@@ -5,16 +5,25 @@ export const SearchBar = () => {
   // used to keep track of the text in the search bar
   const [searchBarText, setSearchBarText] = useState("");
 
-  const handleChange = (event : React.ChangeEvent<HTMLInputElement>) : void => {
+  const handleKeyPress = (event : React.KeyboardEvent<HTMLInputElement>) : void => {
+    if (event.key === "Enter") { 
+      console.log("Enter Pressed.");
+    } 
+  }
+
+  const handleTextChange = (event : React.ChangeEvent<HTMLInputElement>) : void => {
     const newText : string = event.target.value;
     setSearchBarText(newText);
-    console.log("Typed:", newText);
+    console.log(newText);
   }
 
   return (
     <input
+      type="text"
+      placeholder="Search..."
       value={searchBarText} 
-      onChange={(event) => handleChange(event)}
+      onKeyUp={handleKeyPress}
+      onChange={handleTextChange}
       maxLength={100}>
     </input>
   );
