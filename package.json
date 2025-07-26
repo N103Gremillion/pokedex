@@ -5,7 +5,7 @@
   "scripts": {
     "start:client": "npm run start --prefix client",
     "start:server": "npm run start --prefix server",
-    "start": "concurrently \"npm run start:client\" \"npm run start:server\"",
+    "start": "concurrently -n CLIENT,SERVER -c magenta,cyan \"npm run start:client\" \"npm run start:server\"",
     "install:all": "npm install && cd client && npm install && cd ../server && npm install"
   },
   "devDependencies": {
