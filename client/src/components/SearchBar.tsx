@@ -27,4 +27,4 @@ export const SearchBar = () => {
       maxLength={100}>
     </input>
   );
-};
+}

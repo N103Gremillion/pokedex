@@ -2,19 +2,16 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import './styles/general.css'
 import { SearchBar } from './components/SearchBar';
-
-function MyButton() {
-  return (
-    <button>I'm a button</button>
-  );
-
-}
+import { ProModeToggleButton } from './components/ProModeToggleButton';
 
 function App() {
   return (
     <div>
-      <SearchBar></SearchBar>
+      <div className='position-top-left'>
+        <ProModeToggleButton/>
+      </div>
     </div>
   )
 }

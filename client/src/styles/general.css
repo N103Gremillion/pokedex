@@ -1,0 +1,15 @@
+
+/* align div horizontally and center elements with a 10px gap */
+.horizontal-center {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* put div in top left */
+.position-top-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px; 
+}
