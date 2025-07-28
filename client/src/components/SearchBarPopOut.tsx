@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Button from "@mui/material/Button";
 import "../styles/general.css";
 import { SearchBar } from './SearchBar';
+import { Colors } from "../styles/colors";
 
 export const SeachBarPopOut = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +12,7 @@ export const SeachBarPopOut = () => {
   const handleClose = () : void => setIsOpen(false);
 
   return (
-    <div>
+    <div style={{backgroundColor:Colors.background}}>
       <Button onClick={handleOpen}>Search Stats</Button>
 
       <SwipeableDrawer
@@ -20,7 +21,7 @@ export const SeachBarPopOut = () => {
         onClose={handleClose}
         onOpen={handleOpen}
       >
-        <div style={{ width: 250, padding: 16 }}>
+        <div style={{ width: 250, padding: 16}}>
           <SearchBar/>
         </div>
       </SwipeableDrawer>

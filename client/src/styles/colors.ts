@@ -1,5 +1,6 @@
 // colors.ts
 export const Colors = {
+  background: '#242424',
   blueLight: '#06b7e7',       
   blueDark: '#045d7f',       
   blue: '#007bff',            
