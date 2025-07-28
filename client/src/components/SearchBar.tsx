@@ -1,8 +1,8 @@
 import React, {useState, type ChangeEvent, type Dispatch, type SetStateAction} from 'react';
 import { InputAdornment, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { useProMode } from '../context';
 import { getMatchingPlayers } from '../api/player-api';
+import { useProModeStore } from '../context';
 
 
 export const SearchBar = () => {
@@ -12,7 +12,7 @@ export const SearchBar = () => {
   // used to keep track of the text in the search bar
   const [searchBarText, setSearchBarText] = useState("");
 
-  const { isProMode } = useProMode();
+  const { isProMode } = useProModeStore();
 
   const handleKeyPress = async (event : React.KeyboardEvent<HTMLInputElement>) : Promise<void> => {
     if (event.key === "Enter") {

@@ -2,7 +2,7 @@ import { ToggleSlider }  from "react-toggle-slider";
 import { Colors } from "../styles/colors";
 import "../styles/general.css";
 import { useState } from "react";
-import { useProMode } from "../context";
+import { useProModeStore } from "../context";
 
 export const ProModeToggleButton = () => {
   // visuals 
@@ -10,7 +10,7 @@ export const ProModeToggleButton = () => {
   const activeColor : string = Colors.blueDark
 
   // set global context
-  const { isProMode, setIsProMode } = useProMode();
+  const { isProMode, setIsProMode } = useProModeStore();
 
   const handleToggle = () => {
     setIsProMode(!isProMode);
