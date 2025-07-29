@@ -1,15 +1,58 @@
 
-/* align div horizontally and center elements with a 10px gap */
-.horizontal-center {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/** differetn color schemes to try **/
+:root {
+  --background_color: #121417;    /* Almost black, very dark gray for stealth */
+  --toolbar_color: #313336;       /* Dark slate gray for nav/toolbars */
+  --text_color: #d8d8d8;          /* Light gray for easy reading */
+  --highlight_color: #ff6f3c;     /* Tactical orange — energetic & alert */
+  --hover_color: #ffa66b;         /* Lighter orange for hover states */
 }
 
-/* put div in top left */
-.position-top-left {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 10px; 
+
+/*Navbar####################################################*/
+.navbar {
+  height : 50px;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px 20px;
+  background-color: var(--toolbar_color);
+  color: var(--text_color);
+  box-sizing: border-box;
+  gap: 20px; 
+  z-index: 1000 /* garuntee it is always on top */
 }
+
+
+.navbar-component {
+  background-color: var(--toolbar_color);  
+  color: var(--text_color);
+  
+  height : 100%;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 4px;
+
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.navbar-component:hover {
+  background-color: var(--highlight_color);
+}
+
+/* prime react item in a Dropdown */
+.p-dropdown-item {
+  background-color: var(--toolbar_color);
+  color: var(--text_color);
+}
+
+.p-dropdown-item:hover {
+  background-color: var(--hover_color);
+  color: var(--text_color);
+}
+
+/*####################################################################*/

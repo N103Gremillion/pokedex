@@ -16,8 +16,10 @@
     "@mui/icons-material": "^7.2.0",
     "@mui/material": "^7.2.0",
     "@types/react-toggle": "^4.0.5",
+    "primereact": "^10.9.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-native": "^0.80.2",
     "react-popout": "^4.0.0",
     "react-toggle-slider": "^0.4.1",
     "zustand": "^5.0.6"

@@ -1,8 +1,7 @@
-import React, {useState, type ChangeEvent, type Dispatch, type SetStateAction} from 'react';
+import React, {useState} from 'react';
 import { InputAdornment, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { getMatchingPlayers } from '../api/player-api';
-import { useProModeStore } from '../context';
 
 
 export const SearchBar = () => {
@@ -12,16 +11,9 @@ export const SearchBar = () => {
   // used to keep track of the text in the search bar
   const [searchBarText, setSearchBarText] = useState("");
 
-  const { isProMode } = useProModeStore();
-
   const handleKeyPress = async (event : React.KeyboardEvent<HTMLInputElement>) : Promise<void> => {
     if (event.key === "Enter") {
-      if (isProMode) {
-        console.log("Checking ProTeam database", searchBarText);
-      } else {
-        const json = await getMatchingPlayers(searchBarText);
-        console.log(json);
-      }
+      getMatchingPlayers(searchBarText);
     } 
   }
 
