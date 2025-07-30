@@ -1,19 +1,24 @@
 import { Dropdown } from 'primereact/dropdown';
 import '../styles/general.css';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import type { PagePaths } from '../pages/pagePaths';
 
 interface NavBarDropdownProps {
   label : string;
   options : string[];
+  pagePath : PagePaths
 }
 
-export const NavBarDropdown = ({label, options} : NavBarDropdownProps) => {
+export const NavBarDropdown = ({label, options, pagePath} : NavBarDropdownProps) => {
 
   const [selectedOption, setSelectedOption] = useState("");
+  const navigate = useNavigate();
 
   const handleSelection = (selectedString : string) => {
     setSelectedOption(selectedString);
     console.log(selectedOption);
+    navigate(pagePath);
   }
 
   const mappedOptions = options.map(opt => ({

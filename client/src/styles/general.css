@@ -1,13 +1,23 @@
 
 /** differetn color schemes to try **/
 :root {
-  --background_color: #121417;    /* Almost black, very dark gray for stealth */
-  --toolbar_color: #313336;       /* Dark slate gray for nav/toolbars */
+  --background_color: #4b4242;    /* Almost black, very dark gray for stealth */
+  --toolbar_color: #353535;       /* Dark slate gray for nav/toolbars */
   --text_color: #d8d8d8;          /* Light gray for easy reading */
   --highlight_color: #ff6f3c;     /* Tactical orange — energetic & alert */
   --hover_color: #ffa66b;         /* Lighter orange for hover states */
 }
 
+/*Pages#####################################################*/
+.general-page {
+  min-height: 100vh;
+  min-width: 100vw;
+  padding-top: 50px;
+  box-sizing: border-box;
+  width: 100%;
+  background-color: var(--background_color);
+  color: var(--text_color)
+}
 
 /*Navbar####################################################*/
 .navbar {
@@ -56,3 +66,4 @@
 }
 
 /*####################################################################*/
+

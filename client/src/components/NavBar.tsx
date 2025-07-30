@@ -2,6 +2,7 @@ import { Toolbar } from 'primereact/toolbar';
 import { NavBarDropdown } from './NavBarDropdown';
 import '../styles/general.css';
 import { HomeButton } from './HomeButton';
+import { PagePaths } from '../pages/pagePaths';
 
 export const NavBar = () => {
   
@@ -44,9 +45,9 @@ export const NavBar = () => {
         start={
           <>
             <HomeButton/>
-            <NavBarDropdown label={operatorDropdownLabel} options={r6Operators}/>
-            <NavBarDropdown label={mapDropdownLabel} options={r6Maps}/>
-            <NavBarDropdown label={rankDropdownLabel} options={r6Ranks}/>
+            <NavBarDropdown label={operatorDropdownLabel} options={r6Operators} pagePath={PagePaths.Opterator} />
+            <NavBarDropdown label={mapDropdownLabel} options={r6Maps} pagePath={PagePaths.Map}/>
+            <NavBarDropdown label={rankDropdownLabel} options={r6Ranks} pagePath={PagePaths.Rank}/>
           </>
         }
         className='navbar'

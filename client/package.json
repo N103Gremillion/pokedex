@@ -21,6 +21,7 @@
     "react-dom": "^19.1.0",
     "react-native": "^0.80.2",
     "react-popout": "^4.0.0",
+    "react-router-dom": "^7.7.1",
     "react-toggle-slider": "^0.4.1",
     "zustand": "^5.0.6"
   },

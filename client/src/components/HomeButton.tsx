@@ -1,13 +1,10 @@
+import { NavLink } from 'react-router-dom';
+import { PagePaths } from '../pages/pagePaths';
+
 export const HomeButton = () => {
-
-  const handleClick = () => {
-    console.log("Opening Home Page.")
-  }
-
   return (
-    <button 
-      className="navbar-component"
-      onClick={handleClick}
-    >Home</button>
+    <NavLink to={PagePaths.Home} className="navbar-component">
+      Home
+    </NavLink>
   );
 }
