@@ -1,11 +1,40 @@
 
 /** differetn color schemes to try **/
 :root {
-  --background_color: #4b4242;    /* Almost black, very dark gray for stealth */
-  --toolbar_color: #353535;       /* Dark slate gray for nav/toolbars */
-  --text_color: #d8d8d8;          /* Light gray for easy reading */
-  --highlight_color: #ff6f3c;     /* Tactical orange — energetic & alert */
-  --hover_color: #ffa66b;         /* Lighter orange for hover states */
+  /* general */
+  --background_color: #4b4242;
+  --text_color: #d8d8d8;
+  --header_color: #d31812;    
+
+  /* toolbar */
+  --toolbar_color: #353535;       
+  --highlight_color: #ff6f3c;    
+  --hover_color: #ffa66b;  
+  
+  /* search bar */
+  --searchbar_bg: #353535;
+  --searchbar_text: #d8d8d8;
+  --searchbar_border: #ff6f3c;
+
+  /* cards */
+  --card_bg: #1e1e1e;
+}
+
+/*Text################################################*/
+.header {
+  margin-top: 20px;
+  color: var(--header_color);
+}
+
+.header2 {
+  margin-top: 40px;
+  color: var(--header_color);
+}
+
+.raw-text {
+  margin-top: 20px;
+  color: var(--text_color);
+  font-size: 18px;
 }
 
 /*Pages#####################################################*/
@@ -17,6 +46,23 @@
   width: 100%;
   background-color: var(--background_color);
   color: var(--text_color)
+}
+
+/*Containers################################################*/
+.horizontal-container {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: row; 
+  gap: 100px; 
+  align-items: center;
+  justify-content: center; 
+}
+
+/*Cards#####################################################*/
+.small-card {
+  background: var(--card_bg);
+  color: var(--text_color);
+  width: 250px;
 }
 
 /*Navbar####################################################*/
@@ -64,6 +110,4 @@
   background-color: var(--hover_color);
   color: var(--text_color);
 }
-
-/*####################################################################*/
 
