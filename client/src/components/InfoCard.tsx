@@ -12,24 +12,31 @@ interface InfoCardProps {
   subtitle? : string[];
   text : string;
   imageUrl? : string;
-  links? : string[];
+  link? : string;
 }
 
-export const InfoCard = ({size, title, subtitle, text, imageUrl, links} : InfoCardProps) => {
-
+export const InfoCard = ({size, title, subtitle, text, imageUrl, link} : InfoCardProps) => {
+  
 
   return (
-    <CCard className='small-card'>
-      <CCardImage orientation="top" src="https://via.placeholder.com/300x150" alt="Card image" />
+    <CCard className={`${size}-card`}>
+      <CCardImage 
+        orientation="top" 
+        src={imageUrl} 
+        alt=""
+        style= {{
+          width: '100%',
+          height: '200px',
+          objectFit: 'cover'
+        }}
+      />
       <CCardBody>
-        <CCardTitle>Card title</CCardTitle>
-        <CCardSubtitle className="mb-2 text-body-secondary">Card subtitle</CCardSubtitle>
-        <CCardText>
-          Some quick example text to build on the card title and make up the bulk of the card's
-          content.
+        <CCardTitle className='card-title'>{title}</CCardTitle>
+        <CCardSubtitle className="mb-2 text-body-secondary">{subtitle}</CCardSubtitle>
+        <CCardText className='card-text'>
+          {text}
         </CCardText>
-        <CCardLink href="#">Card link</CCardLink>
-        <CCardLink href="#">Another link</CCardLink>
+        <CCardLink href={link}>{link}</CCardLink>
       </CCardBody>
     </CCard>
   )

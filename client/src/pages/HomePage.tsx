@@ -1,4 +1,4 @@
-import { InfoCard } from '../components/InfoCard';
+import { CardSize, InfoCard } from '../components/InfoCard';
 import { SearchBar } from '../components/SearchBar';
 import '../styles/general.css'
 
@@ -10,9 +10,9 @@ export const HomePage = () => {
       <SearchBar/>
       <h2 className='header2'> General Stats </h2>
       <div className='horizontal-container'>
-        <InfoCard/>
-        <InfoCard/>
-        <InfoCard/>
+        <InfoCard size={CardSize.small} title='Average Global K/D' text='1.02' imageUrl='https://i.imgur.com/V6LaZum.jpeg'/>
+        <InfoCard size={CardSize.small} title='Most Picked Operaoter' text='Ash' imageUrl='https://i.imgur.com/weCr7xl.jpeg'/>
+        <InfoCard size={CardSize.small} title='Most Played Map' text='Clubhouse' imageUrl='https://i.imgur.com/mHlxzpf.jpeg'/>
       </div>
     </div>
   );
