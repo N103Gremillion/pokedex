@@ -1,83 +1,38 @@
-import React, {useState} from 'react';
-import { InputAdornment, TextField } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import React, { useState } from 'react';
+import { AutoComplete } from 'primereact/autocomplete';
 import { getMatchingPlayers } from '../api/player-api';
-import '../styles/general.css'
-
+import '../styles/general.css';
 
 export const SearchBar = () => {
-  const backgroundColor : string = '#424242';
-  const textColor : string = '#d8d8d8';
-  const borderColor : string = '#5a5a5a';
-  const focusBorderColor : string = '#ffffff';
+  const [searchBarText, setSearchBarText] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
 
-  // visuals
-  const label : string = "Search...";
+  const handleSearch = async (queryString : string ) => {
+    setSearchBarText(queryString);
 
-  // used to keep track of the text in the search bar
-  const [searchBarText, setSearchBarText] = useState("");
+    if (!queryString) {
+      setSuggestions([]);
+      return;
+    }
 
-  const handleKeyPress = async (event : React.KeyboardEvent<HTMLInputElement>) : Promise<void> => {
-    if (event.key === "Enter") {
-      getMatchingPlayers(searchBarText);
-    } 
-  }
-
-  const handleTextChange = (event : React.ChangeEvent<HTMLInputElement>) : void => {
-    const newText : string = event.target.value;
-    setSearchBarText(newText);
-  }
-
-  // sx "like css"
-  const searchBarSx = {
-    marginTop: '20px',
-    backgroundColor: backgroundColor,
-    color: '#d8d8d8',
-    borderRadius: '6px',
-    input: {
-      color: textColor,
-    },
-    label: {
-      color: borderColor
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: borderColor,
-      },
-      '&:hover fieldset': {
-        borderColor: focusBorderColor,
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: focusBorderColor,
-      },
-    },
-    '& .MuiInputLabel-root': {
-      color: textColor,
-    },
-    '& .MuiInputLabel-root.Mui-focused': {
-      color: focusBorderColor,
-    },
-  }
+    // Call your API to get matching players based on the query
+    const results = await getMatchingPlayers(queryString);
+    setSuggestions(results);
+  };
 
   return (
-    <TextField
-      label={label}
-      color="primary"
-      sx={searchBarSx}
-      className='.search-bar'
-      variant="outlined"
-      onChange={handleTextChange}
-      onKeyUp={handleKeyPress}
-      slotProps={{
-        input: {
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }
-      }}
-    />
+    <div className='search-bar-container'>
+      <AutoComplete
+        size={50}
+        id="player-search"
+        value={searchBarText}
+        suggestions={suggestions}
+        completeMethod={(event) => handleSearch(event.query)} 
+        field="name"                
+        onChange={(event) => setSearchBarText(event.value)}
+        placeholder="Search player..."
+        inputClassName='search-bar'
+      />
+    </div>
   );
-}
-
+};

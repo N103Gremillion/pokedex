@@ -1,4 +1,4 @@
-import Table from 'react-bootstrap/Table';
+// use prime react
 
 export const Leaderboard = () => {
 

@@ -1,5 +1,6 @@
-import { CCard, CCardBody, CCardImage, CCardText, CCardTitle, CCardSubtitle, CCardLink } from '@coreui/react'
-
+import { Card } from 'primereact/card';
+        
+// TODO : change to use primereact
 export enum CardSize {
   small = 'small',
   medium = 'medium',
@@ -12,32 +13,25 @@ interface InfoCardProps {
   subtitle? : string[];
   text : string;
   imageUrl? : string;
-  link? : string;
 }
 
-export const InfoCard = ({size, title, subtitle, text, imageUrl, link} : InfoCardProps) => {
+export const InfoCard = ({size, title, subtitle, text, imageUrl} : InfoCardProps) => {
   
+  const cardImage = (
+    <img 
+      src={imageUrl} 
+      alt="Player card"
+      className='small-card-image'
+    />
+  );
 
   return (
-    <CCard className={`${size}-card`}>
-      <CCardImage 
-        orientation="top" 
-        src={imageUrl} 
-        alt=""
-        style= {{
-          width: '100%',
-          height: '200px',
-          objectFit: 'cover'
-        }}
-      />
-      <CCardBody>
-        <CCardTitle className='card-title'>{title}</CCardTitle>
-        <CCardSubtitle className="mb-2 text-body-secondary">{subtitle}</CCardSubtitle>
-        <CCardText className='card-text'>
-          {text}
-        </CCardText>
-        <CCardLink href={link}>{link}</CCardLink>
-      </CCardBody>
-    </CCard>
+    <Card
+      header={cardImage}
+      className={`${size}-card`} 
+      title={<span className='small-card-title'>{title}</span>} 
+      subTitle={subtitle}>
+      <p className='small-card-text'>{text}</p>
+    </Card>
   )
 }

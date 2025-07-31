@@ -21,6 +21,7 @@
     "bootstrap": "^5.3.7",
     "install": "^0.13.0",
     "npm": "^11.5.2",
+    "primeicons": "^7.0.0",
     "primereact": "^10.9.6",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.10",
