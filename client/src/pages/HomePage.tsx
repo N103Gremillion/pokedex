@@ -1,9 +1,12 @@
+import { Footer } from '../components/Footer';
 import { CardSize, InfoCard } from '../components/InfoCard';
+import { Leaderboard, LeaderboardTypes } from '../components/Leaderboard';
 import { SearchBar } from '../components/SearchBar';
 import '../styles/general.css'
 
 export const HomePage = () => {
   return (
+
     <div className='general-page'>
       <h1 className='header'>R6 SIEGE STATS</h1>
       <p className='raw-text'>check out global stats or search for player stats</p>
@@ -14,6 +17,11 @@ export const HomePage = () => {
         <InfoCard size={CardSize.small} title='Most Picked Operaoter' text='Ash' imageUrl='https://i.imgur.com/weCr7xl.jpeg'/>
         <InfoCard size={CardSize.small} title='Most Played Map' text='Clubhouse' imageUrl='https://i.imgur.com/mHlxzpf.jpeg'/>
       </div>
+      <div className='horizontal-container'>
+        <Leaderboard platformType={LeaderboardTypes.Pc}/>
+        <Leaderboard platformType={LeaderboardTypes.Console}/>
+      </div>
     </div>
+
   );
 }
