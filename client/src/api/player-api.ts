@@ -1,7 +1,7 @@
 import type { leaderboardPlayerData } from "../components/Leaderboard";
 import { PlayerRegion } from "../generalEnums/PlayerRegion";
 import { R6rank } from "../generalEnums/R6rank";
-import { Routes } from "./routes";
+import { baseBackendURL, Routes } from "./routes";
 
 export type PlayerInfo = {
   id: string;
@@ -26,8 +26,8 @@ enum ApiGetEndpoints {
 
 // HOME PAGE STUFF ************************************* //
 export const getAverageKD = async () : Promise<number> => {
-  const response : Response  = await fetch(`${Routes.GENERAL_STATS}${ApiGetEndpoints.AVERAGE_KD}`);
-  const data : number = await response.json();
+  const response : Response  = await fetch(`${Routes.PLAYER}`);
+  const data : number = 1;
   return data;
 }
 

@@ -1,5 +1,5 @@
-const backendPort : number = 3000;
-const baseBackendURL : string = `http://localhost:${backendPort}`;
+const backendPort : number = 5000;
+export const baseBackendURL : string = `http://localhost:${backendPort}`;
 
 export const Routes = {
   PLAYER: `${baseBackendURL}/player`,

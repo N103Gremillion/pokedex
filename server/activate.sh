@@ -1,1 +1,1 @@
-source .venv/bin/activate # activate virtual environment
+source .venv310/bin/activate # activate virtual environment

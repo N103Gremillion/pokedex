@@ -5,7 +5,12 @@ def initApp() -> Flask:
   return app
 
 def setupRoutes(app : Flask) -> None:
-  
   @app.route('/')
   def home():
-      return "Hello, Flask!"
+    return "Hello, Flask!"
+  
+  @app.route('/player')
+  def player():
+    return "Hello, Flask!"
+
+  
