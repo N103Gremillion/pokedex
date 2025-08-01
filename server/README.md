@@ -1,6 +1,6 @@
 # Requirements
 
-- Python 3.9 or newer installed globally  
+- Python 3.9 or 3.10  
   (You can check by running `python3 --version` in your terminal)
 
 - Flask and other dependencies listed in `requirements.txt`

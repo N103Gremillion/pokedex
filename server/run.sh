@@ -1,11 +1,4 @@
-#!/bin/bash
-set -e
-
-if [ ! -d ".venv" ]; then
-  python3 -m venv .venv
-fi
-
-source .venv/bin/activate
+source .venv310/bin/activate
 
 echo "Setup complete!"
-python3 entry.py
+python entry.py
