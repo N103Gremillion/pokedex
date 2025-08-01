@@ -84,7 +84,6 @@ export const Leaderboard = ( {platformType} : LeaderboardProps) => {
         value={playerData}
         tableStyle={{ minWidth: '50rem' }}
         className='leaderboard'
-        scrollable
         scrollHeight='400px'
         stripedRows
       > 

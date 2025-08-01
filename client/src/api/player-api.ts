@@ -17,13 +17,31 @@ export type PlayerInfo = {
   };
 };
 
-enum GetRequestsTypes {
+enum ApiGetEndpoints {
+  AVERAGE_KD = "/average_kd",
+  MOST_PICKED_OPERATOR = "/most_picked_operator",
+  MOST_PICKED_MAP = "/most_picked_map",
   MATCHING_PLAYER = "/matching_player",
+}
+
+// HOME PAGE STUFF ************************************* //
+export const getAverageKD = async () : Promise<number> => {
+  const response : Response  = await fetch(`${Routes.GENERAL_STATS}${ApiGetEndpoints.AVERAGE_KD}`);
+  const data : number = await response.json();
+  return data;
+}
+
+export const getMostPickedOperator = async () : Promise<string> => {
+  return "Ash";
+}
+
+export const getMostPickedMap = async () : Promise<string> => {
+  return "Clubhouse";
 }
 
 export const getMatchingPlayers = async (gamerTag : string) => {
   console.log("requesting gamer tag matches", gamerTag);
-  const res  = await fetch(`${Routes.PLAYER}${GetRequestsTypes.MATCHING_PLAYER}`);
+  const res  = await fetch(`${Routes.PLAYER}${ApiGetEndpoints.MATCHING_PLAYER}`);
   return res.json();
 };
 
@@ -37,6 +55,70 @@ export const getTopPcPlayers = async () : Promise<leaderboardPlayerData[]> => {
       region: PlayerRegion.NA,
       level: 200,
       kd: 1.75,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
       profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
     },
     {
@@ -62,6 +144,70 @@ export const getTopConsolePlayers = async () => {
       region: PlayerRegion.NA,
       level: 200,
       kd: 1.75,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
+      profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
+    },
+    {
+      name: "PCPlayer2",
+      rank: R6rank.Champion,
+      region: PlayerRegion.EU,
+      level: 180,
+      kd: 1.43,
       profilePicUrl: "https://i.imgur.com/IqIa3vt.jpeg"
     },
     {

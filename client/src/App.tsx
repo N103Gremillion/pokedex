@@ -12,6 +12,7 @@ import { RankPage } from './pages/RankPage';
 import { PagePaths } from './pages/pagePaths';
 import './App.css';
 import './styles/general.css';
+import { Footer } from './components/Footer';
 
 
 function App() {
@@ -25,7 +26,8 @@ function App() {
         <Route path={PagePaths.Map} element={<MapPage /> }/>
         <Route path={PagePaths.Rank} element={<RankPage />} />
         <Route path={PagePaths.Player} element={<PlayerPage />} />
-      </Routes>      
+      </Routes> 
+      <Footer/>     
     </>
   );
 }

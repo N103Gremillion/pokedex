@@ -3,5 +3,5 @@ const baseBackendURL : string = `http://localhost:${backendPort}`;
 
 export const Routes = {
   PLAYER: `${baseBackendURL}/player`,
-  PRO_TEAM: `${baseBackendURL}/proTeam`,
+  GENERAL_STATS: `${baseBackendURL}/general-stats`,
 } as const;

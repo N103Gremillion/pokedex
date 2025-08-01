@@ -28,7 +28,6 @@ export const NavBarDropdown = ({label, options, pagePath} : NavBarDropdownProps)
 
   return (
     <Dropdown
-      value={selectedOption}
       className='navbar-component'
       placeholder={label}
       options={mappedOptions}
