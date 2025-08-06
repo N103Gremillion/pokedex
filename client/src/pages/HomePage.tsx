@@ -4,7 +4,7 @@ import { CardSize, InfoCard } from '../components/InfoCard';
 import { Leaderboard, LeaderboardTypes } from '../components/Leaderboard';
 import { SearchBar } from '../components/SearchBar';
 import '../styles/general.css'
-import { getAverageKD, getMostPickedMap, getMostPickedOperator } from '../api/player-api';
+import { getMostPickedMap, getMostPickedOperator } from '../api/player-api';
 
 export const HomePage = () => {
 
@@ -15,7 +15,7 @@ export const HomePage = () => {
   // on mount fetch info from api
   useEffect(() => {
     const fetchData = async () : Promise<void> => {
-      setAverageKD(await getAverageKD());
+      setAverageKD(1);
       setMostPickedOperator(await getMostPickedOperator());
       setMostPickedMap(await getMostPickedMap());
     };

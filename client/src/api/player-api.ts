@@ -1,7 +1,7 @@
 import type { leaderboardPlayerData } from "../components/Leaderboard";
 import { PlayerRegion } from "../generalEnums/PlayerRegion";
 import { R6rank } from "../generalEnums/R6rank";
-import { baseBackendURL, Routes } from "./routes";
+import { Routes } from "./routes";
 
 export type PlayerInfo = {
   id: string;
@@ -17,20 +17,7 @@ export type PlayerInfo = {
   };
 };
 
-enum ApiGetEndpoints {
-  AVERAGE_KD = "/average_kd",
-  MOST_PICKED_OPERATOR = "/most_picked_operator",
-  MOST_PICKED_MAP = "/most_picked_map",
-  MATCHING_PLAYER = "/matching_player",
-}
-
 // HOME PAGE STUFF ************************************* //
-export const getAverageKD = async () : Promise<number> => {
-  const response : Response  = await fetch(`${Routes.PLAYER}`);
-  const data : number = 1;
-  return data;
-}
-
 export const getMostPickedOperator = async () : Promise<string> => {
   return "Ash";
 }
@@ -41,12 +28,16 @@ export const getMostPickedMap = async () : Promise<string> => {
 
 export const getMatchingPlayers = async (gamerTag : string) => {
   console.log("requesting gamer tag matches", gamerTag);
-  const res  = await fetch(`${Routes.PLAYER}${ApiGetEndpoints.MATCHING_PLAYER}`);
+  const res  = await fetch(`${Routes.MATCHING_PLAYERS}`);
   return res.json();
 };
 
 export const getTopPcPlayers = async () : Promise<leaderboardPlayerData[]> => {
-  console.log("requestiong top 10 pc players");
+  console.log("getting top pc players.")
+  const res : Response = await fetch(`${Routes.TOP_PC_PLAYERS}`);
+  const data = await res.json();
+
+  console.log(data);
 
   const playerData : leaderboardPlayerData[] = [
     {
