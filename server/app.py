@@ -1,15 +1,16 @@
+import os
 from flask import Flask
 from enum import Enum
 from flask_cors import CORS
+from dotenv import load_dotenv
+from pokeapi.pokemon import *
 
 def initApp() -> Flask:
   app : Flask = Flask(__name__)
   return app
 
 class ApiGetEndpoints(Enum):
-  TOP_PC_PLAYERS = "/top_pc_players"
-  TOP_CONSOLE_PLAYERS = "/top_console_players"
-  MATCHING_PLAYER = "/matching_player"
+  POKEMON = "/pokemon"
 
 def setupRoutes(app : Flask) -> None:
   
@@ -18,9 +19,10 @@ def setupRoutes(app : Flask) -> None:
     print("Fetching home info")
     return "Hello, Flask!"
   
-  @app.route(ApiGetEndpoints.TOP_PC_PLAYERS.value)
-  def player():
-    print("Fetching top 10 pc players")
-    return "Hello, Flask!"
+  @app.route(f"{ApiGetEndpoints.POKEMON.value}/<string:name>")
+  def get_pokemon(name):
+      print(f"Fetching pokemon: {name}")
+      response = fetchPokemon(name)
+      return response
 
   

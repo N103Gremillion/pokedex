@@ -1,7 +1,6 @@
 from app import initApp, setupRoutes
 from flask import Flask, jsonify
 from flask_cors import CORS
-import r6statsapi
 
 portNumber : int = 5000
 frontEndUrl : str = "http://localhost:5173/"

@@ -1,0 +1,1 @@
+baseApiUrl : str = "https://pokeapi.co/api/v2/"
