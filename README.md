@@ -1,2 +1,2 @@
 ##Overview
--Rainbow 6 Siege stats tracker used to track players stats and also pro league stats
+-Pokemon pokedex site used to view stats info about pokemon and other information 
