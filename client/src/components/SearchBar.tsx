@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AutoComplete } from 'primereact/autocomplete';
-import { getMatchingPlayers } from '../api/player-api';
+import { getMatchingPlayers } from '../api/pokemon_api';
 import '../styles/general.css';
 
 export const SearchBar = () => {

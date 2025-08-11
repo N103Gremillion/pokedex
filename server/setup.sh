@@ -1,38 +1,28 @@
 #!/bin/bash
 
-# Exit on any error
-set -e
-
-# Define the Python version
-PYTHON_VERSION="3.10"
-VENV_DIR=".venv310"
-
-echo "📦 Creating virtual environment with Python $PYTHON_VERSION..."
-
-# Check for python3.10
-if ! command -v python$PYTHON_VERSION &>/dev/null; then
-    echo "❌ Python $PYTHON_VERSION is not installed. Please install it using:"
-    echo "    sudo apt install python3.10 python3.10-venv python3.10-dev"
-    exit 1
+# Remove old venv if it exists
+if [ -d ".venv" ]; then
+  echo "Removing old virtual environment..."
+  rm -rf .venv
 fi
 
-# Create the virtual environment
-python$PYTHON_VERSION -m venv "$VENV_DIR"
+# Create new venv using the default python3
+echo "Creating new virtual environment with the default python3..."
+python3 -m venv .venv
 
-echo "✅ Virtual environment created at $VENV_DIR"
+# Activate the venv
+source .venv/bin/activate
 
-# Activate the environment
-source "$VENV_DIR/bin/activate"
-
-echo "🔄 Upgrading pip..."
+# Upgrade pip to latest version
+echo "Upgrading pip..."
 pip install --upgrade pip
 
-echo "📥 Installing dependencies..."
+# Install requirements
+if [ -f "requirements.txt" ]; then
+  echo "Installing packages from requirements.txt..."
+  pip install -r requirements.txt
+else
+  echo "No requirements.txt file found."
+fi
 
-# Install packages with compatible versions
-pip install flask r6statsapi==0.1.9 aiohttp==3.6.2
-
-echo "📄 Freezing requirements to requirements.txt..."
-pip freeze > requirements.txt
-
-echo "✅ Environment setup complete."
+echo "Environment setup complete!"

@@ -2,23 +2,24 @@
 /** differetn color schemes to try **/
 :root {
   /* general */
-  --background_color: #312d2d;
-  --text_color: #d8d8d8;
-  --header_color: #d31812;    
+  --background_color: #121820;    /* very dark blue-gray */
+  --text_color: #cbd6e4;          /* soft light blue-gray */
+  --header_color: #0d99ff;        /* bright electric blue */
 
   /* toolbar */
-  --toolbar_color: #353535;       
-  --highlight_color: #ff6f3c;    
-  --hover_color: #ffa66b;  
-  
+  --toolbar_color: #1e2a38;       /* dark navy */
+  --highlight_color: #3399ff;     /* medium blue */
+  --hover_color: #66b3ff;         /* lighter blue for hover */
+
   /* search bar */
-  --searchbar_bg: #353535;
-  --searchbar_text: #d8d8d8;
-  --searchbar_border: #ff6f3c;
+  --searchbar_bg: #1e2a38;        /* match toolbar */
+  --searchbar_text: #cbd6e4;      /* light text */
+  --searchbar_border: #3399ff;    /* blue border */
 
   /* cards */
-  --card_bg: #1e1e1e;
+  --card_bg: #1b2230;             /* deep navy/blue-black */
 }
+
 
 /*Text################################################*/
 .header {

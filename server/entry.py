@@ -5,7 +5,7 @@ from flask_cors import CORS
 portNumber : int = 5000
 frontEndUrl : str = "http://localhost:5173/"
 app : Flask = initApp()
-CORS(app, resources={r"/*": {"origins": frontEndUrl}})
+CORS(app)
 setupRoutes(app)
 
 if __name__ == "__main__":

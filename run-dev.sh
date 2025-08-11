@@ -5,8 +5,8 @@
 
 # Activate Python backend venv and run backend in background
 echo "Starting backend..."
-source ./server/.venv310/bin/activate
-python ./server/entry.py &
+source ./server/.venv/bin/activate
+python3 ./server/entry.py &
 
 BACKEND_PID=$! # get pid of backend process
 

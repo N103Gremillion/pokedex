@@ -1,4 +1,7 @@
-source .venv310/bin/activate
+./kill.sh # kill previous running process
 
-echo "Setup complete!"
-python entry.py
+pwd
+
+echo "Starting backend..."
+source ./.venv/bin/activate
+python ./entry.py 
