@@ -3,9 +3,10 @@ export const baseBackendURL : string = `http://localhost:${backendPort}`;
 
 enum ApiGetEndpoints {
   POKEMON = "/pokemon",
-  ITEM = ""
+  ITEM = "/item",
 }
 
 export const Routes = {
   POKEMON : `${baseBackendURL}${ApiGetEndpoints.POKEMON}`,
+  ITEM : `${baseBackendURL}${ApiGetEndpoints.ITEM}`
 } as const;

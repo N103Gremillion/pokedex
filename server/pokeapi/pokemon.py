@@ -1,12 +1,12 @@
 from typing import Optional
 from app_types import ErrorResponse, PokemonData, SuccessResponse
-from .api import baseApiUrl, fetchData
+from .general import baseApiUrl, fetchData
 from enum import Enum
 import requests
 
 class PokemonInfoEndpoints(Enum):
   GET_POKEMON = f"{baseApiUrl}/pokemon"
-  GET_ITEM = f"{baseApiUrl}/item"
+  
 
 # general pokemon fetched used for the pokemon specific pages
 def fetchPokemonByName(name: str):
@@ -23,7 +23,6 @@ def fetchPokemonById(pokemon_id: int) -> PokemonData:
     return {
       "id": -1,
       "name": "Unknown",
-      "description": "No description available.",
       "imageUrl": ""
     }
   

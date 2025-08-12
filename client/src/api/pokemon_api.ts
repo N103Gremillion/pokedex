@@ -39,7 +39,7 @@ export const getRandomItem = async () : Promise<ItemData> => {
 
   // try and get the data of a pokemon with a random id
   const randomId : number = getRandomItemId();
-  const request_url : string = `${Routes.POKEMON}/${randomId}`;
+  const request_url : string = `${Routes.ITEM}/${randomId}`;
   const res : Response = await fetch(request_url);
 
   if (res.status === NOT_FOUND_STATUS) throw new Error("Pokemon not found");

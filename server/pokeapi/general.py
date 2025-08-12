@@ -12,6 +12,7 @@ def fetchData(url: str) -> SuccessResponse | ErrorResponse:
       "success": True,
       "data": response.json()
     }
+  # client error
   except requests.HTTPError as error:
     return {
       "success": False,

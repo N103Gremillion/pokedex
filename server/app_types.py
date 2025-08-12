@@ -15,3 +15,8 @@ class PokemonData(TypedDict):
   id: int
   name: str
   imageUrl : str
+
+class ItemData(TypedDict):
+  id: int
+  name: str
+  imageUrl : str
