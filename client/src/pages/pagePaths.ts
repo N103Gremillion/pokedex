@@ -1,7 +1,6 @@
 export enum PagePaths {
   Home = '/',
-  Opterator = '/operator',
-  Map = '/map',
-  Rank = '/rank',
-  Player = '/player',
+  Pokedex = '/pokedex',
+  GymLeaders = '/gym-leaders',
+  Type = '/type',
 }

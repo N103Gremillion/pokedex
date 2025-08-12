@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { CardSize, InfoCard } from '../components/InfoCard';
 import { SearchBar } from '../components/SearchBar';
 import '../styles/general.css'
-import { getMostPickedMap, getMostPickedOperator, getRandomItem, getRandomPokemon, type ItemData, type PokemonData } from '../api/pokemon_api';
+import { getMostPickedOperator, getRandomItem, getRandomPokemon, type ItemData, type PokemonData } from '../api/pokemon_api';
 
 export const HomePage = () => {
 
@@ -24,7 +24,7 @@ export const HomePage = () => {
   return (
     <div className='general-page'>
       <h1 className='header'>PokePluse</h1>
-      <p className='raw-text'>Your daily gateway to Pokémon info and discoveries.</p>
+      <p className='raw-text'>Your gateway to Pokémon info and discoveries.</p>
       <SearchBar/>
       <h2 className='header2'> Random Picks for You</h2>
       <div className='horizontal-container'>
