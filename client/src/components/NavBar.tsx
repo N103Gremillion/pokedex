@@ -6,38 +6,43 @@ import { PagePaths } from '../pages/pagePaths';
 
 export const NavBar = () => {
   
-  const operatorDropdownLabel : string = "Select Operator";
-  const mapDropdownLabel : string = "Select Map";
-  const rankDropdownLabel : string = "Select Rank";
+  const pokedexDropdownLabel : string = "Pokedex";
+  const gymLeaderDropdownLabel : string = "Gym Leader";
+  const typeDropdownLabel : string = "Type";
 
-  const r6Operators : string[] = [
-    "Ash", "Thermite", "Twitch", "Montagne", "Glaz",
-    "Fuze", "Blitz", "IQ", "Buck", "Blackbeard", "Capitao", "Hibana",
-    "Jackal", "Ying", "Zofia", "Dokkaebi", "Lion", "Finka", "Maverick",
-    "Nomad", "Gridlock", "Nokk", "Amaru", "Kali", "Iana", "Ace",
-    "Zero", "Flores", "Oryx", "Thorn", "Azami", "Solis", "Fenrir",
-    "Jager", "Bandit", "Smoke", "Mute", "Pulse", "Castle", "Doc",
-    "Rook", "Kapkan", "Tachanka", "Caveira", "Echo", "Valkyrie", "Lesion",
-    "Ela", "Vigil", "Maestro", "Alibi", "Clash", "Kaid", "Mozzie", "Warden",
-    "Goyo", "Wamai", "Osa", "Thunderbird", "Thatcher", "Sledge", "Recruit"
+  const pokemonGenerations: string[] = [
+    "Generation I",
+    "Generation II",
+    "Generation III",
+    "Generation IV",
+    "Generation V",
+    "Generation VI",
+    "Generation VII",
+    "Generation VIII",
+    "Generation IX"
   ];
-  const r6Maps: string[] = [
-    "Bank", "Border", "Chalet", "Clubhouse", "Coastline",
-    "Consulate", "Kafe Dostoyevsky", "Oregon", "Outback", "Plane",
-    "Skyscraper", "Theme Park", "Tower", "Villa", "Yacht",
-    "Fortress", "Hillside", "Reunion", "Kanal", "Favela",
-    "House", "Hereford Base", "Presidio", "Pearl", "Oryx Estate",
-    "Bartlett University", "Borderlands"
+
+  const pokemonTypes: string[] = [
+    "Normal",
+    "Fire",
+    "Water",
+    "Electric",
+    "Grass",
+    "Ice",
+    "Fighting",
+    "Poison",
+    "Ground",
+    "Flying",
+    "Psychic",
+    "Bug",
+    "Rock",
+    "Ghost",
+    "Dragon",
+    "Dark",
+    "Steel",
+    "Fairy"
   ];
-  const r6Ranks: string[] = [
-    "Copper IV", "Copper III", "Copper II", "Copper I",
-    "Bronze IV", "Bronze III", "Bronze II", "Bronze I",
-    "Silver IV", "Silver III", "Silver II", "Silver I",
-    "Gold IV", "Gold III", "Gold II", "Gold I",
-    "Platinum IV",  "Platinum III", "Platinum II", "Platinum I",
-    "Diamond IV", "Diamond III", "Diamond II", "Diamond I",
-    "Champion"
-  ];
+
 
   return (
     <div>
@@ -45,9 +50,9 @@ export const NavBar = () => {
         start={
           <>
             <HomeButton/>
-            <NavBarDropdown label={operatorDropdownLabel} options={r6Operators} pagePath={PagePaths.Opterator} />
-            <NavBarDropdown label={mapDropdownLabel} options={r6Maps} pagePath={PagePaths.Map}/>
-            <NavBarDropdown label={rankDropdownLabel} options={r6Ranks} pagePath={PagePaths.Rank}/>
+            <NavBarDropdown label={pokedexDropdownLabel} options={pokemonGenerations} pagePath={PagePaths.Pokedex} />
+            <NavBarDropdown label={gymLeaderDropdownLabel} options={pokemonGenerations} pagePath={PagePaths.GymLeaders}/>
+            <NavBarDropdown label={typeDropdownLabel} options={pokemonTypes} pagePath={PagePaths.Rank}/>
           </>
         }
         className='navbar'
