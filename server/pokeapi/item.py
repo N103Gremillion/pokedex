@@ -26,8 +26,6 @@ def fetchItemById(item_id: int) -> ItemData:
   
   data = response["data"]
   
-  print(data)
-  
   # map the data onto the PokemonData to ensure you have these on the frontend
   itemData : ItemData = {
     "id": data.get("id"),
