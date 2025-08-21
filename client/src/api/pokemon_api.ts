@@ -1,19 +1,19 @@
 import { getRandomItemId, getRandomPokemonId, NOT_FOUND_STATUS, SERVER_SIDE_ERROR_CUTOFF } from "./helpers";
 import { Routes } from "./routes";
 
+// General ****************************************************************** //
+export const getMatchingPlayers = async (gamerTag : string) => {
+  console.log("requesting gamer tag matches", gamerTag);
+  const res  = await fetch(``);
+  return res.json();
+};
+
+// Pokemon **************************************************************** //
 export type PokemonData = {
   id? : number;
   name? : string;
   imageUrl? : string;
 };
-
-export type ItemData = {
-  id? : number;
-  name? : string;
-  imageUrl? : string;
-}
-
-// HOME PAGE STUFF ************************************* //
 export const getRandomPokemon = async () : Promise<PokemonData> => {
   console.log("fetching a random pokemon.");
 
@@ -32,6 +32,13 @@ export const getRandomPokemon = async () : Promise<PokemonData> => {
     name: json.name,
     imageUrl: json.imageUrl
   };
+}
+
+// Items ************************************************************ //
+export type ItemData = {
+  id? : number;
+  name? : string;
+  imageUrl? : string;
 }
 
 export const getRandomItem = async () : Promise<ItemData> => {
@@ -54,18 +61,28 @@ export const getRandomItem = async () : Promise<ItemData> => {
   };
 }
 
-export const getMostPickedOperator = async () : Promise<string> => {
-  return "Ash";
+// Gym Leaders ***************************************************** //
+export type GymLeaderData = {
+  id? : number;
+  name? : string;
+  imageUrl? : string;
 }
 
-export const getMostPickedMap = async () : Promise<string> => {
-  return "Clubhouse";
+export const getRandomGymLeader = async () : Promise<GymLeaderData> => {
+  console.log("fetching a random gym leader.");
+
+  // we have to generate the randomness of the gym leader on the backend since it is not part of the api we have to webscrape it
+  const request_url : string = `${Routes.GYM_LEADER}/random`
+  const res : Response = await fetch(request_url);
+  const json = await res.json();
+
+  console.log(json);
+
+  return {
+    name : json.name,
+    imageUrl : json.imageUrl
+  };
 }
 
-export const getMatchingPlayers = async (gamerTag : string) => {
-  console.log("requesting gamer tag matches", gamerTag);
-  const res  = await fetch(``);
-  return res.json();
-};
 
 

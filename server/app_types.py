@@ -20,3 +20,8 @@ class ItemData(TypedDict):
   id: int
   name: str
   imageUrl : str
+  
+class GymLeaderData(TypedDict):
+  id : int
+  name : str
+  imageUrl : str
