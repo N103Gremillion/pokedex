@@ -1,6 +1,6 @@
 # general pokemon fetched used for the pokemon specific pages
 from enum import Enum
-from app_types import ErrorResponse, ItemData, PokemonData, SuccessResponse
+from app_types import ErrorResponse, ErrorResponseKeys, ItemData, ItemKeys, PokemonData, SuccessResponse, SuccessResponseKeys
 from pokeapi.pokemon import PokemonInfoEndpoints
 from .general import baseApiUrl, fetchData
 
@@ -16,21 +16,21 @@ def fetchItemById(item_id: int) -> ItemData:
   url : str = f"{ItemInfoEndpoints.GET_ITEM.value}/{item_id}"
   response : SuccessResponse | ErrorResponse = fetchData(url)
   
-  if (not response["success"]):
+  if (not response[ErrorResponseKeys.SUCCESS]):
     print(f"Error fetching data for item id: {item_id}. Error: {response['error']}")
     return {
-      "id": -1,
-      "name": "Unknown",
-      "imageUrl": ""
+      ItemKeys.ID: -1,
+      ItemKeys.NAME: "Unknown",
+      ItemKeys.IMAGE_URL: "",
     }
   
-  data = response["data"]
+  data = response[SuccessResponseKeys.DATA]
   
   # map the data onto the PokemonData to ensure you have these on the frontend
   itemData : ItemData = {
-    "id": data.get("id"),
-    "name": data.get("name"),
-    "imageUrl": data.get("sprites").get("default"),
+    ItemKeys.ID: data.get("id"),
+    ItemKeys.NAME: data.get("name"),
+    ItemKeys.IMAGE_URL: data.get("sprites").get("default"),
   }
   
   return itemData

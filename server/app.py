@@ -3,9 +3,10 @@ from flask import Flask, Response, jsonify, request
 from enum import Enum
 from flask_cors import CORS
 from dotenv import load_dotenv
-from app_types import GymLeaderData, ItemData, PokemonData
+from app_types import GymLeaderData, ItemData, PokemonData, PokedexKeys
 from pokeapi.general import fetchData
 from pokeapi.item import ItemInfoEndpoints, fetchItemById, fetchItemByName
+from pokeapi.pokedex import fetchPokedexByGeneration
 from pokeapi.pokemon import PokemonInfoEndpoints, fetchPokemonById, fetchPokemonByName
 from scraper.scraper import fetchRandomGymLeader
 
@@ -32,7 +33,7 @@ def setupRoutes(app : Flask) -> None:
       result : PokemonData = fetchPokemonById(pokemon_id)
     else:
       # Name fetch
-      result = fetchPokemonByName(identifier.lower())
+      result = fetchPokemonByName(identifier.lower()) # api expects a lower case name
     
     return jsonify(result)
   
@@ -54,9 +55,23 @@ def setupRoutes(app : Flask) -> None:
   
   @app.route("/gym-leader/random")
   def getRandomGymLeader() -> GymLeaderData:
-    print("Fetching random Gym Leader")
     result : GymLeaderData = fetchRandomGymLeader()
-    
-    return result
+    return jsonify(result)
 
   
+  @app.route("/pokedex/<generation>")
+  def getPokemonInPokedexByGeneration(generation : str) -> Response:
+    gen_num : int
+    
+    try:
+      gen_num = int(generation)
+    except ValueError:
+      gen_num = -1
+  
+    if (gen_num == -1):
+      print(f"Invalid query param for generations. {generation}")
+      return {PokedexKeys.GEN_NUMBER : -1, PokedexKeys.POKEMON : []}
+
+    result = fetchPokedexByGeneration(gen_num)
+    
+    return jsonify(result)

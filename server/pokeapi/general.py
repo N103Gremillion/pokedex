@@ -1,7 +1,7 @@
 from typing import Optional
 import requests
 
-from app_types import ErrorResponse, SuccessResponse
+from app_types import ErrorResponse, ErrorResponseKeys, SuccessResponse, SuccessResponseKeys
 
 baseApiUrl : str = "https://pokeapi.co/api/v2/"
 
@@ -9,32 +9,34 @@ def fetchData(url: str, fromScrapper : bool = False) -> SuccessResponse | ErrorR
   try:
       
     response = requests.get(url, timeout=5)
-    response.raise_for_status()
+    response.raise_for_status() # raise 4xx/ 5xx responses to be caught in execption below
+    
+    # you can just use json for the api
     if (not fromScrapper):
       return {
-        "success": True,
-        "data": response.json()
+        SuccessResponseKeys.SUCCESS: True,
+        SuccessResponseKeys.DATA: response.json()
       }
     # need to use response.text for the scrapper
     else :
       return {
-        "success": True,
-        "data" : response.text
+        SuccessResponseKeys.SUCCESS: True,
+        SuccessResponseKeys.DATA: response.text
       }
       
   # client error
   except requests.HTTPError as error:
     return {
-      "success": False,
-      "error": str(error),
-      "status_code": response.status_code,
-      "details": None
+      ErrorResponseKeys.SUCCESS: False,
+      ErrorResponseKeys.ERROR: str(error),
+      ErrorResponseKeys.STATUS_CODE: response.status_code,
+      ErrorResponseKeys.DETAILS: None
     }
   
   except requests.RequestException as error:
     return {
-      "success": False,
-      "error": "Network error",
-      "status_code": None,
-      "details": str(error)
+      ErrorResponseKeys.SUCCESS: False,
+      ErrorResponseKeys.ERROR: "Network error",
+      ErrorResponseKeys.STATUS_CODE: None,
+      ErrorResponseKeys.DETAILS: str(error)
     }

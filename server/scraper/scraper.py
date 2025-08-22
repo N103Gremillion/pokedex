@@ -27,7 +27,7 @@ import time
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 
-from app_types import ErrorResponse, GymLeaderData, SuccessResponse
+from app_types import ErrorResponseKeys, ErrorResponse, GymLeaderKeys, GymLeaderData, SuccessResponseKeys, SuccessResponse
 from pokeapi.general import fetchData
 
 BASE_WIKI_URL : str = "https://bulbapedia.bulbagarden.net/wiki"
@@ -38,7 +38,6 @@ HEADERS = {
         "Gecko/20100101 Firefox/116.0"
     )
 }
-
 
 GYM_LEADERS : List[str] = [
   "Brock", "Misty", "Lt._Surge", "Erika", "Koga", "Janine", "Sabrina", "Blaine", "Giovanni", "Blue", # Indigo League
@@ -64,15 +63,15 @@ def fetchRandomGymLeader() -> GymLeaderData:
   gymLeaderPage : SuccessResponse | ErrorResponse = scrape_page(url_string)
   
   default_response : GymLeaderData = {
-    "name": gymLeaderName,
-    "imageUrl": ""
+    GymLeaderKeys.NAME : gymLeaderName,
+    GymLeaderKeys.IMAGE_URL : ""
   }
   
-  if not gymLeaderPage["success"]:
+  if not gymLeaderPage[ErrorResponseKeys.SUCCESS]:
     print("Failed to get gym leader page")
     return default_response
   
-  html = gymLeaderPage["data"]
+  html = gymLeaderPage[SuccessResponseKeys.DATA]
   
   soup = BeautifulSoup(html, "html.parser")
   
@@ -95,8 +94,8 @@ def fetchRandomGymLeader() -> GymLeaderData:
     return default_response
   
   return {
-    "name": gymLeaderName,
-    "imageUrl": image_info["src"]
+    GymLeaderKeys.NAME : gymLeaderName,
+    GymLeaderKeys.IMAGE_URL : image_info["src"]
   }
   
 def scrape_page(url_string : str) -> SuccessResponse | ErrorResponse:

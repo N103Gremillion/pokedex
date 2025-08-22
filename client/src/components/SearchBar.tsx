@@ -30,7 +30,7 @@ export const SearchBar = () => {
         completeMethod={(event) => handleSearch(event.query)} 
         field="name"                
         onChange={(event) => setSearchBarText(event.value)}
-        placeholder="Search player..."
+        placeholder="Search ..."
         inputClassName='search-bar'
       />
     </div>
