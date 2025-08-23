@@ -11,14 +11,15 @@ export const TypePage = () => {
   useEffect (() => {
     const run = async () => {
       setLoading(true);
+      
       await sleep(2);
-        
+
       if (!validPokemonType(typeString)){
         console.log(`Invalid type passed to TypePage. Type : ${typeString}`)
         return
       }
       
-      setLoading(false)
+      setLoading(false);
     };
 
     run();

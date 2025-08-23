@@ -1,3 +1,4 @@
+import type { Generation } from "../types";
 import { getRandomItemId, getRandomPokemonId, NOT_FOUND_STATUS, SERVER_SIDE_ERROR_CUTOFF } from "./helpers";
 import { Routes } from "./routes";
 
@@ -58,6 +59,27 @@ export const getRandomItem = async () : Promise<ItemData> => {
     id: json.id,
     name: json.name,
     imageUrl: json.imageUrl
+  };
+}
+
+// Pokedex ********************************************************* //
+export type PokedexData = {
+  gen_num? : number;
+  pokemon? : PokedexData[]
+}
+
+export const getPokedexInfo = async (generation : Generation) : Promise<PokedexData> => {
+  console.log(`Fetching pokedex info for gen ${generation}`);
+
+  const request_url : string = `${Routes.POKEDEX}/${generation}`;
+  const res : Response = await fetch(request_url);
+  const json = await res.json();
+
+  console.log(json);
+
+  return {
+    gen_num : json.gen_num,
+    pokemon : json.pokemon
   };
 }
 

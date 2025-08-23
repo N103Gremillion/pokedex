@@ -2,23 +2,19 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Generation, getGenerationFromString } from "../types";
 import { sleep } from "../utils";
-
-interface PokedexData {
-  gen_number: string;
-  pokemon: string[];
-}
+import { getPokedexInfo, type PokedexData } from "../api/pokemon_api";
 
 export const PokedexPage = () => {
   // pull of the genreatoin info from the url 
   const { generationString = "" } = useParams<{ generationString? : string }>();
   const [ loading, setLoading ] = useState<boolean>(false);
+  const [ pokedexInfo, setPokedexInfo ] = useState<PokedexData>({gen_num : -1, pokemon : []});
 
   // request the pokedex info from the backend every time a different generation is selected
   useEffect(() => {
     const run = async () => {
       setLoading(true);
-      await sleep(2);
-
+    
       // map the genrationString to the enum
       const generation : Generation = getGenerationFromString(generationString);
       
@@ -27,7 +23,14 @@ export const PokedexPage = () => {
         setLoading(false)
         return
       }
-      setLoading(false)
+
+      try {
+        setPokedexInfo(await getPokedexInfo(generation));
+      } catch (error) {
+        console.log(`Issue getting pokedex info for gen : ${generation} | Error : ${error}`);
+      } finally {
+        setLoading(false);
+      }
     };
     
     run();

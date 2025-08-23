@@ -59,7 +59,7 @@ class GymLeaderData(TypedDict):
 
 # Pokedex
 class PokedexKeys(str, Enum):
-  GEN_NUMBER = "gen_number"
+  GEN_NUMBER = "gen_num"
   POKEMON = "pokemon"
   
 class PokedexData(TypedDict):
