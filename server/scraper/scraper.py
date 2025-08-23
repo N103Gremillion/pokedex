@@ -17,6 +17,9 @@ use these to discover pages :
   
 Note:
   I am using this because some information is not openly availble on the pokeapi.
+  
+TODOS:
+  Add caching of requested html pages for the trainer information also host images on firebase cuz some of them are having binding issues
 """
 import random
 import threading

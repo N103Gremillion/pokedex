@@ -1,4 +1,31 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { validPokemonType } from "../types";
+import { sleep } from "../utils";
+
 export const TypePage = () => {
+  // pull of the type info from the url 
+  const { typeString = "" } = useParams<{ typeString? : string }>();
+  const [ loading, setLoading ] = useState<boolean>(false);
+
+  useEffect (() => {
+    const run = async () => {
+      setLoading(true);
+      await sleep(2);
+        
+      if (!validPokemonType(typeString)){
+        console.log(`Invalid type passed to TypePage. Type : ${typeString}`)
+        return
+      }
+      
+      setLoading(false)
+    };
+
+    run();
+  }, [typeString]);
+  
+  if (loading) { return <div className='loading-page'>Loading...</div>};
+
   return (
     <div className='general-page'>
 

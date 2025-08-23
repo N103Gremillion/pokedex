@@ -18,9 +18,9 @@ function App() {
       <NavBar/>
       <Routes>
         <Route path={PagePaths.Home} element={<HomePage />} />
-        <Route path={PagePaths.Pokedex} element={<PokedexPage /> }/>
-        <Route path={PagePaths.GymLeaders} element={<GymLeadersPage /> }/>
-        <Route path={PagePaths.Type} element={<TypePage />} />
+        <Route path={`${PagePaths.Pokedex}/:generationString`} element={<PokedexPage /> }/>
+        <Route path={`${PagePaths.GymLeaders}/:generationString`} element={<GymLeadersPage /> }/>
+        <Route path={`${PagePaths.Type}/:typeString`} element={<TypePage />} />
       </Routes> 
       <Footer/>     
     </>

@@ -11,15 +11,15 @@ export const NavBar = () => {
   const typeDropdownLabel : string = "Type";
 
   const pokemonGenerations: string[] = [
-    "Generation I",
-    "Generation II",
-    "Generation III",
-    "Generation IV",
-    "Generation V",
-    "Generation VI",
-    "Generation VII",
-    "Generation VIII",
-    "Generation IX"
+    "GenerationI",
+    "GenerationII",
+    "GenerationIII",
+    "GenerationIV",
+    "GenerationV",
+    "GenerationVI",
+    "GenerationVII",
+    "GenerationVIII",
+    "GenerationIX"
   ];
 
   const pokemonTypes: string[] = [
@@ -52,7 +52,7 @@ export const NavBar = () => {
             <HomeButton/>
             <NavBarDropdown label={pokedexDropdownLabel} options={pokemonGenerations} pagePath={PagePaths.Pokedex} />
             <NavBarDropdown label={gymLeaderDropdownLabel} options={pokemonGenerations} pagePath={PagePaths.GymLeaders}/>
-            <NavBarDropdown label={typeDropdownLabel} options={pokemonTypes} pagePath={PagePaths.Rank}/>
+            <NavBarDropdown label={typeDropdownLabel} options={pokemonTypes} pagePath={PagePaths.Type}/>
           </>
         }
         className='navbar'

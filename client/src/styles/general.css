@@ -96,9 +96,20 @@
   padding-top: 50px;
   padding-bottom: 100px;
   box-sizing: border-box;
-  width: 100%;
   background-color: var(--background_color);
   color: var(--text_color)
+}
+
+.loading-page {
+  min-height: 100vh;
+  min-width: 100vw;
+  padding-top: 50px;
+  padding-bottom: 100px;
+  background-color: var(--background_color);
+  color: var(--header_color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /*Footer####################################################*/

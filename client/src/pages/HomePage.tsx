@@ -3,6 +3,7 @@ import { CardSize, InfoCard } from '../components/InfoCard';
 import { SearchBar } from '../components/SearchBar';
 import '../styles/general.css'
 import { getRandomGymLeader, getRandomItem, getRandomPokemon, type GymLeaderData, type ItemData, type PokemonData } from '../api/pokemon_api';
+import { PagePaths } from './pagePaths';
 
 export const HomePage = () => {
 

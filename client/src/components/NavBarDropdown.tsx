@@ -17,7 +17,7 @@ export const NavBarDropdown = ({label, options, pagePath} : NavBarDropdownProps)
 
   const handleSelection = (selectedString : string) => {
     setSelectedOption(selectedString);
-    navigate(pagePath);
+    navigate(`${pagePath}/${selectedString}`);
   }
 
   const mappedOptions = options.map(opt => ({
