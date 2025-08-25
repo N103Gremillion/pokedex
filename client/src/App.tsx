@@ -9,6 +9,7 @@ import { PagePaths } from './pages/pagePaths';
 import './App.css';
 import './styles/general.css';
 import { Footer } from './components/Footer';
+import { PokemonPage } from './pages/PokemonPage';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path={`${PagePaths.Pokedex}/:generationString`} element={<PokedexPage /> }/>
         <Route path={`${PagePaths.GymLeaders}/:generationString`} element={<GymLeadersPage /> }/>
         <Route path={`${PagePaths.Type}/:typeString`} element={<TypePage />} />
+        <Route path={`${PagePaths.Pokemon}/:pokemonNameString`} element={<PokemonPage/>}/>
       </Routes> 
       <Footer/>     
     </>

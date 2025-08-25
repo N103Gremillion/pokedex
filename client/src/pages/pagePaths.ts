@@ -3,4 +3,5 @@ export enum PagePaths {
   Pokedex = '/pokedex',
   GymLeaders = '/gym-leaders',
   Type = '/type',
+  Pokemon = '/pokemon',
 }
