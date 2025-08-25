@@ -35,23 +35,20 @@ export const PokedexEntry = ({pokemonData} : PokedexEntryProps) => {
   }
 
   return (
-    <div style={{width:"150px", height:"150px"}}>
-      <div className="pokedex-entry" onClick={(event) => handleClick(event)}>
-        {pokemonImage}
-        <div className="pokedex-entry-types-container">
-          {typeImageUrls.map((url, index) => (
-            <img
-              key={index}
-              src={url}
-              alt={`type-image`}
-              className="pokedex-entry-type-image"
-            />
-          ))}
-        </div>
-        <div className="pokedex-entry-name">
-          {pokemonData.name} <br/>
-        </div>
-        
+    <div className="pokedex-entry" onClick={(event) => handleClick(event)}>
+      {pokemonImage}
+      <div className="pokedex-entry-types-container">
+        {typeImageUrls.map((url, index) => (
+          <img
+            key={index}
+            src={url}
+            alt={`type-image`}
+            className="pokedex-entry-type-image"
+          />
+        ))}
+      </div>
+      <div className="pokedex-entry-name">
+        {pokemonData.name} <br/>
       </div>
     </div>
   );

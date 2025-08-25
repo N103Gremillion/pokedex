@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Generation, getGenerationFromString } from "../types";
-import { sleep } from "../utils";
 import { getPokedexInfo, getRandomPokemon, type PokedexData, type PokemonData } from "../api/pokemon_api";
 import { PokedexGrid } from "../components/PokedexGrid";
-import { PokedexEntry } from "../components/PokedexEntry";
 
 export const PokedexPage = () => {
   // pull of the genreatoin info from the url 
   const { generationString = "" } = useParams<{ generationString? : string }>();
   const [ loading, setLoading ] = useState<boolean>(false);
   const [ pokedexInfo, setPokedexInfo ] = useState<PokedexData>({gen_num : -1, pokemon : []});
-  const [ testPokemon, setTestPokemon ] = useState<PokemonData>({id : -1, name : "undefined", imageUrl : "undefined"});
 
   // request the pokedex info from the backend every time a different generation is selected
   useEffect(() => {
@@ -28,8 +25,7 @@ export const PokedexPage = () => {
       }
 
       try {
-        // setPokedexInfo(await getPokedexInfo(generation));
-        setTestPokemon(await getRandomPokemon());
+        setPokedexInfo(await getPokedexInfo(generation));
       } catch (error) {
         console.log(`Issue getting pokedex info for gen : ${generation} | Error : ${error}`);
       } finally {
@@ -45,8 +41,7 @@ export const PokedexPage = () => {
   return (
     <div className='general-page'>
       <h1 className='header'>Generation {pokedexInfo.gen_num} Pokedex</h1>
-      <PokedexEntry pokemonData={testPokemon}/>
-      {/* <PokedexGrid pokedex={pokedexInfo}/> */}
+      <PokedexGrid pokedex={pokedexInfo}/> 
     </div>
   );
 }
