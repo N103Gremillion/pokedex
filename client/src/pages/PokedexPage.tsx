@@ -45,8 +45,7 @@ export const PokedexPage = () => {
   return (
     <div className='general-page'>
       <h1 className='header'>Generation {pokedexInfo.gen_num} Pokedex</h1>
-      <PokedexEntry pokemonData={testPokemon}/>
-      {/* <PokedexGrid pokedex={pokedexInfo}/> */}
+      <PokedexGrid pokedex={pokedexInfo}/>
     </div>
   );
 }
