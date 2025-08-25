@@ -1,4 +1,4 @@
-import type { Generation } from "../types";
+import type { Generation, PokemonType } from "../types";
 import { getRandomItemId, getRandomPokemonId, NOT_FOUND_STATUS, SERVER_SIDE_ERROR_CUTOFF } from "./helpers";
 import { Routes } from "./routes";
 
@@ -14,7 +14,9 @@ export type PokemonData = {
   id? : number;
   name? : string;
   imageUrl? : string;
-};
+  types? : PokemonType[];
+}
+
 export const getRandomPokemon = async () : Promise<PokemonData> => {
   console.log("fetching a random pokemon.");
 
@@ -31,7 +33,8 @@ export const getRandomPokemon = async () : Promise<PokemonData> => {
   return {
     id: json.id,
     name: json.name,
-    imageUrl: json.imageUrl
+    imageUrl: json.imageUrl,
+    types : json.types
   };
 }
 

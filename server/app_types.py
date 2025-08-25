@@ -1,7 +1,28 @@
 from enum import Enum
 from typing import NotRequired, TypedDict, Any, Optional
 
-# generic types for when you make a api fetch
+# Helpful Types
+class PokemonType (str, Enum):
+  Normal = "normal",
+  Fire = "fire",
+  Water = "water",
+  Electric = "electric",
+  Grass = "grass",
+  Ice = "ice",
+  Fighting = "fighting",
+  Poison = "poison",
+  Ground = "ground",
+  Flying = "flying",
+  Psychic = "psychic",
+  Bug = "bug",
+  Rock = "rock",
+  Ghost = "ghost",
+  Dragon = "dragon",
+  Dark = "dark",
+  Steel = "steel",
+  Fairy = "fairy"
+ 
+# generic object to return in api fetches
 class SuccessResponseKeys(str, Enum):
   SUCCESS = "success"
   DATA = "data"
@@ -33,7 +54,7 @@ class PokemonData(TypedDict):
   id: int
   name: str
   imageUrl : str
-  types: NotRequired[list[str]]
+  types: NotRequired[list[PokemonType]]
 
 # Items
 class ItemKeys(str, Enum):
@@ -65,4 +86,5 @@ class PokedexKeys(str, Enum):
 class PokedexData(TypedDict):
   gen_number : int
   pokemon : list[PokemonData]
-  
+
+

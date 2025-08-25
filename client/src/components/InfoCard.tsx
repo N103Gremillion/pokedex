@@ -1,4 +1,5 @@
 import { Card } from 'primereact/card';
+import type { SyntheticEvent } from 'react';
         
 // TODO : change to use primereact
 export enum CardSize {
@@ -17,11 +18,20 @@ interface InfoCardProps {
 
 export const InfoCard = ({size, title, subtitle, text, imageUrl} : InfoCardProps) => {
   
+  const defaultImageUrl : string = "/public/default_img.png";
+
+  // construct the handler for when the image doesnt load
+  const handleImageNotFound = (event : SyntheticEvent<HTMLImageElement, Event>) => {
+    const img = event.currentTarget;
+    img.src = defaultImageUrl;
+  }
+
   const cardImage = (
     <img 
-      src={imageUrl} 
+      src={imageUrl || defaultImageUrl} 
       alt="Player card"
       className='small-card-image'
+      onError= {(error) => handleImageNotFound(error)}
     />
   );
 

@@ -38,34 +38,52 @@
   font-size: 18px;
 }
 
-/*Leaderboard################################################*/
-.leaderboard {
-  table-layout: fixed;
-  width: 100%;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+/*Pokedex################################################*/
+.pokedex-entry {
+  width : 100%;
+  height : 100%;
+  display: flex;
+  flex-direction: column;
   background-color: var(--card_bg);
+  padding: 5px;
+  border-radius: 2px;
+  border-color: var(--toolbar_color);
+  border-style: solid;
 }
 
-/* this is added automaically to DataTable body cells by primereact */
-/* table headers */
-.leaderboard .p-datatable-thead > tr > th {
-  padding: 12px;
+.pokedex-entry-img {
+  width: 100%;
+  height: 60%;
+  object-fit: contain;
+}
+
+.pokedex-entry-name {
+  width: 100%;
+  height: 20%;
   text-align: center;
+  object-fit: contain;
 }
 
-/* table data */
-.p-datatable .p-datatable-tbody > tr > td {
-  border: 1px solid var(--searchbar_bg);
-  padding: 12px;
-  box-sizing: border-box; 
-  text-align: left;    
-  vertical-align: middle;
+.pokedex-entry-types-container {
+  width: 100%;
+  height: 20%;
+  object-fit: contain;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
 }
 
+.pokedex-entry-type-image {
+  width: 80%;
+  height: 100%;
+  object-fit: contain;
+  flex-shrink: 1;
+}
 
-
+.pokedex-entry:hover {
+  border-color: var(--highlight_color);
+}
 
 /*Search Bar#################################################*/
 .search-bar-container {
@@ -139,6 +157,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  padding: 5px;
 }
 
 .small-card-image {

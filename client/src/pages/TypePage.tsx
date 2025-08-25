@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { validPokemonType } from "../types";
-import { sleep } from "../utils";
+import { sleep, validPokemonType } from "../utils";
 
 export const TypePage = () => {
   // pull of the type info from the url 

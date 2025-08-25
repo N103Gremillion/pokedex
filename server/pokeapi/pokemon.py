@@ -1,26 +1,22 @@
 from typing import Optional
 
 from flask import json
-from app_types import ErrorResponse, PokemonData, SuccessResponse, ErrorResponseKeys, PokemonKeys, SuccessResponseKeys
+from app_types import ErrorResponse, PokemonData, PokemonType, SuccessResponse, ErrorResponseKeys, PokemonKeys, SuccessResponseKeys
+from pokeapi.utils import isValidType, print_pretty_json
 from .general import baseApiUrl, fetchData
 from enum import Enum
 import requests
 
 class PokemonInfoEndpoints(Enum):
   GET_POKEMON = f"{baseApiUrl}/pokemon"
-  
-# general pokemon fetched used for the pokemon specific pages
-def fetchPokemonByName(name: str):
-  url : str = f"{PokemonInfoEndpoints.GET_POKEMON.value}/{name}"
-  return fetchData(url)
-    
+      
 # less data for this one since it is not used on the in depth pokemon pages
-def fetchPokemonById(pokemon_id: int) -> PokemonData:
-  url : str = f"{PokemonInfoEndpoints.GET_POKEMON.value}/{pokemon_id}"
+def fetchPokemonDataByIdentifier(pokemon_identifier : int | str) -> PokemonData:
+  url : str = f"{PokemonInfoEndpoints.GET_POKEMON.value}/{pokemon_identifier}"
   response : SuccessResponse | ErrorResponse = fetchData(url)
   
   if (not response[ErrorResponseKeys.SUCCESS]):
-    print(f"Error fetching data for pokemon id: {pokemon_id}. Error: {response['error']}")
+    print(f"Error fetching data for pokemon identifier: {pokemon_identifier}. Error: {response['error']}")
     return {
       PokemonKeys.ID : -1,
       PokemonKeys.NAME : "Unknown",
@@ -29,11 +25,23 @@ def fetchPokemonById(pokemon_id: int) -> PokemonData:
   
   data = response[SuccessResponseKeys.DATA]
   
+  # add type information
+  type_info = data.get("types")
+  types : list[PokemonType] = []
+  
+  for entry in type_info:
+    type_data = entry.get("type")
+    if (type_data):
+      type_name = type_data.get("name")
+      if isValidType(type_name):
+        types.append(type_name)
+  
   # map the data onto the PokemonData to ensure you have these on the frontend
   pokemonData : PokemonData = {
     PokemonKeys.ID : data.get("id"),
     PokemonKeys.NAME : data.get("name"),
-    PokemonKeys.IMAGE_URL : data.get("sprites").get("front_default")
+    PokemonKeys.IMAGE_URL : data.get("sprites").get("front_default"),
+    PokemonKeys.TYPES : types
   }
   
   return pokemonData

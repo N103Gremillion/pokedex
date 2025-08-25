@@ -1,33 +1,22 @@
 export enum PokemonType {
-  Normal = "Normal",
-  Fire = "Fire",
-  Water = "Water",
-  Electric = "Electric",
-  Grass = "Grass",
-  Ice = "Ice",
-  Fighting = "Fighting",
-  Poison = "Poison",
-  Ground = "Ground",
-  Flying = "Flying",
-  Psychic = "Psychic",
-  Bug = "Bug",
-  Rock = "Rock",
-  Ghost = "Ghost",
-  Dragon = "Dragon",
-  Dark = "Dark",
-  Steel = "Steel",
-  Fairy = "Fairy"
-}
-
-export function validPokemonType(typeString : string) : boolean {
-
-  for (const type of Object.values(PokemonType)) {
-    if (typeString === type) {
-      return true;
-    }
-  }
-
-  return false;
+  Normal = "normal",
+  Fire = "fire",
+  Water = "water",
+  Electric = "electric",
+  Grass = "grass",
+  Ice = "ice",
+  Fighting = "fighting",
+  Poison = "poison",
+  Ground = "ground",
+  Flying = "flying",
+  Psychic = "psychic",
+  Bug = "bug",
+  Rock = "rock",
+  Ghost = "ghost",
+  Dragon = "dragon",
+  Dark = "dark",
+  Steel = "steel",
+  Fairy = "fairy"
 }
 
 export enum Generation {

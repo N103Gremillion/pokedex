@@ -7,7 +7,7 @@ from app_types import GymLeaderData, ItemData, PokemonData, PokedexKeys
 from pokeapi.general import fetchData
 from pokeapi.item import ItemInfoEndpoints, fetchItemById, fetchItemByName
 from pokeapi.pokedex import fetchPokedexByGeneration
-from pokeapi.pokemon import PokemonInfoEndpoints, fetchPokemonById, fetchPokemonByName
+from pokeapi.pokemon import PokemonInfoEndpoints, fetchPokemonDataByIdentifier
 from scraper.scraper import fetchRandomGymLeader
 
 def initApp() -> Flask:
@@ -30,10 +30,10 @@ def setupRoutes(app : Flask) -> None:
     if identifier.isdigit():
       # ID fetch
       pokemon_id : int = int(identifier)
-      result : PokemonData = fetchPokemonById(pokemon_id)
+      result : PokemonData = fetchPokemonDataByIdentifier(pokemon_id)
     else:
       # Name fetch
-      result = fetchPokemonByName(identifier.lower()) # api expects a lower case name
+      result = fetchPokemonDataByIdentifier(identifier.lower()) # api expects a lower case name
     
     return jsonify(result)
   

@@ -3,7 +3,7 @@ from flask import json
 from app_types import ErrorResponse, ErrorResponseKeys, PokedexData, PokedexKeys, SuccessResponse, SuccessResponseKeys, PokemonData
 from .general import baseApiUrl, fetchData
 from .utils import print_pretty_json
-from .pokemon import fetchPokemonById
+from .pokemon import fetchPokemonDataByIdentifier
 
 class PokedexInfoEndpoints(Enum):
   GET_GENERATION = f"{baseApiUrl}/generation"
@@ -47,7 +47,7 @@ def fetchPokedexByGeneration(gen_num) -> PokedexData:
       print(f"Issue pulling off the pokemon_id for a pokemon in gen {gen_num}. pokemon_info : {pokemon}")
       continue
     
-    pokemon_map[pokemon_id] = fetchPokemonById(pokemon_id)
+    pokemon_map[pokemon_id] = fetchPokemonDataByIdentifier(pokemon_id)
     
   sorted_pokemon = [pokemon_map[id_] for id_ in sorted(pokemon_map.keys())]
   res[PokedexKeys.POKEMON] = sorted_pokemon
