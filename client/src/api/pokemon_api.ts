@@ -68,7 +68,7 @@ export const getRandomItem = async () : Promise<ItemData> => {
 // Pokedex ********************************************************* //
 export type PokedexData = {
   gen_num? : number;
-  pokemon? : PokedexData[]
+  pokemon? : PokemonData[]
 }
 
 export const getPokedexInfo = async (generation : Generation) : Promise<PokedexData> => {

@@ -39,9 +39,18 @@
 }
 
 /*Pokedex################################################*/
+.pokedex-grid-container {
+  padding-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(5, 200px);/* 5 squares per cols */
+  column-gap: 20px;
+  row-gap: 20px;
+  justify-content: center;
+}
+
 .pokedex-entry {
-  width : 100%;
-  height : 100%;
+  width : 200px;
+  height : 200px;
   display: flex;
   flex-direction: column;
   background-color: var(--card_bg);
