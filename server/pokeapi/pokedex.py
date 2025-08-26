@@ -1,14 +1,27 @@
 from enum import Enum
-from flask import json
+from flask import json, jsonify
 from app_types import ErrorResponse, ErrorResponseKeys, PokedexData, PokedexKeys, SuccessResponse, SuccessResponseKeys, PokemonData
-from .general import baseApiUrl, fetchData
-from .utils import print_pretty_json
-from .pokemon import fetchPokemonDataByIdentifier
+from pokeapi.general import baseApiUrl, fetchData
+from pokeapi.utils import print_pretty_json
+from pokeapi.pokemon import fetchPokemonDataByIdentifier
+from mongo.db_utils import DatabaseCollections
+from pymongo.collection import Collection
 
 class PokedexInfoEndpoints(Enum):
   GET_GENERATION = f"{baseApiUrl}/generation"
 
-def fetchPokedexByGeneration(gen_num) -> PokedexData:
+def fetchPokedexByGeneration(gen_num : int) -> PokedexData:
+  from entry import globalDb
+  
+  # check if it is already cached in the database
+  pokedexCollection : Collection = globalDb[DatabaseCollections.POKEDEX.value.name]
+  
+  cachedDoc = pokedexCollection.find_one({DatabaseCollections.POKEDEX.value.key: gen_num})
+  
+  if (cachedDoc):
+    return { PokedexKeys.GEN_NUMBER : cachedDoc[PokedexKeys.GEN_NUMBER], PokedexKeys.POKEMON : cachedDoc[PokedexKeys.POKEMON]}
+  
+  # if not chached fetch from api
   url : str = f"{PokedexInfoEndpoints.GET_GENERATION.value}/{gen_num}"
   response : SuccessResponse | ErrorResponse = fetchData(url)
   res : PokedexData = {PokedexKeys.GEN_NUMBER :  gen_num, PokedexKeys.POKEMON : []}
@@ -18,8 +31,6 @@ def fetchPokedexByGeneration(gen_num) -> PokedexData:
     return res
   
   data = response[SuccessResponseKeys.DATA]
-  
-  # this is a dict
   pokemon_entries = data.get("pokemon_species")
   
   if (not pokemon_entries):
@@ -52,4 +63,10 @@ def fetchPokedexByGeneration(gen_num) -> PokedexData:
   sorted_pokemon = [pokemon_map[id_] for id_ in sorted(pokemon_map.keys())]
   res[PokedexKeys.POKEMON] = sorted_pokemon
   
+  # add to cache pages to prevent unecessary fetches in the future
+  pokedexCollection.insert_one({
+    DatabaseCollections.POKEDEX.value.key: gen_num,
+    PokedexKeys.POKEMON: res[PokedexKeys.POKEMON]
+  })
+
   return res

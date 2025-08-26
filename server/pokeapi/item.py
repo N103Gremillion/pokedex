@@ -2,7 +2,7 @@
 from enum import Enum
 from app_types import ErrorResponse, ErrorResponseKeys, ItemData, ItemKeys, PokemonData, SuccessResponse, SuccessResponseKeys
 from pokeapi.pokemon import PokemonInfoEndpoints
-from .general import baseApiUrl, fetchData
+from pokeapi.general import baseApiUrl, fetchData
 
 class ItemInfoEndpoints(Enum):
   GET_ITEM = f"{baseApiUrl}/item"
