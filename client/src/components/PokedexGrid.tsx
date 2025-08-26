@@ -1,6 +1,5 @@
 import type { PokedexData, PokemonData } from "../api/pokemon_api";
 import { PokedexEntry } from "./PokedexEntry";
-        
 
 interface PokedexGridProps {
   pokedex : PokedexData;

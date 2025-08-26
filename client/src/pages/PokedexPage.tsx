@@ -41,11 +41,7 @@ export const PokedexPage = () => {
   return (
     <div className='general-page'>
       <h1 className='header'>Generation {pokedexInfo.gen_num} Pokedex</h1>
-<<<<<<< HEAD
-      <PokedexGrid pokedex={pokedexInfo}/>
-=======
       <PokedexGrid pokedex={pokedexInfo}/> 
->>>>>>> refs/remotes/origin/main
     </div>
   );
 }
