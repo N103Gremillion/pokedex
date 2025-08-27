@@ -1,8 +1,9 @@
 import random
+import copy
 from typing import List
 from bs4 import BeautifulSoup, Tag
 from app_types import ErrorResponse, ErrorResponseKeys, GymLeaderData, GymLeaderKeys, PokemonRegionGymLeaders, PokemonRegionGymLeadersKeys, SuccessResponse, SuccessResponseKeys
-from pokeapi.utils import print_pretty_json
+from utils import print_pretty_json, isValidType
 from scraper.scraper import BASE_WIKI_URL, scrape_page
 
 
@@ -109,45 +110,126 @@ def fetchGymleadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
     gym_data : GymLeaderData
     rowspan : int
     offset : int = 0
-      
+    
     # edge case (1 of these)
     if total_cells == 6:
       offset : int = 1
       
     gym_data, rowspan = parse_gym_row(cells, offset)
     
-    i += 1
+    # go ahead and add the inital data to the gymLeaders
+    gym_leaders.append(gym_data)
+    
+    if (rowspan > 1):
       
+      # if the cells span multiple rows we now there is at least rowspan number of gym leaders so we need to copy over the previous cells and check to see the ones that have changed
+      while (rowspan > 1):
+        
+        # pull off the next row since it should have some addational info 
+        i += 1
+        
+        if (i >= len(gym_leader_rows)):
+          rowspan -= 1
+          continue
+        
+        next_row = gym_leader_rows[i]
+        next_cells = next_row.find_all("td")
+        
+        if not cells:
+          rowspan -= 1
+          continue
+          
+        gym_data_copy = parse_gym_row_copy(gym_data, next_cells)
+        gym_leaders.append(gym_data_copy)
+        
+        rowspan -= 1
+    
+    i += 1
+  
+  leader_num : int = 1
+
+  for leader in gym_leaders:
+    print("-------------------------")
+    print(f"Number : {leader_num}")
+    print(leader[GymLeaderKeys.GYM_NAME])
+    print(leader[GymLeaderKeys.BADGE_NAME])
+    print(leader[GymLeaderKeys.BADGE_IMAGE_URL])
+    print(leader[GymLeaderKeys.TYPE])
+    print(leader[GymLeaderKeys.GYM_LEADER_NAME])
+    print(leader[GymLeaderKeys.GYM_LEADER_IMAGE_URL])
+    leader_num += 1
+  
   return response
 
-# this get the general cases in the tables (offset is used for the )
+# this handle the case where a col spans multiple rows and some extra info can be pull off
+def parse_gym_row_copy(gym_data : GymLeaderData, cells : list[Tag]) -> GymLeaderData:
+  count : int = 0
+  gym_data_copy : GymLeaderData = copy.deepcopy(gym_data)
+  
+  for cell in cells:
+    text : str = cell.get_text(strip=True)
+    img = cell.find("img")
+    
+    # check if the cell contains a type (identify by if if contains text that appear in or enum)
+    if (isValidType(text)): # Type name
+      gym_data_copy[GymLeaderKeys.TYPE] = text
+  
+    # at this point we know it is not a type and if it has an img it has to be gym trainer info
+    elif (img and text != "1"): # Gym Tainer info
+      gym_data_copy[GymLeaderKeys.GYM_LEADER_NAME] = text
+      gym_leader_img_url = img.get("src")
+      
+      gym_data_copy[GymLeaderKeys.GYM_LEADER_IMAGE_URL] = gym_leader_img_url
+      
+    # at this point if the text isnt null it is the gym name there are also some other checks you will have to look at the table for Unova make this make sense
+    elif (text != "" and text[len(text) - 1] == "m"): # Gym Name
+      print(text)
+      gym_data_copy[GymLeaderKeys.GYM_NAME] = text
+      
+    count += 1
+    
+  return gym_data_copy
+  
+# this get the general cases when scraping the tables from  https://bulbapedia.bulbagarden.net/wiki/Gym (offset is used for gen 5 which has one extra column)
 def parse_gym_row(cells : list[Tag], offset : int) -> tuple[GymLeaderData, int]:
   
   response : GymLeaderData = {}
   
   # badge info can only have 1 instance so we use this to determine if another cell has 2 entries 
+  gym_name = cells[1 + offset].get_text(strip=True)
   badge_cell = cells[2 + offset]
   badge_name = badge_cell.get_text(strip=True)
   badge_img = badge_cell.find("img")
+  gym_type = cells[3 + offset].get_text(strip=True) 
+  gym_leader_cell = cells[4 + offset]
+  gym_leader_name = gym_leader_cell.get_text(strip=True)
+  gym_leader_img = gym_leader_cell.find("img")
   
   if badge_img:
     badge_img_url = badge_img.get("src") 
   else :
     badge_img_url = "" 
   
-  print(f"Badge Name : {badge_name}")
-  print(f"Badge Url : {badge_img_url}")
-  
+  if gym_leader_img:
+    gym_leader_img_url = gym_leader_img.get("src")
+  else:
+    gym_leader_img_url = ""
+    
+  response[GymLeaderKeys.GYM_NAME] = gym_name
   response[GymLeaderKeys.BADGE_NAME] = badge_name
   response[GymLeaderKeys.BADGE_IMAGE_URL] = badge_img_url
+  response[GymLeaderKeys.GYM_LEADER_NAME] = gym_leader_name
+  response[GymLeaderKeys.GYM_LEADER_IMAGE_URL] = gym_leader_img_url
+  
+  if (isValidType(gym_type)):
+    response[GymLeaderKeys.TYPE] = gym_type
+  
   
   # check if there are more possible gym leader names, gym leader images, or gym types 
   rowspan = int(badge_cell.get("rowspan", 1))
   
-  print(f"ROWSPAN : {rowspan}")
-  print("------------------------------------------------")
-  
   return (response, rowspan)
+
 
 def fetchRandomGymLeader() -> GymLeaderData:
   # first get a random gym leader name and create the url string

@@ -28,6 +28,7 @@ export const NavBarDropdown = ({label, options, pagePath} : NavBarDropdownProps)
   return (
     <Dropdown
       className='navbar-component'
+      appendTo="self"
       placeholder={label}
       options={mappedOptions}
       onChange={(event) => handleSelection(event.value)}

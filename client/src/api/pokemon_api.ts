@@ -30,6 +30,8 @@ export const getRandomPokemon = async () : Promise<PokemonData> => {
 
   const json = await res.json();
 
+  console.log(json)
+
   return {
     id: json.id,
     name: json.name,
@@ -105,8 +107,6 @@ export const getRandomGymLeader = async () : Promise<GymLeaderData> => {
   const request_url : string = `${Routes.GYM_LEADER}/random`
   const res : Response = await fetch(request_url);
   const json = await res.json();
-
-  console.log(json);
 
   return {
     gym_leader_name : json.gym_leader_name,

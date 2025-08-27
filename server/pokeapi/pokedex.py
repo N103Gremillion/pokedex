@@ -2,7 +2,7 @@ from enum import Enum
 from flask import json, jsonify
 from app_types import ErrorResponse, ErrorResponseKeys, PokedexData, PokedexKeys, SuccessResponse, SuccessResponseKeys, PokemonData
 from pokeapi.general import baseApiUrl, fetchData
-from pokeapi.utils import print_pretty_json
+from utils import print_pretty_json
 from pokeapi.pokemon import fetchPokemonDataByIdentifier
 from mongo.db_utils import DatabaseCollections
 from pymongo.collection import Collection

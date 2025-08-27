@@ -3,24 +3,25 @@ from typing import NotRequired, TypedDict, Any, Optional
 
 # Helpful Types
 class PokemonType (str, Enum):
-  Normal = "normal",
-  Fire = "fire",
-  Water = "water",
-  Electric = "electric",
-  Grass = "grass",
-  Ice = "ice",
-  Fighting = "fighting",
-  Poison = "poison",
-  Ground = "ground",
-  Flying = "flying",
-  Psychic = "psychic",
-  Bug = "bug",
-  Rock = "rock",
-  Ghost = "ghost",
-  Dragon = "dragon",
-  Dark = "dark",
-  Steel = "steel",
-  Fairy = "fairy"
+  Normal = "Normal",
+  Fire = "Fire",
+  Water = "Water",
+  Electric = "Electric",
+  Grass = "Grass",
+  Ice = "Ice",
+  Fighting = "Fighting",
+  Poison = "Poison",
+  Ground = "Ground",
+  Flying = "Flying",
+  Psychic = "Psychic",
+  Bug = "Bug",
+  Rock = "Rock",
+  Ghost = "Ghost",
+  Dragon = "Dragon",
+  Dark = "Dark",
+  Steel = "Steel",
+  Fairy = "Fairy",
+  Various = "Various"
  
 # generic object to return in api fetches
 class SuccessResponseKeys(str, Enum):

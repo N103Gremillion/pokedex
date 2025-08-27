@@ -2,7 +2,7 @@ from typing import Optional
 
 from flask import json
 from app_types import ErrorResponse, PokemonData, PokemonType, SuccessResponse, ErrorResponseKeys, PokemonKeys, SuccessResponseKeys
-from pokeapi.utils import isValidType, print_pretty_json
+from utils import isValidType, print_pretty_json
 from pokeapi.general import baseApiUrl, fetchData
 from enum import Enum
 import requests
