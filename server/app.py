@@ -3,12 +3,12 @@ from flask import Flask, Response, jsonify, request
 from enum import Enum
 from flask_cors import CORS
 from dotenv import load_dotenv
-from app_types import GymLeaderData, ItemData, PokemonData, PokedexKeys
+from app_types import GymLeaderData, ItemData, PokemonData, PokedexKeys, PokemonRegionGymLeaders
 from pokeapi.general import fetchData
 from pokeapi.item import ItemInfoEndpoints, fetchItemById, fetchItemByName
 from pokeapi.pokedex import fetchPokedexByGeneration
 from pokeapi.pokemon import PokemonInfoEndpoints, fetchPokemonDataByIdentifier
-from scraper.scraper import fetchRandomGymLeader
+from scraper.gymLeader import fetchGymleadersByGeneration, fetchRandomGymLeader
 
 def initApp() -> Flask:
   app : Flask = Flask(__name__)
@@ -24,6 +24,7 @@ def setupRoutes(app : Flask) -> None:
     print("Fetching home info")
     return "Hello, Flask!"
   
+  # POKEMON ENDPOINTS ################################################################
   # TO DO add tying to name fetches and implement the rest of the typing
   @app.route("/pokemon/<identifier>")
   def getPokemonByIdentifier(identifier : str) -> Response:   
@@ -37,6 +38,7 @@ def setupRoutes(app : Flask) -> None:
     
     return jsonify(result)
   
+  # ITEM ENDPOINTS ###################################################################
   # TO DO add tying to name fetches and implement the rest of the typing
   @app.route("/item/<identifier>")
   def getItemByIdentifier(identifier : str) -> Response:
@@ -47,18 +49,10 @@ def setupRoutes(app : Flask) -> None:
     else:
       # Name fetch
       result = fetchItemByName(identifier.lower())
-      
-    #result = fetchData(ItemInfoEndpoints.GET_ITEM.value)
     
-    # print(result)
     return jsonify(result)
   
-  @app.route("/gym-leader/random")
-  def getRandomGymLeader() -> GymLeaderData:
-    result : GymLeaderData = fetchRandomGymLeader()
-    return jsonify(result)
-
-  
+  # POKEDEX ENDPOINTS ###########################################################
   @app.route("/pokedex/<generation>")
   def getPokemonInPokedexByGeneration(generation : str) -> Response:
     gen_num : int
@@ -75,3 +69,17 @@ def setupRoutes(app : Flask) -> None:
     result = fetchPokedexByGeneration(gen_num)
     
     return jsonify(result)
+  
+  # scrapper endpoints (mostly gym stuff)
+  # GYMLEADERS ENDPOINTS ##################################################################
+  @app.route("/gym-leader/random")
+  def getRandomGymLeader() -> GymLeaderData:
+    result : GymLeaderData = fetchRandomGymLeader()
+    return jsonify(result)
+
+  @app.route("/gym-leaders/<generation>")
+  def getGymLeadersFromGeneration(generation : str) -> PokemonRegionGymLeaders:
+    res : list[GymLeaderData] = fetchGymleadersByGeneration(generation)
+    return jsonify(res)
+  
+  

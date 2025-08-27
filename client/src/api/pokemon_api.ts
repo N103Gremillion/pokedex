@@ -89,8 +89,13 @@ export const getPokedexInfo = async (generation : Generation) : Promise<PokedexD
 // Gym Leaders ***************************************************** //
 export type GymLeaderData = {
   id? : number;
-  name? : string;
-  imageUrl? : string;
+  gym_name? : string;
+  gym_leader_name? : string;
+  gym_leader_image_url? : string;
+  element_type? : PokemonType;
+  badge_name? : string,
+  badge_image_url? : string,
+  pokemon? : PokedexData[]
 }
 
 export const getRandomGymLeader = async () : Promise<GymLeaderData> => {
@@ -104,8 +109,8 @@ export const getRandomGymLeader = async () : Promise<GymLeaderData> => {
   console.log(json);
 
   return {
-    name : json.name,
-    imageUrl : json.imageUrl
+    gym_leader_name : json.gym_leader_name,
+    gym_leader_image_url : json.gym_leader_image_url
   };
 }
 

@@ -30,7 +30,7 @@ export const HomePage = () => {
       <h2 className='header2'> Random Picks for You</h2>
       <div className='horizontal-container'>
         <InfoCard size={CardSize.small} title="Random Pokemon" text={pokemon?.name ?? "Unknown"} imageUrl={pokemon?.imageUrl}/>
-        <InfoCard size={CardSize.small} title='Random Gym Leader' text={gymLeader?.name ?? "Unknown"} imageUrl={gymLeader?.imageUrl}/>
+        <InfoCard size={CardSize.small} title='Random Gym Leader' text={gymLeader?.gym_leader_name ?? "Unknown"} imageUrl={gymLeader?.gym_leader_image_url}/>
         <InfoCard size={CardSize.small} title='Random Item' text={item?.name ?? "Unkown"} imageUrl={item?.imageUrl}/>
       </div>
     </div>

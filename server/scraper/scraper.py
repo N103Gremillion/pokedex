@@ -21,16 +21,10 @@ Note:
 TODOS:
   Add caching of requested html pages for the trainer information also host images on firebase cuz some of them are having binding issues
 """
-import random
 import threading
-from typing import List
-from flask import Response
-import requests
 import time
-from bs4 import BeautifulSoup
-from bs4.element import Tag
 
-from app_types import ErrorResponseKeys, ErrorResponse, GymLeaderKeys, GymLeaderData, SuccessResponseKeys, SuccessResponse
+from app_types import ErrorResponse, SuccessResponse
 from pokeapi.general import fetchData
 
 BASE_WIKI_URL : str = "https://bulbapedia.bulbagarden.net/wiki"
@@ -42,64 +36,9 @@ HEADERS = {
     )
 }
 
-GYM_LEADERS : List[str] = [
-  "Brock", "Misty", "Lt._Surge", "Erika", "Koga", "Janine", "Sabrina", "Blaine", "Giovanni", "Blue", # Indigo League
-  "Falkner", "Bugsy", "Whitney", "Morty", "Chuck", "Jasmine", "Pryce", "Clair", # Johto League 
-  "Roxanne", "Brawly", "Wattson", "Flannery", "Norman", "Winona", "Tate_and_Liza", "Wallace", "Juan", # Hoenn League
-  "Roark", "Gardenia", "Maylene", "Crasher_Wake", "Fantina", "Byron", "Candice", "Volkner", # Sinnoh League
-  "Cilan", "Chili", "Cress", "Lenora", "Burgh", "Elesa", "Clay", "Skyla", "Brycen", "Drayden", "Iris", # Unova League (Black and White)
-  "Cheren", "Roxie", "Marlon", # Unova League (Black and White)
-  "Viola", "Grant", "Korrina", "Ramos", "Clemont", "Valerie", "Olympia", "Wulfric", # Kalos League
-  "Milo", "Nessa", "Kabu", "Bea", "Allister", "Opal", "Bede", "Gordie", "Melong", "Piers", "Marnie", "Raihan", # Galar League
-  "Katy", "Brassius", "Iono", "Kofu", "Larry", "Ryme", "Tulip", "Grusha" # Paldea League
-]
-
 last_scrape = 0
 lock = threading.Lock()
 
-def fetchRandomGymLeader() -> GymLeaderData:
-  # first get a random gym leader name and create the url string
-  gymLeaderName : str = random.choice(GYM_LEADERS)
-  url_string : str = f"{BASE_WIKI_URL}/{gymLeaderName}"
-  
-  # request this gymLeaders page
-  gymLeaderPage : SuccessResponse | ErrorResponse = scrape_page(url_string)
-  
-  default_response : GymLeaderData = {
-    GymLeaderKeys.NAME : gymLeaderName,
-    GymLeaderKeys.IMAGE_URL : ""
-  }
-  
-  if not gymLeaderPage[ErrorResponseKeys.SUCCESS]:
-    print("Failed to get gym leader page")
-    return default_response
-  
-  html = gymLeaderPage[SuccessResponseKeys.DATA]
-  
-  soup = BeautifulSoup(html, "html.parser")
-  
-  content_div : Tag | None = soup.find("div", id="mw-content-text")
-  
-  if (not content_div):
-    print("Failed to get contient div when fetching gym leader info")
-    return default_response
-  
-  gym_leader_info_table : Tag | None = content_div.find("table", class_="roundy infobox")
-  
-  if (not content_div):
-    print("Failed to get table div when fetching gym leader info")
-    return default_response
-  
-  image_info : Tag | None = gym_leader_info_table.find("img")
-  
-  if (not image_info):
-    print("Failed to get image from table when fetching gym leader info")
-    return default_response
-  
-  return {
-    GymLeaderKeys.NAME : gymLeaderName,
-    GymLeaderKeys.IMAGE_URL : image_info["src"]
-  }
   
 def scrape_page(url_string : str) -> SuccessResponse | ErrorResponse:
   global last_scrape
