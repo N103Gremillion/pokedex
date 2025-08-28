@@ -2,7 +2,7 @@ import random
 import copy
 from typing import List
 from bs4 import BeautifulSoup, Tag
-from app_types import ErrorResponse, ErrorResponseKeys, GymLeaderData, GymLeaderKeys, PokemonRegionGymLeaders, PokemonRegionGymLeadersKeys, SuccessResponse, SuccessResponseKeys
+from app_types import ErrorResponse, ErrorResponseKeys, GymLeaderData, GymLeaderKeys, PokemonData, PokemonRegionGymLeaders, PokemonRegionGymLeadersKeys, SuccessResponse, SuccessResponseKeys
 from utils import print_pretty_json, isValidType
 from scraper.scraper import BASE_WIKI_URL, scrape_page
 
@@ -31,11 +31,55 @@ GEN_TO_REGION : dict[int, str] = {
   9: "Paldea"
 }
 
-def fetchGymleadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
+def fetchRandomGymLeader() -> GymLeaderData:
+  # first get a random gym leader name and create the url string
+  gym_leader_name : str = random.choice(GYM_LEADERS)
+  url_string : str = f"{BASE_WIKI_URL}/{gym_leader_name}"
   
+  # request this gymLeaders page
+  gymLeaderPage : SuccessResponse | ErrorResponse = scrape_page(url_string)
+  
+  response : GymLeaderData = {
+    GymLeaderKeys.GYM_LEADER_NAME : gym_leader_name,
+    GymLeaderKeys.GYM_LEADER_IMAGE_URL : ""
+  }
+  
+  if not gymLeaderPage[ErrorResponseKeys.SUCCESS]:
+    print("Failed to get gym leader page")
+    return response
+  
+  html = gymLeaderPage[SuccessResponseKeys.DATA]
+  
+  soup = BeautifulSoup(html, "html.parser")
+  
+  content_div : Tag | None = soup.find("div", id="mw-content-text")
+  
+  if (not content_div):
+    print("Failed to get contient div when fetching gym leader info")
+    return response
+  
+  gym_leader_info_table : Tag | None = content_div.find("table", class_="roundy infobox")
+  
+  if (not content_div):
+    print("Failed to get table div when fetching gym leader info")
+    return response
+  
+  image_info : Tag | None = gym_leader_info_table.find("img")
+  
+  if (not image_info):
+    print("Failed to get image from table when fetching gym leader info")
+    return response
+  
+  response[GymLeaderKeys.GYM_LEADER_IMAGE_URL] = image_info["src"]
+  
+  return response
+
+def fetchGymleadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
   response : PokemonRegionGymLeaders = {
     PokemonRegionGymLeadersKeys.GEN_NUMBER : -1,
     PokemonRegionGymLeadersKeys.REGION : "undefined",
+    PokemonRegionGymLeadersKeys.GYM_LEADERS : [],
+    PokemonRegionGymLeadersKeys.ISLAND_LEADERS : []
   }
   
   # try and cast the string to an int
@@ -49,6 +93,10 @@ def fetchGymleadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
   if (gen < 1 or gen > 9):
     print(f"Invalid Gen Number for Input {gen}. Must be between 1-9 inclusively.")
     return response
+  
+  region : str = GEN_TO_REGION[gen]
+  response[PokemonRegionGymLeadersKeys.REGION] = region
+  response[PokemonRegionGymLeadersKeys.GEN_NUMBER] = gen
   
   # this is an edge case since it does not have gym leaders but a similar thing called island challenges
   if (gen == 7):
@@ -65,9 +113,6 @@ def fetchGymleadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
 
   html = gymLeadersPage[SuccessResponseKeys.DATA]
   soup = BeautifulSoup(html, "html.parser")
-  
-  region : str = GEN_TO_REGION[gen]
-  response[PokemonRegionGymLeadersKeys.REGION] = region
   
   # get the tag with the id=region
   region_span = soup.find("span", id=region)
@@ -146,21 +191,15 @@ def fetchGymleadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
     
     i += 1
   
-  leader_num : int = 1
-
+  # iterate over each trainer and scrap the info about there pokemon 
   for leader in gym_leaders:
-    print("-------------------------")
-    print(f"Number : {leader_num}")
-    print(leader[GymLeaderKeys.GYM_NAME])
-    print(leader[GymLeaderKeys.BADGE_NAME])
-    print(leader[GymLeaderKeys.BADGE_IMAGE_URL])
-    print(leader[GymLeaderKeys.TYPE])
-    print(leader[GymLeaderKeys.GYM_LEADER_NAME])
-    print(leader[GymLeaderKeys.GYM_LEADER_IMAGE_URL])
-    leader_num += 1
+    leaders_pokemon = fetchGymleadersPokmeon(leader)
+  
+  response[PokemonRegionGymLeadersKeys.GYM_LEADERS] = gym_leaders
   
   return response
 
+####################### THESE ARE SPECIFIC TO THIS PAGE https://bulbapedia.bulbagarden.net/wiki/Gym ##########################################
 # this handle the case where a col spans multiple rows and some extra info can be pull off
 def parse_gym_row_copy(gym_data : GymLeaderData, cells : list[Tag]) -> GymLeaderData:
   count : int = 0
@@ -190,7 +229,6 @@ def parse_gym_row_copy(gym_data : GymLeaderData, cells : list[Tag]) -> GymLeader
     
   return gym_data_copy
   
-# this get the general cases when scraping the tables from  https://bulbapedia.bulbagarden.net/wiki/Gym (offset is used for gen 5 which has one extra column)
 def parse_gym_row(cells : list[Tag], offset : int) -> tuple[GymLeaderData, int]:
   
   response : GymLeaderData = {}
@@ -229,47 +267,12 @@ def parse_gym_row(cells : list[Tag], offset : int) -> tuple[GymLeaderData, int]:
   rowspan = int(badge_cell.get("rowspan", 1))
   
   return (response, rowspan)
+################################################################################################################################
 
+# These are use to scrap the trainer pages something like this https://bulbapedia.bulbagarden.net/wiki/Falkner ###################
+def fetchGymleaderWithPokemon(leader : GymLeaderData) -> GymLeaderData:
+  pokemon : list[PokemonData] = []
+  
+  return leader
 
-def fetchRandomGymLeader() -> GymLeaderData:
-  # first get a random gym leader name and create the url string
-  gym_leader_name : str = random.choice(GYM_LEADERS)
-  url_string : str = f"{BASE_WIKI_URL}/{gym_leader_name}"
-  
-  # request this gymLeaders page
-  gymLeaderPage : SuccessResponse | ErrorResponse = scrape_page(url_string)
-  
-  response : GymLeaderData = {
-    GymLeaderKeys.GYM_LEADER_NAME : gym_leader_name,
-    GymLeaderKeys.GYM_LEADER_IMAGE_URL : ""
-  }
-  
-  if not gymLeaderPage[ErrorResponseKeys.SUCCESS]:
-    print("Failed to get gym leader page")
-    return response
-  
-  html = gymLeaderPage[SuccessResponseKeys.DATA]
-  
-  soup = BeautifulSoup(html, "html.parser")
-  
-  content_div : Tag | None = soup.find("div", id="mw-content-text")
-  
-  if (not content_div):
-    print("Failed to get contient div when fetching gym leader info")
-    return response
-  
-  gym_leader_info_table : Tag | None = content_div.find("table", class_="roundy infobox")
-  
-  if (not content_div):
-    print("Failed to get table div when fetching gym leader info")
-    return response
-  
-  image_info : Tag | None = gym_leader_info_table.find("img")
-  
-  if (not image_info):
-    print("Failed to get image from table when fetching gym leader info")
-    return response
-  
-  response[GymLeaderKeys.GYM_LEADER_IMAGE_URL] = image_info["src"]
-  
-  return response
+###################################################################################################################################
