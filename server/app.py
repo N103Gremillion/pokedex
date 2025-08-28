@@ -8,7 +8,7 @@ from pokeapi.general import fetchData
 from pokeapi.item import ItemInfoEndpoints, fetchItemById, fetchItemByName
 from pokeapi.pokedex import fetchPokedexByGeneration
 from pokeapi.pokemon import PokemonInfoEndpoints, fetchPokemonDataByIdentifier
-from scraper.gymLeader import fetchGymleadersByGeneration, fetchRandomGymLeader
+from scraper.gymLeaderScrapper import fetchGymLeadersByGeneration, fetchRandomGymLeader
 
 def initApp() -> Flask:
   app : Flask = Flask(__name__)
@@ -79,7 +79,7 @@ def setupRoutes(app : Flask) -> None:
 
   @app.route("/gym-leaders/<generation>")
   def getGymLeadersFromGeneration(generation : str) -> PokemonRegionGymLeaders:
-    res : list[GymLeaderData] = fetchGymleadersByGeneration(generation)
+    res : list[GymLeaderData] = fetchGymLeadersByGeneration(generation)
     return jsonify(res)
   
   

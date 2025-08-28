@@ -37,18 +37,18 @@ def fetchRandomGymLeader() -> GymLeaderData:
   url_string : str = f"{BASE_WIKI_URL}/{gym_leader_name}"
   
   # request this gymLeaders page
-  gymLeaderPage : SuccessResponse | ErrorResponse = scrape_page(url_string)
+  gym_leader_page : SuccessResponse | ErrorResponse = scrape_page(url_string)
   
   response : GymLeaderData = {
     GymLeaderKeys.GYM_LEADER_NAME : gym_leader_name,
     GymLeaderKeys.GYM_LEADER_IMAGE_URL : ""
   }
   
-  if not gymLeaderPage[ErrorResponseKeys.SUCCESS]:
+  if not gym_leader_page[ErrorResponseKeys.SUCCESS]:
     print("Failed to get gym leader page")
     return response
   
-  html = gymLeaderPage[SuccessResponseKeys.DATA]
+  html = gym_leader_page[SuccessResponseKeys.DATA]
   
   soup = BeautifulSoup(html, "html.parser")
   
@@ -74,7 +74,8 @@ def fetchRandomGymLeader() -> GymLeaderData:
   
   return response
 
-def fetchGymleadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
+####################### THESE ARE SPECIFIC TO THIS PAGE https://bulbapedia.bulbagarden.net/wiki/Gym ##########################################
+def fetchGymLeadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
   response : PokemonRegionGymLeaders = {
     PokemonRegionGymLeadersKeys.GEN_NUMBER : -1,
     PokemonRegionGymLeadersKeys.REGION : "undefined",
@@ -104,8 +105,8 @@ def fetchGymleadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
     return response
   
   # fetch the inital page with all the generic info about the gym leaders
-  general_gymleadrs_fetch_url : str = f"{BASE_WIKI_URL}/Gym"
-  gymLeadersPage : SuccessResponse | ErrorResponse = scrape_page(general_gymleadrs_fetch_url)
+  url : str = f"{BASE_WIKI_URL}/Gym"
+  gymLeadersPage : SuccessResponse | ErrorResponse = scrape_page(url)
   
   if not gymLeadersPage[ErrorResponseKeys.SUCCESS]:
     print("Failed to get gym leader page")
@@ -160,7 +161,7 @@ def fetchGymleadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
     if total_cells == 6:
       offset : int = 1
       
-    gym_data, rowspan = parse_gym_row(cells, offset)
+    gym_data, rowspan = parseGymRow(cells, offset)
     
     # go ahead and add the inital data to the gymLeaders
     gym_leaders.append(gym_data)
@@ -184,7 +185,7 @@ def fetchGymleadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
           rowspan -= 1
           continue
           
-        gym_data_copy = parse_gym_row_copy(gym_data, next_cells)
+        gym_data_copy = parseGymRowCopy(gym_data, next_cells)
         gym_leaders.append(gym_data_copy)
         
         rowspan -= 1
@@ -193,15 +194,15 @@ def fetchGymleadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
   
   # iterate over each trainer and scrap the info about there pokemon 
   for leader in gym_leaders:
-    leaders_pokemon = fetchGymleadersPokmeon(leader)
-  
+    print(f"SCRAPING FOR {leader[GymLeaderKeys.GYM_LEADER_NAME]}")
+    leader_pokemon = fetchGymLeaderWithPokemon(leader)
+    
   response[PokemonRegionGymLeadersKeys.GYM_LEADERS] = gym_leaders
   
   return response
 
-####################### THESE ARE SPECIFIC TO THIS PAGE https://bulbapedia.bulbagarden.net/wiki/Gym ##########################################
 # this handle the case where a col spans multiple rows and some extra info can be pull off
-def parse_gym_row_copy(gym_data : GymLeaderData, cells : list[Tag]) -> GymLeaderData:
+def parseGymRowCopy(gym_data : GymLeaderData, cells : list[Tag]) -> GymLeaderData:
   count : int = 0
   gym_data_copy : GymLeaderData = copy.deepcopy(gym_data)
   
@@ -229,7 +230,7 @@ def parse_gym_row_copy(gym_data : GymLeaderData, cells : list[Tag]) -> GymLeader
     
   return gym_data_copy
   
-def parse_gym_row(cells : list[Tag], offset : int) -> tuple[GymLeaderData, int]:
+def parseGymRow(cells : list[Tag], offset : int) -> tuple[GymLeaderData, int]:
   
   response : GymLeaderData = {}
   
@@ -268,11 +269,118 @@ def parse_gym_row(cells : list[Tag], offset : int) -> tuple[GymLeaderData, int]:
   
   return (response, rowspan)
 ################################################################################################################################
-
+# this pulls off the image url and the pokemon information from the page
 # These are use to scrap the trainer pages something like this https://bulbapedia.bulbagarden.net/wiki/Falkner ###################
-def fetchGymleaderWithPokemon(leader : GymLeaderData) -> GymLeaderData:
+def fetchGymLeaderWithPokemon(leader : GymLeaderData) -> GymLeaderData:
+  # set it up with default values
   pokemon : list[PokemonData] = []
+  leader[GymLeaderKeys.POKEMON] = pokemon
+  full_leader_name : str | None = leader[GymLeaderKeys.GYM_LEADER_NAME]
+  
+  if (not full_leader_name or full_leader_name == ""):
+    return leader
+    
+  leader_first_name : str = getGymLeaderUrlName(full_leader_name)
+  url : str = f"{BASE_WIKI_URL}/{leader_first_name}"
+  gym_leader_page : SuccessResponse | ErrorResponse = scrape_page(url)
+  
+  print(url)
+  
+  if not gym_leader_page[ErrorResponseKeys.SUCCESS]:
+    print("Failed to get gym leader page")
+    return leader
+  
+  html = gym_leader_page[SuccessResponseKeys.DATA]
+  soup = BeautifulSoup(html, "html.parser")
+  
+  header_id : str = "Pokémon"
+  
+  if (leader_first_name == "Larry"):
+    header_id = "Pokémon_2"
+    
+  # the header id is different for a few of the gym leaders
+  pokemon_span = soup.find("span", id=header_id) # get span with the heading pokemon this is where his pokemon info is
+  
+  if not pokemon_span:
+    print(f"Could not pull of the span with to Pokemon Id for {leader_first_name}.")
+    return leader
+  
+  pokemon_header = pokemon_span.find_parent("h3")
+  
+  if not pokemon_header:
+    print(f"Could not pull of the header with to Pokemon Id for {leader_first_name}.")
+    return leader
+  
+  gym_name : str = leader[GymLeaderKeys.GYM_NAME] # search for the table that has a string matching the name of the gym
+  
+  if (gym_name == "Spikemuth Gym"): # this is an edge case the name on the page we are parsing is slightly different
+    gym_name = "Spikemuth"
+    
+  gym_leader_table = None
+  
+  for table in pokemon_header.find_all_next("table"):
+    if (table.find("a", title=gym_name)):
+      gym_leader_table = table
+      break
+  
+  if not gym_leader_table:
+    print(f"Could not find the gym leader table for {leader_first_name}")
+    return leader
+  
+  img = gym_leader_table.find_next("img") # first we will get the gym leader img 
+  
+  if not img:
+    print(f"Could not pull of the gym leader img for {leader_first_name}.")
+    return leader
+  
+  # at this point switch out the previous img_url with this new one (these ones have better imgs)
+  leader[GymLeaderKeys.GYM_LEADER_IMAGE_URL] = img.get("src")
+  
+  imgs = []
+  img = img.find_next("img")
+  
+  while img:
+    imgs.append(img)
+    next_img = img.find_next("img")
+    
+    if not next_img or gym_leader_table not in next_img.find_parents("table"):
+      break
+    
+    img = next_img
+  
+  valid_imgs = imgs[6:]
+  
+  for img in valid_imgs:
+    print(img.get("src"))
   
   return leader
+
+def getGymLeaderUrlName(full_leader_name : str):
+  
+  if full_leader_name == "Lt. Surge":
+    return "Lt._Surge"
+  elif full_leader_name == "Tate and Liza":
+    return "Tate_and_Liza"
+  elif full_leader_name == "Crasher Wake":
+    return "Crasher_Wake"
+  
+  # pull off the 1 portion of the names for gym leader since this is what url uses
+  n : int = len(full_leader_name)
+  leader_first_name_list : list[str] = []
+  
+  for i in range(n):
+    char : str = full_leader_name[i]
+    
+    if (char == " " or char == "(" or (i != 0 and char == "R") or (i != 0 and char == "E")):
+      break
+    
+    leader_first_name_list.append(char)
+  
+  url_name : str = "".join(leader_first_name_list)
+  
+  if (url_name == "Blue"):
+    url_name ="Blue_(game)"
+  
+  return url_name
 
 ###################################################################################################################################
