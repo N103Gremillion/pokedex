@@ -8,6 +8,7 @@ from scraper.gen7data import GEN_7_ISLAND_CAPTAINS, GEN_7_ISLAND_KAHUNAS
 
 ####################### THESE ARE SPECIFIC TO THIS PAGE https://bulbapedia.bulbagarden.net/wiki/Gym ##########################################
 def fetchGymLeadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
+  
   response : PokemonRegionGymLeaders = {
     PokemonRegionGymLeadersKeys.GEN_NUMBER : -1,
     PokemonRegionGymLeadersKeys.REGION : "undefined",
@@ -145,7 +146,7 @@ def fetchGymLeadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
     
   # iterate over each trainer and scrap the info about there pokemon 
   for leader in gym_leaders:
-    # print(f"SCRAPING FOR {leader[GymLeaderKeys.GYM_LEADER_NAME]}")
+    print(f"SCRAPING FOR {leader[GymLeaderKeys.GYM_LEADER_NAME]}")
     leader_pokemon = fetchGymLeaderWithPokemon(leader, gen)
     
   # if (len(gym_leaders) > 1):

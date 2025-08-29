@@ -34,7 +34,7 @@ def fetchPokemonDataByIdentifier(pokemon_identifier : int | str) -> PokemonData:
     if (type_data):
       type_name = type_data.get("name")
       if isValidType(type_name):
-        types.append(type_name)
+        types.append(PokemonType(type_name))
   
   # map the data onto the PokemonData to ensure you have these on the frontend
   pokemonData : PokemonData = {

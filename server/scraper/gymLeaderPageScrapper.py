@@ -24,7 +24,7 @@ Note:
 import random
 from typing import List
 from bs4 import BeautifulSoup, Tag
-from app_types import ErrorResponse, ErrorResponseKeys, GymLeaderData, GymLeaderKeys, IslandCaptainData, IslandCaptainKeys, IslandKahunaData, IslandKahunaKeys, PokemonData, SuccessResponse, SuccessResponseKeys
+from app_types import ErrorResponse, ErrorResponseKeys, GymLeaderData, GymLeaderKeys, IslandCaptainData, IslandCaptainKeys, IslandKahunaData, IslandKahunaKeys, PokemonData, PokemonKeys, PokemonType, SuccessResponse, SuccessResponseKeys
 from utils import print_pretty_json, isValidType
 from scraper.scraper import BASE_BULBAPEDIA_WIKI_URL, BASE_POKEMON_DB_URL, scrape_page_builbapedia,scrape_page_pokedb
 
@@ -113,7 +113,7 @@ def fetchGymLeaderWithPokemon(leader : GymLeaderData | IslandKahunaData | Island
   
   # set it up with default values
   pokemon : list[PokemonData] = []
-  leader[GymLeaderKeys.POKEMON] = pokemon
+  leader[GymLeaderKeys.POKEMON] = pokemon # this has same value for all 3 types
   full_leader_name : str | None = None
   
   if GymLeaderKeys.GYM_LEADER_NAME in leader:
@@ -150,5 +150,88 @@ def fetchGymLeaderWithPokemon(leader : GymLeaderData | IslandKahunaData | Island
   
   print(f"PAGE FOUND FOR {full_leader_name} --------------------")
   print(f"{url}")
+  
+  # use gym leader name as a reference to find the img 
+  img_tag = soup.find("img", {"alt": full_leader_name})
+  
+  if not img_tag:
+    print(f"Could not find img tag with alt {full_leader_name}")
+    return leader
+  
+  if GymLeaderKeys.GYM_LEADER_NAME in leader:
+    leader[GymLeaderKeys.GYM_LEADER_IMAGE_URL] = img_tag.get("src")
+    
+  elif IslandKahunaKeys.ISLAND_KAHUNA_NAME in leader:
+    leader[IslandKahunaKeys.ISLAND_KAHUNA_IMAGE_URL] = img_tag.get("src")
+    
+  elif IslandCaptainKeys.ISLAND_CAPTAIN_NAME in leader:
+    leader[IslandCaptainKeys.ISLAND_CAPTAIN_IMAGE_URL] = img_tag.get("src")
+  
+  # pull out all the pokemon divs for this trainer
+  pokemon_div_classes = ["infocard", "trainer-pkmn"]
+  pokemon_divs  = []
+  
+  cur_div = img_tag.find_next("div")
+  
+  while (cur_div and (pokemon_div_classes == cur_div.get("class"))):
+    pokemon_divs.append(cur_div)
+    cur_div = cur_div.find_next("div")
+  
+  for div in pokemon_divs:
+  
+    pokemon_data : PokemonData = {
+      PokemonKeys.NAME : "",
+      PokemonKeys.IMAGE_URL : "",
+      PokemonKeys.LEVEL : -1,
+      PokemonKeys.TYPES : []
+    }
+    
+    # img url 
+    img_tag = div.find("img")
+    
+    if img_tag:
+      pokemon_data[PokemonKeys.IMAGE_URL] = img_tag.get("src")
+      
+    # Name
+    name_class : str = "ent-name"
+    name_tag = div.find_next("a",  class_=name_class)
+    
+    if not name_tag:
+      pokemon.append(pokemon_data)
+      continue
+    
+    pokemon_data[PokemonKeys.NAME] = name_tag.get_text(strip=True)
+
+    # level
+    level_tag = name_tag.find_next("small")
+    
+    if not level_tag:
+      pokemon.append(pokemon_data)
+      continue
+    
+    # sometimes there is a form small which we want to skip
+    if "Level" not in level_tag.get_text(strip=True):
+      level_tag = level_tag.find_next("small")
+      
+    pokemon_data[PokemonKeys.LEVEL] = level_tag.get_text(strip=True)
+    
+    # types
+    types_tag = level_tag.find_next("small")
+    
+    if not types_tag:
+      pokemon.append(pokemon_data)
+      continue
+    
+    types : list[PokemonType] = []
+    
+    for a_tag in types_tag.find_all("a"):
+      type_string = a_tag.get_text(strip=True)
+      
+      if (isValidType(type_string)):
+        types.append(PokemonType(type_string))
+        
+    pokemon_data[PokemonKeys.TYPES] = types
+      
+    pokemon.append(pokemon_data)
   
   return leader

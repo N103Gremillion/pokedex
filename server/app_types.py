@@ -50,12 +50,14 @@ class PokemonKeys(str, Enum):
   NAME = "name"
   IMAGE_URL = "imageUrl"
   TYPES = "types"
+  LEVEL = "level"
   
 class PokemonData(TypedDict):
   id: int
   name: str
   imageUrl : str
   types: NotRequired[list[PokemonType]]
+  level : NotRequired[str]
 
 # Items
 class ItemKeys(str, Enum):
