@@ -27,7 +27,8 @@ import time
 from app_types import ErrorResponse, SuccessResponse
 from pokeapi.general import fetchData
 
-BASE_WIKI_URL : str = "https://bulbapedia.bulbagarden.net/wiki"
+BASE_BULBAPEDIA_WIKI_URL : str = "https://bulbapedia.bulbagarden.net/wiki"
+BASE_POKEMON_DB_URL : str = "https://pokemondb.net"
 
 HEADERS = {
     "User-Agent": (
@@ -36,22 +37,39 @@ HEADERS = {
     )
 }
 
-last_scrape = 0
-lock = threading.Lock()
+last_builbapedia_scrape = 0
+buildbapedia_lock = threading.Lock()
 
   
-def scrape_page(url_string : str) -> SuccessResponse | ErrorResponse:
-  global last_scrape
+def scrape_page_builbapedia(url_string : str) -> SuccessResponse | ErrorResponse:
+  global last_builbapedia_scrape
   
-  with lock:
+  with buildbapedia_lock:
     
     now = time.time()
-    if now - last_scrape < 5:
-      wait = 5 - (now - last_scrape)
+    if now - last_builbapedia_scrape < 5:
+      wait = 5 - (now - last_builbapedia_scrape)
       time.sleep(wait)
-    last_scrape = time.time()
+    last_builbapedia_scrape = time.time()
 
     # do the scraping
     response : SuccessResponse | ErrorResponse = fetchData(url_string, True)
     
     return response
+
+last_pokedb_scrape = 0
+pokedb_lock = threading.Lock()
+
+def scrape_page_pokedb(url_string: str) -> 'SuccessResponse | ErrorResponse':
+    global last_pokedb_scrape
+
+    with pokedb_lock:
+        now = time.time()
+        if now - last_pokedb_scrape < 2:  # 2-second polite delay
+            wait = 2 - (now - last_pokedb_scrape)
+            time.sleep(wait)
+        last_pokedb_scrape = time.time()
+
+        # do the scraping
+        response: 'SuccessResponse | ErrorResponse' = fetchData(url_string, True)
+        return response

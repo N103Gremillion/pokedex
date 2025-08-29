@@ -98,14 +98,49 @@ class GymLeaderData(TypedDict):
   badge_image_url : str
   pokemon : NotRequired[list[PokemonData]]
 
+# Island Kahunas
+class IslandKahunaKeys(str, Enum):
+  ID = "id"
+  FIGHT_LOCATION = "fight_location"
+  ISLAND_KAHUNA_NAME = "island_kahuna_name"
+  ISLAND_KAHUNA_IMAGE_URL = "island_kahuna_image_url"
+  TYPE = "element_type"
+  POKEMON = "pokemon"
+  
+class IslandKahunaData(TypedDict):
+  id : int
+  fight_location : str
+  island_kahuna_name : str
+  island_kahuna_image_url : str
+  element_type : PokemonType
+  pokemon : NotRequired[list[PokemonData]]
+  
+# Island Captains
+class IslandCaptainKeys(str, Enum):
+  ID = "id"
+  ISLAND_CAPTAIN_NAME = "island_captain_name"
+  ISLAND_CAPTAIN_IMAGE_URL = "island_captain_image_url"
+  TYPE = "element_type"
+  POKEMON = "pokemon"
+  
+class IslandCaptainData(TypedDict):
+  id : int
+  island_captain_name : str
+  island_captain_image_url : str
+  element_type : PokemonType
+  pokemon : NotRequired[list[PokemonData]]
+
+# PokemonRegion Gym/Importan trainer info
 class PokemonRegionGymLeadersKeys(str, Enum):
   GEN_NUMBER = "gen_num"
   REGION = "region"
   GYM_LEADERS = "gym_leaders"
-  ISLAND_LEADERS = "island_leaders" # for Sun and Moon
+  ISLAND_KAHUNAS = "island_kahunas" # for Sun and Moon
+  ISLAND_CAPTAINS = "island_captains" # for Sun and Moon
   
 class PokemonRegionGymLeaders(TypedDict):
   gen_num : int
   region : str
   gym_leaders : NotRequired[list[GymLeaderData]]
-  island_leaders : NotRequired[list[GymLeaderData]]
+  island_kahunas : NotRequired[list[IslandKahunaData]]
+  island_captains : NotRequired[list[IslandCaptainData]]

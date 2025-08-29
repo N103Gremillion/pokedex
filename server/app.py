@@ -1,14 +1,12 @@
 import os
-from flask import Flask, Response, jsonify, request
+from flask import Flask, Response, jsonify
 from enum import Enum
-from flask_cors import CORS
-from dotenv import load_dotenv
 from app_types import GymLeaderData, ItemData, PokemonData, PokedexKeys, PokemonRegionGymLeaders
-from pokeapi.general import fetchData
-from pokeapi.item import ItemInfoEndpoints, fetchItemById, fetchItemByName
+from pokeapi.item import fetchItemById, fetchItemByName
 from pokeapi.pokedex import fetchPokedexByGeneration
-from pokeapi.pokemon import PokemonInfoEndpoints, fetchPokemonDataByIdentifier
-from scraper.gymLeaderScrapper import fetchGymLeadersByGeneration, fetchRandomGymLeader
+from pokeapi.pokemon import fetchPokemonDataByIdentifier
+from scraper.gymLeaderPageScrapper import fetchRandomGymLeader
+from scraper.gymLeadersPageScrapper import fetchGymLeadersByGeneration
 
 def initApp() -> Flask:
   app : Flask = Flask(__name__)
