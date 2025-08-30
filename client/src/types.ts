@@ -1,59 +1,56 @@
-export enum PokemonType {
-  Normal = "Normal",
-  Fire = "Fire",
-  Water = "Water",
-  Electric = "Electric",
-  Grass = "Grass",
-  Ice = "Ice",
-  Fighting = "Fighting",
-  Poison = "Poison",
-  Ground = "Ground",
-  Flying = "Flying",
-  Psychic = "Psychic",
-  Bug = "Bug",
-  Rock = "Rock",
-  Ghost = "Ghost",
-  Dragon = "Dragon",
-  Dark = "Dark",
-  Steel = "Steel",
-  Fairy = "Fairy",
-  Various = "Various"
+import type { PokemonType } from "./enums";
+
+export type PokemonData = {
+  id? : number;
+  name? : string;
+  imageUrl? : string;
+  types? : PokemonType[];
+  level? : number;
 }
 
-export enum Generation {
-  Gen1 = "1",
-  Gen2 = "2",
-  Gen3 = "3",
-  Gen4 = "4",
-  Gen5 = "5",
-  Gen6 = "6",
-  Gen7 = "7",
-  Gen8 = "8",
-  Gen9 = "9",
-  INVALID = "-1"
+export type ItemData = {
+  id? : number;
+  name? : string;
+  imageUrl? : string;
 }
 
-export function getGenerationFromString(generationsString : string) : Generation{
-  switch (generationsString) {
-    case "GenerationI":
-      return Generation.Gen1;
-    case "GenerationII":
-      return Generation.Gen2;
-    case "GenerationIII":
-      return Generation.Gen3;
-    case "GenerationIV":
-      return Generation.Gen4;
-    case "GenerationV":
-      return Generation.Gen5;
-    case "GenerationVI":
-      return Generation.Gen6;
-    case "GenerationVII":
-      return Generation.Gen7;
-    case "GenerationVIII":
-      return Generation.Gen8;
-    case "GenerationIX":
-      return Generation.Gen9;
-    default:
-      return Generation.INVALID;
-  }
+export type PokedexData = {
+  gen_num? : number;
+  pokemon? : PokemonData[]
+}
+
+export type GymLeaderData = {
+  id? : number;
+  gym_name? : string;
+  gym_leader_name? : string;
+  gym_leader_image_url? : string;
+  element_type? : PokemonType;
+  badge_name? : string,
+  badge_image_url? : string,
+  pokemon? : PokedexData[]
+}
+
+export type IslandKahunaData = {
+  id? : number;
+  fight_location? : string;
+  island_kahuna_name? : string;
+  island_kahuna_image_url? : string;
+  element_type? : PokemonType;
+  pokemon? : PokemonData[];
+}
+
+export type IslandCaptainData = {
+  id? : number;
+  island_captain_name? : string;
+  island_captain_image_url? : string;
+  element_type? : PokemonType;
+  pokemon? : PokemonData[];
+}
+
+export type PokemonRegionGymLeaders = {
+  gen_num : number;
+  region : string;
+  gym_leaders : GymLeaderData[];
+  island_kahunas : IslandKahunaData[];
+  island_captains : IslandCaptainData[];
 }

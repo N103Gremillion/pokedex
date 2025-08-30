@@ -192,6 +192,11 @@
   white-space: nowrap;
 }
 
+/* GymLeader Componenets ###################################*/
+.gym-leaders-container {
+  
+}
+
 /*Navbar####################################################*/
 .navbar {
   height : 50px;

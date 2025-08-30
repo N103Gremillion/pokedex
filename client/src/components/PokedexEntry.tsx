@@ -1,8 +1,8 @@
 import type { SyntheticEvent } from "react";
-import type { PokemonData } from "../api/pokemon_api";
 import { getTypeUrls } from "../utils";
 import { useNavigate } from 'react-router-dom';
 import { PagePaths } from "../pages/pagePaths";
+import type { PokemonData } from "../types";
 
 interface PokedexEntryProps {
   pokemonData : PokemonData

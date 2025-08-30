@@ -149,10 +149,6 @@ def fetchGymLeadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
     print(f"SCRAPING FOR {leader[GymLeaderKeys.GYM_LEADER_NAME]}")
     leader_pokemon = fetchGymLeaderWithPokemon(leader, gen)
     
-  # if (len(gym_leaders) > 1):
-  #   print(f"SCRAPING FOR {gym_leaders[0][GymLeaderKeys.GYM_LEADER_NAME]}")
-  #   leader_pokemon = fetchGymLeaderWithPokemon(gym_leaders[0], gen)
-    
   response[PokemonRegionGymLeadersKeys.GYM_LEADERS] = gym_leaders
     
   return response

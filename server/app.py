@@ -69,7 +69,7 @@ def setupRoutes(app : Flask) -> None:
     return jsonify(result)
   
   # scrapper endpoints (mostly gym stuff)
-  # GYMLEADERS ENDPOINTS ##################################################################
+  # GYMLEADERS ENDPOINTS 
   @app.route("/gym-leader/random")
   def getRandomGymLeader() -> GymLeaderData:
     result : GymLeaderData = fetchRandomGymLeader()
@@ -79,5 +79,3 @@ def setupRoutes(app : Flask) -> None:
   def getGymLeadersFromGeneration(generation : str) -> PokemonRegionGymLeaders:
     res : list[GymLeaderData] = fetchGymLeadersByGeneration(generation)
     return jsonify(res)
-  
-  

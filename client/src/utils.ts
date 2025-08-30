@@ -1,4 +1,4 @@
-import { PokemonType } from "./types";
+import { PokemonType } from "./enums";
 
 const basetypeImageUrl : string = "/public/type_logos";
 
