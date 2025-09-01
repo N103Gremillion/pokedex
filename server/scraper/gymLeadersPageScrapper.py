@@ -63,7 +63,16 @@ def fetchGymLeadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
     for captain in response[PokemonRegionGymLeadersKeys.ISLAND_CAPTAINS]:
       # print(f"SCRAPING FOR THE CAPTAIN {captain[IslandCaptainKeys.ISLAND_CAPTAIN_NAME]}.")
       leader_pokemon = fetchGymLeaderWithPokemon(captain, gen)
-      
+    
+    # add to cache pages to prevent unecessary fetches in the future
+    pokemonRegionCollection.insert_one({
+      DatabaseCollections.POKEMON_REGION_GYM_LEADERS.value.key: gen,
+      PokemonRegionGymLeadersKeys.REGION : response[PokemonRegionGymLeadersKeys.REGION],
+      PokemonRegionGymLeadersKeys.GYM_LEADERS : response[PokemonRegionGymLeadersKeys.GYM_LEADERS],
+      PokemonRegionGymLeadersKeys.ISLAND_KAHUNAS : response[PokemonRegionGymLeadersKeys.ISLAND_KAHUNAS],
+      PokemonRegionGymLeadersKeys.ISLAND_CAPTAINS : response[PokemonRegionGymLeadersKeys.ISLAND_CAPTAINS]
+    })
+  
     return response
   
   # fetch the inital page with all the generic info about the gym leaders

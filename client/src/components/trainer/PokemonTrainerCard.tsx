@@ -10,6 +10,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
 
   let leaderContent: JSX.Element | null = null;
   const defaultImageUrl : string = "/public/default_img.png";
+  const totalPokemon : number = gymLeaderData.pokemon?.length ?? 0;
 
   // construct the handler for when the image doesnt load
   const handleImageNotFound = (event : SyntheticEvent<HTMLImageElement, Event>) => {
@@ -47,7 +48,8 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
     );
 
     leaderContent = (
-      <div className="trainer-card-component">
+      <div className="gym-leader-card-component">
+        {badgeImage}
         {trainerImage}
         <div>
           <div>
@@ -57,7 +59,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
             {`(${gymLeaderData.gym_name}) `}
           </div>
           <div>
-            {typeImage}  {badgeImage}
+            {typeImage}  
           </div>
         </div>
       </div>
@@ -75,7 +77,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
     );
 
     leaderContent = (
-      <div className="trainer-card-component">
+      <div className="gym-leader-card-component">
         {trainerImage}
         <div>
           <div>
@@ -104,7 +106,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
 
     // setup the imgs for this componenent
     leaderContent = (
-      <div className="trainer-card-component">
+      <div className="gym-leader-card-component">
         {trainerImage}
         <div>
           <div>
@@ -121,21 +123,33 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
   return (
     <div className="horizontal-container">
       {leaderContent}
-      {/* layout there pokemon */}
-      {gymLeaderData.pokemon?.map((pokemon) => (
-        <div className="trainer-card-component">
-          <img src={pokemon.imageUrl} alt={pokemon.name ?? "Pokmemon image"} className="trainer-card-pokemon-img" />
-          <p>{pokemon.name ?? "Unknown"}</p>
-          <p>{pokemon.level ?? "-"}</p>
-          {pokemon.types?.map((type) => (
+      <div className="trainers-pokemon-container">
+        {/* layout there pokemon */}
+        {gymLeaderData.pokemon?.map((pokemon) => (
+          <div key={pokemon.name ?? Math.random()} className="trainers-pokemon">
             <img
-              src={getTypeUrl(type) || defaultImageUrl} 
-              style={{width:"50px", height:"20px"}}
-              onError= {(error) => handleImageNotFound(error)}
+              src={pokemon.imageUrl}
+              alt={pokemon.name ?? "Pokemon image"}
+              className="trainer-card-pokemon-img"
             />
-          ))}
-        </div>
-      ))}
+            <p>{pokemon.name ?? "Unknown"}</p>
+            <p>{pokemon.level ?? "-"}</p>
+            {pokemon.types?.map((type, index) => (
+              <img
+                key={index}
+                src={getTypeUrl(type) || defaultImageUrl}
+                style={{ width: "50px", height: "20px" }}
+                onError={(error) => handleImageNotFound(error)}
+              />
+            ))}
+          </div>
+        ))}
+        {/* empty components */}
+        {[...Array(6 - totalPokemon)].map(() => (
+          <div className="trainers-pokemon-empty" />
+        ))}
+      </div>
     </div>
   );
 }
+

@@ -18,6 +18,7 @@
 
   /* cards */
   --card_bg: #1b2230;             /* deep navy/blue-black */
+  --card-border: #465572;         /* lighter grey  */
 }
 
 
@@ -155,7 +156,7 @@
   justify-content: center; 
 }
 
-/*Cards#####################################################*/
+/*InfoCard#####################################################*/
 .small-card {
   background: var(--card_bg);
   color: var(--text_color);
@@ -193,36 +194,88 @@
 }
 
 /* Trainer Card ###################################*/
-.trainer-card-component{
-  width: 200px;
-  height: 200px;
-  padding: 10px;
-}
-
-.trainer-card-component:hover{
-  border  : 2px solid var(--header_color);
+/* Gym Leader */
+.gym-leader-card-component{
+  position: relative;
+  width: 350px;
+  height: 350px;
+  background-color: var(--toolbar_color);
+  border-style: solid;
+  border-color: var(--card-border);
+  border-width: 2px;
 }
 
 .trainer-card-trainer-img {
   width: 100%;
-  height: 40%;
+  height: 50%;
+  margin-top: 10%;
   object-fit: contain;
+}
+
+.badge-img {
+  position: absolute; 
+  top: -2px;    /* move up slightly to overlap */
+  right: -2px; /* move right slightly to overlap */
+  width: 20%;
+  height: 20%;
+  float : right;
+  padding: 4px;
+}
+
+.gym-leader-card-component:hover{
+  border  : 2px solid var(--header_color);
+}
+
+.gym-leader-name {
+  margin-top: 10px;
+  color: var(--header_color);
+}
+
+/* Pokemon */
+.trainers-pokemon-container {
+  width: 500px;
+  height: 350px;
+  background-color: var(--toolbar_color);
+  border-style: solid;
+  border-color: var(--card-border);
+  border-width: 2px;
+  padding-top: 7px;
+
+  /* grid layout */
+  display: grid;
+  grid-template-columns: repeat(3, 150px);/* 5 squares per cols */
+  column-gap: 20px;
+  row-gap: 20px;
+  justify-content: center;
+}
+
+.trainers-pokemon {
+  width: 150px;
+  height: 150px;
+  background-color: var(--toolbar_color);
+  border-style: solid;
+  border-color: var(--card-border);
+  border-width: 2px;
+  
+}
+
+.trainers-pokemon:hover{
+  border  : 2px solid var(--header_color);
+}
+
+.trainers-pokemon-empty {
+  width: 150px;
+  height: 150px;
+  background-color: var(--toolbar_color);
+  border-style: dashed;
+  border-color: var(--card-border);
+  border-width: 2px;
 }
 
 .trainer-card-pokemon-img {
   width: 100%;
   height: 40%;
   object-fit: contain;
-}
-
-.badge-img {
-  width: 10%;
-  height: 10%;
-}
- 
-.gym-leader-name {
-  margin-top: 10px;
-  color: var(--header_color);
 }
 
 .trainer-type-img {
