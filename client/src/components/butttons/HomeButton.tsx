@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { PagePaths } from '../pages/pagePaths';
+import { PagePaths } from '../../pages/pagePaths';
 
 export const HomeButton = () => {
   return (

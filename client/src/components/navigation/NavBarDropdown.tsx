@@ -1,8 +1,7 @@
 import { Dropdown } from 'primereact/dropdown';
-import '../styles/general.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { PagePaths } from '../pages/pagePaths';
+import type { PagePaths } from '../../pages/pagePaths';
 
 interface NavBarDropdownProps {
   label : string;

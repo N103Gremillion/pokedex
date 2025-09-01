@@ -94,6 +94,8 @@ export const getPokemonRegionGymLeaders = async (generation : Generation) : Prom
   const res : Response = await fetch(request_url);
   const json = await res.json();
 
+  console.log(json)
+  
   return {
     gen_num : json.gen_num,
     region : json.region,

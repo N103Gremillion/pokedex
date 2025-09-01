@@ -1,13 +1,16 @@
 import copy
 from bs4 import BeautifulSoup, Tag
 from app_types import ErrorResponse, ErrorResponseKeys, GymLeaderData, GymLeaderKeys, IslandCaptainKeys, IslandKahunaKeys, PokemonData, PokemonRegionGymLeaders, PokemonRegionGymLeadersKeys, SuccessResponse, SuccessResponseKeys
+from mongo.db_utils import DatabaseCollections
 from scraper.gymLeaderPageScrapper import GEN_TO_REGION, fetchGymLeaderWithPokemon
 from utils import print_pretty_json, isValidType
 from scraper.scraper import BASE_BULBAPEDIA_WIKI_URL, scrape_page_builbapedia
 from scraper.gen7data import GEN_7_ISLAND_CAPTAINS, GEN_7_ISLAND_KAHUNAS
+from pymongo.collection import Collection
 
 ####################### THESE ARE SPECIFIC TO THIS PAGE https://bulbapedia.bulbagarden.net/wiki/Gym ##########################################
 def fetchGymLeadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
+  from entry import globalDb
   
   response : PokemonRegionGymLeaders = {
     PokemonRegionGymLeadersKeys.GEN_NUMBER : -1,
@@ -28,6 +31,20 @@ def fetchGymLeadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
   if (gen < 1 or gen > 9):
     print(f"Invalid Gen Number for Input {gen}. Must be between 1-9 inclusively.")
     return response
+  
+  # check if it is already cached in the database
+  pokemonRegionCollection : Collection = globalDb[DatabaseCollections.POKEMON_REGION_GYM_LEADERS.value.name]
+  
+  cachedDoc = pokemonRegionCollection.find_one({DatabaseCollections.POKEMON_REGION_GYM_LEADERS.value.key: gen})
+  
+  if (cachedDoc):
+    return { 
+      PokemonRegionGymLeadersKeys.GEN_NUMBER : cachedDoc[PokemonRegionGymLeadersKeys.GEN_NUMBER], 
+      PokemonRegionGymLeadersKeys.REGION : cachedDoc[PokemonRegionGymLeadersKeys.REGION],
+      PokemonRegionGymLeadersKeys.GYM_LEADERS : cachedDoc[PokemonRegionGymLeadersKeys.GYM_LEADERS],
+      PokemonRegionGymLeadersKeys.ISLAND_KAHUNAS : cachedDoc[PokemonRegionGymLeadersKeys.ISLAND_KAHUNAS],
+      PokemonRegionGymLeadersKeys.ISLAND_CAPTAINS : cachedDoc[PokemonRegionGymLeadersKeys.ISLAND_CAPTAINS]
+    }
   
   region : str = GEN_TO_REGION[gen]
   response[PokemonRegionGymLeadersKeys.REGION] = region
@@ -150,7 +167,16 @@ def fetchGymLeadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
     leader_pokemon = fetchGymLeaderWithPokemon(leader, gen)
     
   response[PokemonRegionGymLeadersKeys.GYM_LEADERS] = gym_leaders
-    
+  
+  # add to cache pages to prevent unecessary fetches in the future
+  pokemonRegionCollection.insert_one({
+    DatabaseCollections.POKEMON_REGION_GYM_LEADERS.value.key: gen,
+    PokemonRegionGymLeadersKeys.REGION : response[PokemonRegionGymLeadersKeys.REGION],
+    PokemonRegionGymLeadersKeys.GYM_LEADERS : response[PokemonRegionGymLeadersKeys.GYM_LEADERS],
+    PokemonRegionGymLeadersKeys.ISLAND_KAHUNAS : response[PokemonRegionGymLeadersKeys.ISLAND_KAHUNAS],
+    PokemonRegionGymLeadersKeys.ISLAND_CAPTAINS : response[PokemonRegionGymLeadersKeys.ISLAND_CAPTAINS]
+  })
+  
   return response
 
 def trimGymLeaderName(full_gym_leader_name : str) -> str:

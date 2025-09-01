@@ -17,6 +17,15 @@ export function validPokemonType(typeString : string) : boolean {
   return false;
 }
 
+export function getTypeUrl(type : PokemonType | undefined) : string {
+
+  if (type === undefined) {
+    return ""
+  }
+  
+  return `${basetypeImageUrl}/${type}.png`
+} 
+
 export function getTypeUrls(types : PokemonType[] | undefined) : string[] {
   if (types === undefined) {
     return []

@@ -25,6 +25,7 @@ import random
 from typing import List
 from bs4 import BeautifulSoup, Tag
 from app_types import ErrorResponse, ErrorResponseKeys, GymLeaderData, GymLeaderKeys, IslandCaptainData, IslandCaptainKeys, IslandKahunaData, IslandKahunaKeys, PokemonData, PokemonKeys, PokemonType, SuccessResponse, SuccessResponseKeys
+from pokeapi.pokemon import fetchPokemonDataByIdentifier
 from utils import print_pretty_json, isValidType
 from scraper.scraper import BASE_BULBAPEDIA_WIKI_URL, BASE_POKEMON_DB_URL, scrape_page_builbapedia,scrape_page_pokedb
 
@@ -158,7 +159,7 @@ def fetchGymLeaderWithPokemon(leader : GymLeaderData | IslandKahunaData | Island
     print(f"Could not find img tag with alt {full_leader_name}")
     return leader
   
-  if GymLeaderKeys.GYM_LEADER_NAME in leader:
+  if GymLeaderKeys.GYM_LEADER_NAME in leader and full_leader_name == "Larry":
     leader[GymLeaderKeys.GYM_LEADER_IMAGE_URL] = img_tag.get("src")
     
   elif IslandKahunaKeys.ISLAND_KAHUNA_NAME in leader:
@@ -188,9 +189,6 @@ def fetchGymLeaderWithPokemon(leader : GymLeaderData | IslandKahunaData | Island
     
     # img url 
     img_tag = div.find("img")
-    
-    if img_tag:
-      pokemon_data[PokemonKeys.IMAGE_URL] = img_tag.get("src")
       
     # Name
     name_class : str = "ent-name"
@@ -200,8 +198,15 @@ def fetchGymLeaderWithPokemon(leader : GymLeaderData | IslandKahunaData | Island
       pokemon.append(pokemon_data)
       continue
     
-    pokemon_data[PokemonKeys.NAME] = name_tag.get_text(strip=True)
+    pokemon_name = name_tag.get_text(strip=True)
 
+    # Fetch full Pokemon data
+    pokemon_data = fetchPokemonDataByIdentifier(pokemon_name)
+        
+    if img_tag and not pokemon_data.get(PokemonKeys.IMAGE_URL):
+      pokemon_data[PokemonKeys.NAME] = pokemon_name
+      pokemon_data[PokemonKeys.IMAGE_URL] = img_tag.get("src")
+    
     # level
     level_tag = name_tag.find_next("small")
     

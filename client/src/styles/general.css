@@ -192,9 +192,42 @@
   white-space: nowrap;
 }
 
-/* GymLeader Componenets ###################################*/
-.gym-leaders-container {
-  
+/* Trainer Card ###################################*/
+.trainer-card-component{
+  width: 200px;
+  height: 200px;
+  padding: 10px;
+}
+
+.trainer-card-component:hover{
+  border  : 2px solid var(--header_color);
+}
+
+.trainer-card-trainer-img {
+  width: 100%;
+  height: 40%;
+  object-fit: contain;
+}
+
+.trainer-card-pokemon-img {
+  width: 100%;
+  height: 40%;
+  object-fit: contain;
+}
+
+.badge-img {
+  width: 10%;
+  height: 10%;
+}
+ 
+.gym-leader-name {
+  margin-top: 10px;
+  color: var(--header_color);
+}
+
+.trainer-type-img {
+  width: 20%;
+  height: 20%;
 }
 
 /*Navbar####################################################*/

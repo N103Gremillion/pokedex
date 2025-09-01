@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Generation, getGenerationFromString } from "../enums";
 import { getPokedexInfo } from "../api/pokemon_api";
-import { PokedexGrid } from "../components/PokedexGrid";
+import { PokedexGrid } from "../components/pokedex/PokedexGrid";
 import type { PokedexData } from "../types";
 
 export const PokedexPage = () => {

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { CardSize, InfoCard } from '../components/InfoCard';
-import { SearchBar } from '../components/SearchBar';
+import { CardSize, InfoCard } from '../components/general/InfoCard';
+import { SearchBar } from '../components/navigation/SearchBar';
 import '../styles/general.css'
-import { getRandomGymLeader, getRandomItem, getRandomPokemon, type GymLeaderData, type ItemData, type PokemonData } from '../api/pokemon_api';
-import { PagePaths } from './pagePaths';
+import { getRandomGymLeader, getRandomItem, getRandomPokemon } from '../api/pokemon_api';
+import type { GymLeaderData, ItemData, PokemonData } from '../types';
 
 export const HomePage = () => {
 

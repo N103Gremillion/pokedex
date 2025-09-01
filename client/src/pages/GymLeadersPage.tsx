@@ -1,10 +1,9 @@
 import { useParams } from "react-router-dom";
 import { Generation, getGenerationFromString } from "../enums";
 import { useEffect, useState } from "react";
-import { sleep } from "../utils";
 import { getPokemonRegionGymLeaders } from "../api/pokemon_api";
 import type { PokemonRegionGymLeaders } from "../types";
-import { PokemonTrainerCard } from "../components/PokemonTrainerCard";
+import { PokemonTrainerCard } from "../components/trainer/PokemonTrainerCard";
 
 export const GymLeadersPage = () => {
   // pull of the genreatoin info from the url 
@@ -32,7 +31,6 @@ export const GymLeadersPage = () => {
       } catch (error) {
         console.log(`Issue getting pokemonRegionInfo for gen : ${generation} | Error : ${error}`);
       } finally {
-        console.log(pokemonRegionInfo);
         setLoading(false);
       }
     };
@@ -60,7 +58,7 @@ export const GymLeadersPage = () => {
         {/* if this is gen 7 then it has island captains and island kahunas instead of gym leaders */}
         {pokemonRegionInfo.gen_num === 7 && (
           <div>
-            <h2 className='header'>Kahunas</h2>
+            <h2 className='header'>Island Kahunas</h2>
             {pokemonRegionInfo.island_kahunas.map((islandKahunaInfo) => (
               <PokemonTrainerCard gymLeaderData={islandKahunaInfo}/>
             ))}
@@ -69,7 +67,7 @@ export const GymLeadersPage = () => {
 
         {pokemonRegionInfo.gen_num === 7 && (
           <div>
-            <h2 className='header'>Captians</h2>
+            <h2 className='header'>Island Captians</h2>
             {pokemonRegionInfo.island_captains.map((islandCaptainInfo) => (
               <PokemonTrainerCard gymLeaderData={islandCaptainInfo}/>
             ))}

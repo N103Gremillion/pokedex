@@ -1,8 +1,8 @@
 import type { SyntheticEvent } from "react";
-import { getTypeUrls } from "../utils";
+import { getTypeUrls } from "../../utils";
 import { useNavigate } from 'react-router-dom';
-import { PagePaths } from "../pages/pagePaths";
-import type { PokemonData } from "../types";
+import { PagePaths } from "../../pages/pagePaths";
+import type { PokemonData } from "../../types";
 
 interface PokedexEntryProps {
   pokemonData : PokemonData
@@ -13,7 +13,7 @@ export const PokedexEntry = ({pokemonData} : PokedexEntryProps) => {
   const defaultImageUrl : string = "/public/substitute.png";
   const typeImageUrls : string[] = getTypeUrls(pokemonData.types);
   const navigate = useNavigate();
-  
+
   // construct the handler for when the img doesn't load
   const handleImageNotFound = (event : SyntheticEvent<HTMLImageElement, Event>) => {
     const img = event.currentTarget;

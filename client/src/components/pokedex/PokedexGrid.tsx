@@ -1,4 +1,5 @@
-import type { PokedexData, PokemonData } from "../api/pokemon_api";
+
+import type { PokedexData, PokemonData } from "../../types";
 import { PokedexEntry } from "./PokedexEntry";
 
 interface PokedexGridProps {
@@ -7,6 +8,8 @@ interface PokedexGridProps {
 
 export const PokedexGrid = ({pokedex} : PokedexGridProps) => {
 
+  console.log(pokedex);
+  
   return (
     <div className="pokedex-grid-container">
       {pokedex.pokemon?.map((pokemon : PokemonData) => (
