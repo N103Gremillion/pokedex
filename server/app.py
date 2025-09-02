@@ -1,10 +1,12 @@
 import os
+from typing import List
 from flask import Flask, Response, jsonify
 from enum import Enum
-from app_types import GymLeaderData, ItemData, PokemonData, PokedexKeys, PokemonRegionGymLeaders
+from utils import isValidType
+from app_types import GymLeaderData, ItemData, PokemonData, PokedexKeys, PokemonRegionGymLeaders, PokemonType
 from pokeapi.item import fetchItemById, fetchItemByName
 from pokeapi.pokedex import fetchPokedexByGeneration
-from pokeapi.pokemon import fetchPokemonDataByIdentifier
+from pokeapi.pokemon import fetchAllPokemonOfType, fetchPokemonDataByIdentifier
 from scraper.gymLeaderPageScrapper import fetchRandomGymLeader
 from scraper.gymLeadersPageScrapper import fetchGymLeadersByGeneration
 
@@ -35,6 +37,16 @@ def setupRoutes(app : Flask) -> None:
       result = fetchPokemonDataByIdentifier(identifier.lower()) # api expects a lower case name
     
     return jsonify(result)
+  
+  @app.route("/pokemon/type/<type_name>")
+  def getAllPokemonOfType(type_name : PokemonType) -> Response:
+    
+    if (not isValidType(type_name)):
+      return { PokedexKeys.POKEMON : []}
+    
+    pokemon : List[PokemonData] = fetchAllPokemonOfType(type_name)
+    
+    return jsonify({ PokedexKeys.POKEMON : pokemon })
   
   # ITEM ENDPOINTS ###################################################################
   # TO DO add tying to name fetches and implement the rest of the typing
@@ -79,3 +91,4 @@ def setupRoutes(app : Flask) -> None:
   def getGymLeadersFromGeneration(generation : str) -> PokemonRegionGymLeaders:
     res : list[GymLeaderData] = fetchGymLeadersByGeneration(generation)
     return jsonify(res)
+  

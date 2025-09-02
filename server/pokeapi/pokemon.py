@@ -1,7 +1,7 @@
-from typing import Optional
+from typing import List, Optional
 
 from flask import json
-from app_types import ErrorResponse, PokemonData, PokemonType, SuccessResponse, ErrorResponseKeys, PokemonKeys, SuccessResponseKeys
+from app_types import ErrorResponse, PokedexKeys, PokemonData, PokemonType, SuccessResponse, ErrorResponseKeys, PokemonKeys, SuccessResponseKeys
 from utils import isValidType, print_pretty_json
 from pokeapi.general import baseApiUrl, fetchData
 from enum import Enum
@@ -9,6 +9,7 @@ import requests
 
 class PokemonInfoEndpoints(Enum):
   GET_POKEMON = f"{baseApiUrl}/pokemon"
+  GET_TYPE = f"{baseApiUrl}/type"
       
 # less data for this one since it is not used on the in depth pokemon pages
 def fetchPokemonDataByIdentifier(pokemon_identifier : int | str) -> PokemonData:
@@ -46,4 +47,27 @@ def fetchPokemonDataByIdentifier(pokemon_identifier : int | str) -> PokemonData:
   
   return pokemonData
   
-        
+def fetchAllPokemonOfType(pokemon_type : PokemonType) -> List[PokemonData]:
+  url : str = f"{PokemonInfoEndpoints.GET_TYPE.value}/{pokemon_type.lower()}"
+  response : SuccessResponse | ErrorResponse = fetchData(url)
+  
+  if (not response[ErrorResponseKeys.SUCCESS]):
+    print(f"Error fetching data for pokemon by type: {pokemon_type}. Error: {response['error']}")
+    return []
+  
+  data = response[SuccessResponseKeys.DATA]
+  
+  if not data.get("pokemon"):
+    print(f"Could not pull of pokemon from data when fetching pokemon of type {pokemon_type}.")
+    return []
+  
+  pokemon : List[PokemonData] = []
+  
+  for entry in data.get("pokemon"):
+    pokemon_entry = entry.get("pokemon", {})
+    name: str | None = pokemon_entry.get("name")
+    if not name:
+      continue
+    pokemon.append(fetchPokemonDataByIdentifier(name))
+  
+  return pokemon

@@ -9,7 +9,7 @@ interface PokemonTrainerCardProps {
 export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) => {
 
   let leaderContent: JSX.Element | null = null;
-  const defaultImageUrl : string = "/public/default_img.png";
+  const defaultImageUrl : string = "/default_img.png";
   const totalPokemon : number = gymLeaderData.pokemon?.length ?? 0;
 
   // construct the handler for when the image doesnt load

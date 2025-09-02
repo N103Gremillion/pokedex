@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { sleep, validPokemonType } from "../utils";
+import { validPokemonType } from "../utils";
+import { getAllPokemonOfType, getTypInfo } from "../api/pokemon_api";
+import { PokemonType } from "../enums";
 
 export const TypePage = () => {
   // pull of the type info from the url 
@@ -11,13 +13,14 @@ export const TypePage = () => {
     const run = async () => {
       setLoading(true);
       
-      await sleep(2);
-
       if (!validPokemonType(typeString)){
         console.log(`Invalid type passed to TypePage. Type : ${typeString}`)
         return
       }
       
+      await getAllPokemonOfType(typeString as PokemonType);
+      await getTypInfo(typeString as PokemonType);
+
       setLoading(false);
     };
 

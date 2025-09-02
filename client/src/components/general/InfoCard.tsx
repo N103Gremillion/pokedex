@@ -18,7 +18,7 @@ interface InfoCardProps {
 
 export const InfoCard = ({size, title, subtitle, text, imageUrl} : InfoCardProps) => {
   
-  const defaultImageUrl : string = "/public/default_img.png";
+  const defaultImageUrl : string = "/default_img.png";
 
   // construct the handler for when the image doesnt load
   const handleImageNotFound = (event : SyntheticEvent<HTMLImageElement, Event>) => {

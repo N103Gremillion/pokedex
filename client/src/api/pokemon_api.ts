@@ -1,14 +1,7 @@
-import type { Generation } from "../enums";
+import type { Generation, PokemonType } from "../enums";
 import type { GymLeaderData, ItemData, PokedexData, PokemonData, PokemonRegionGymLeaders } from "../types";
 import { getRandomItemId, getRandomPokemonId, NOT_FOUND_STATUS, SERVER_SIDE_ERROR_CUTOFF } from "./helpers";
 import { Routes } from "./routes";
-
-// General ****************************************************************** //
-export const getMatchingPlayers = async (gamerTag : string) => {
-  console.log("requesting gamer tag matches", gamerTag);
-  const res  = await fetch(``);
-  return res.json();
-};
 
 // Pokemon **************************************************************** //
 export const getRandomPokemon = async () : Promise<PokemonData> => {
@@ -24,14 +17,22 @@ export const getRandomPokemon = async () : Promise<PokemonData> => {
 
   const json = await res.json();
 
-  console.log(json);
-
   return {
     id: json.id,
     name: json.name,
     imageUrl: json.imageUrl,
     types : json.types
   };
+}
+
+export const getAllPokemonOfType = async (type : PokemonType) : Promise<PokemonData[]> => {
+  const request_url : string = `${Routes.POKEMON}/type/${type}`;
+  const res : Response = await fetch(request_url);
+  const json = await res.json();
+  console.log(`Fetching all pokemon of Type ${type}`);
+  console.log(json);
+
+  return json.pokemon;
 }
 
 // Items ************************************************************ //
@@ -103,5 +104,10 @@ export const getPokemonRegionGymLeaders = async (generation : Generation) : Prom
     island_kahunas : json.island_kahunas,
     island_captains : json.island_captains
   }
+}
+
+// TypeInfo **************************************************//
+export const getTypInfo = async (type : PokemonType) : Promise<any> => {
+  return undefined;
 }
 

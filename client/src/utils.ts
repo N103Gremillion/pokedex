@@ -1,6 +1,6 @@
 import { PokemonType } from "./enums";
 
-const basetypeImageUrl : string = "/public/type_logos";
+const basetypeImageUrl : string = "/type_logos";
 
 export const sleep = async(seconds : number) : Promise<void> => {
   await new Promise(resolve => setTimeout(resolve, seconds * 1000));
