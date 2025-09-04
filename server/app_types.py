@@ -67,6 +67,7 @@ class MoveKeys(str, Enum):
   PRIORITY = "priority"
   POWER = "power"
   DMG_CLASS = "dmg_class"
+  EFFECTS = "effects"
   NAME = "name"
   TYPE_NAME = "type_name"
   
@@ -77,6 +78,7 @@ class MoveData(TypedDict):
   priority : int
   power : int
   dmg_class : str
+  effects : List[str]
   name : str
   type_name : PokemonType
   

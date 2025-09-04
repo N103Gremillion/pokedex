@@ -12,6 +12,7 @@ def fetchPokemonMove(move_name : str) -> MoveData:
     MoveKeys.PRIORITY : 0,
     MoveKeys.POWER : -1,
     MoveKeys.DMG_CLASS : 'unknown',
+    MoveKeys.EFFECTS : [],
     MoveKeys.NAME : "unknown",
     MoveKeys.TYPE_NAME : PokemonType.Unknown
   }
@@ -42,8 +43,6 @@ def fetchPokemonMove(move_name : str) -> MoveData:
     
   priority = data.get("priority")
   
-  print(priority)
-  
   if priority:
     result[MoveKeys.PRIORITY] = priority
     
@@ -66,7 +65,11 @@ def fetchPokemonMove(move_name : str) -> MoveData:
   
   effect_entries_data = data.get("effect_entries")
   
-  # print(effect_entries_data)
+  if effect_entries_data:
+    for entry in effect_entries_data:
+      effect = entry.get("effect")
+      if (effect):
+        result[MoveKeys.EFFECTS].append(effect)
   
   type_data = data.get("type")
   
