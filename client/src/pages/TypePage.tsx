@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { validPokemonType } from "../utils";
-import { getAllPokemonOfType, getTypInfo } from "../api/pokemon_api";
+import { getAllPokemonOfType, getMovesOfType, getTypeInfo } from "../api/pokemon_api";
 import { PokemonType } from "../enums";
 
 export const TypePage = () => {
@@ -18,9 +18,10 @@ export const TypePage = () => {
         return
       }
       
-      await getAllPokemonOfType(typeString as PokemonType);
-      await getTypInfo(typeString as PokemonType);
-
+      // await getTypeInfo(typeString as PokemonType);
+      await getMovesOfType(typeString as PokemonType);
+      // await getAllPokemonOfType(typeString as PokemonType);
+      
       setLoading(false);
     };
 

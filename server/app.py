@@ -2,8 +2,10 @@ import os
 from typing import List
 from flask import Flask, Response, jsonify
 from enum import Enum
+from pokeapi.move import fetchPokemonMoves
+from pokeapi.type import fetchDetailedPokemonType
 from utils import isValidType
-from app_types import GymLeaderData, ItemData, PokemonData, PokedexKeys, PokemonRegionGymLeaders, PokemonType
+from app_types import DetailedPokemonType, DetailedPokemonTypeKeys, GymLeaderData, ItemData, MoveData, PokemonData, PokedexKeys, PokemonRegionGymLeaders, PokemonType
 from pokeapi.item import fetchItemById, fetchItemByName
 from pokeapi.pokedex import fetchPokedexByGeneration
 from pokeapi.pokemon import fetchAllPokemonOfType, fetchPokemonDataByIdentifier
@@ -80,6 +82,19 @@ def setupRoutes(app : Flask) -> None:
     
     return jsonify(result)
   
+  # TYPE ENDPOINTS
+  @app.route("/type/<type_str>")
+  def getTypeInfo(type_str : str) -> DetailedPokemonType:
+    result : DetailedPokemonType = fetchDetailedPokemonType(type_str)
+    return  jsonify(result)
+  
+  # MOVE ENDPOINTS
+  @app.route("/moves/<type_str>")
+  def getMovesOfType(type_str : str) -> List[MoveData]:
+    print("GETTING MOVES")
+    result : List[MoveData] = fetchPokemonMoves(type_str)
+    return jsonify(result)
+  
   # scrapper endpoints (mostly gym stuff)
   # GYMLEADERS ENDPOINTS 
   @app.route("/gym-leader/random")
@@ -91,4 +106,6 @@ def setupRoutes(app : Flask) -> None:
   def getGymLeadersFromGeneration(generation : str) -> PokemonRegionGymLeaders:
     res : list[GymLeaderData] = fetchGymLeadersByGeneration(generation)
     return jsonify(res)
+  
+  
   

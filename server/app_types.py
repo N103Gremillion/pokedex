@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import NotRequired, TypedDict, Any, Optional
+from typing import List, NotRequired, TypedDict, Any, Optional
 
 # Helpful Types
 class PokemonType (str, Enum):
@@ -21,7 +21,7 @@ class PokemonType (str, Enum):
   Dark = "Dark",
   Steel = "Steel",
   Fairy = "Fairy",
-  Various = "Various"
+  Unknown = "Unknown"
  
 # generic object to return in api fetches
 class SuccessResponseKeys(str, Enum):
@@ -59,6 +59,27 @@ class PokemonData(TypedDict):
   types: NotRequired[list[PokemonType]]
   level : NotRequired[str]
 
+# Moves
+class MoveKeys(str, Enum):
+  ACCURACY = "accuracy"
+  EFFECT_CHANCE = "effect_chance"
+  PP = "pp"
+  PRIORITY = "priority"
+  POWER = "power"
+  DMG_CLASS = "dmg_class"
+  NAME = "name"
+  TYPE_NAME = "type_name"
+  
+class MoveData(TypedDict):
+  accuracy : int
+  effect_chance : int
+  pp : int
+  priority : int
+  power : int
+  dmg_class : str
+  name : str
+  type_name : PokemonType
+  
 # Items
 class ItemKeys(str, Enum):
   ID = "id"
@@ -146,3 +167,23 @@ class PokemonRegionGymLeaders(TypedDict):
   gym_leaders : NotRequired[list[GymLeaderData]]
   island_kahunas : NotRequired[list[IslandKahunaData]]
   island_captains : NotRequired[list[IslandCaptainData]]
+  
+# in depth Type info
+class DetailedPokemonTypeKeys(str, Enum):
+  TYPE_NAME = "type_name"
+  NO_DMG_TO = "no_dmg_to"
+  HALF_DMG_TO = "half_dmg_to"
+  DOUBLE_DMG_TO = "double_dmg_to"
+  NO_DMG_FROM = "no_dmg_from"
+  HALF_DMG_FROM = "half_dmg_from"
+  DOUBLE_DMG_FROM = "double_dmg_from"
+  
+class DetailedPokemonType(TypedDict):
+  type_name : PokemonType
+  no_dmg_to : List[PokemonType]
+  half_dmg_to : List[PokemonType]
+  double_dmg_to : List[PokemonType]
+  no_dmg_from : List[PokemonType]
+  half_dmg_from : List[PokemonType]
+  double_dmg_from : List[PokemonType]
+  

@@ -10,6 +10,7 @@ import requests
 class PokemonInfoEndpoints(Enum):
   GET_POKEMON = f"{baseApiUrl}/pokemon"
   GET_TYPE = f"{baseApiUrl}/type"
+  GET_MOVE = f"{baseApiUrl}/move"
       
 # less data for this one since it is not used on the in depth pokemon pages
 def fetchPokemonDataByIdentifier(pokemon_identifier : int | str) -> PokemonData:

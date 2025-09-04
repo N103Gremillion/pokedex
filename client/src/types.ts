@@ -14,6 +14,21 @@ export type ItemData = {
   imageUrl? : string;
 }
 
+export type MoveData = {
+  type_name : PokemonType;
+  name : string;
+}
+
+export type DetailedPokemonTypeData = {
+  type_name? : PokemonType;
+  no_dmg_to? : PokemonType[];
+  half_dmg_to? : PokemonType[];
+  double_dmg_to? : PokemonType[];
+  no_dmg_from? : PokemonType[];
+  half_dmg_from? : PokemonType[];
+  double_dmg_from? : PokemonType[];
+}
+
 export type PokedexData = {
   gen_num? : number;
   pokemon? : PokemonData[]

@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { AutoComplete } from 'primereact/autocomplete';
 import { getMatchingPlayers } from '../../api/pokemon_api';
 
+
 export const SearchBar = () => {
   const [searchBarText, setSearchBarText] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   const handleSearch = async (queryString : string ) => {
     setSearchBarText(queryString);

@@ -1,7 +1,11 @@
 import type { Generation, PokemonType } from "../enums";
-import type { GymLeaderData, ItemData, PokedexData, PokemonData, PokemonRegionGymLeaders } from "../types";
+import type { DetailedPokemonTypeData, GymLeaderData, ItemData, MoveData, PokedexData, PokemonData, PokemonRegionGymLeaders } from "../types";
 import { getRandomItemId, getRandomPokemonId, NOT_FOUND_STATUS, SERVER_SIDE_ERROR_CUTOFF } from "./helpers";
 import { Routes } from "./routes";
+
+export const getMatchingPlayers = async (queryString : string) : Promise<string[]> => {
+  return [];
+}
 
 // Pokemon **************************************************************** //
 export const getRandomPokemon = async () : Promise<PokemonData> => {
@@ -30,6 +34,7 @@ export const getAllPokemonOfType = async (type : PokemonType) : Promise<PokemonD
   const res : Response = await fetch(request_url);
   const json = await res.json();
   console.log(`Fetching all pokemon of Type ${type}`);
+
   console.log(json);
 
   return json.pokemon;
@@ -95,7 +100,7 @@ export const getPokemonRegionGymLeaders = async (generation : Generation) : Prom
   const res : Response = await fetch(request_url);
   const json = await res.json();
 
-  console.log(json)
+  console.log(json);
   
   return {
     gen_num : json.gen_num,
@@ -107,7 +112,31 @@ export const getPokemonRegionGymLeaders = async (generation : Generation) : Prom
 }
 
 // TypeInfo **************************************************//
-export const getTypInfo = async (type : PokemonType) : Promise<any> => {
-  return undefined;
+export const getTypeInfo = async (type : PokemonType) : Promise<DetailedPokemonTypeData> => {
+  const url : string = `${Routes.TYPE}/${type}`;
+  const res : Response = await fetch(url);
+  const json = await res.json();
+
+  console.log(json);
+
+  return {
+    type_name : json.type_name,
+    no_dmg_to : json.no_dmg_to,
+    half_dmg_to : json.half_dmg_to,
+    double_dmg_to : json.double_dmg_to,
+    no_dmg_from : json.no_dmg_from,
+    half_dmg_from : json.half_dmg_from,
+    double_dmg_from : json.double_dmg_from
+  };
 }
 
+// Moves
+export const  getMovesOfType = async (type : PokemonType) : Promise<MoveData[]>  => {
+  const url : string = `${Routes.MOVES}/${type}`;
+  const res : Response = await fetch(url);
+  const json = await res.json();
+
+  console.log(json);
+  
+  return [];
+}
