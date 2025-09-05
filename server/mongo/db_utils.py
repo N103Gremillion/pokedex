@@ -5,7 +5,7 @@ import os
 from pymongo import MongoClient
 from pymongo.database import Database
 from pymongo.collection import Collection
-from app_types import PokedexKeys, PokemonRegionGymLeadersKeys
+from app_types import DetailedPokemonTypeKeys, PokedexKeys, PokemonRegionGymLeadersKeys
 from dataclasses import dataclass
 
 
@@ -18,6 +18,7 @@ class CollectionInfo:
 class DatabaseCollections (Enum):
   POKEDEX = CollectionInfo("pokedex", PokedexKeys.GEN_NUMBER)
   POKEMON_REGION_GYM_LEADERS = CollectionInfo("pokemon_region_gym_leaders", PokemonRegionGymLeadersKeys.GEN_NUMBER)
+  POKEMON_TYPE_INFO = CollectionInfo("pokemon_type_info", DetailedPokemonTypeKeys.TYPE_NAME)
 
 load_dotenv()
 

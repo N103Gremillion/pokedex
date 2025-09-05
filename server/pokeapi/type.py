@@ -1,10 +1,14 @@
+from flask import jsonify
 from app_types import DetailedPokemonType, DetailedPokemonTypeKeys, ErrorResponse, PokemonType, SuccessResponse, SuccessResponseKeys
-from typing import List
+from typing import Collection, List
+from mongo.db_utils import DatabaseCollections
 from pokeapi.general import baseApiUrl, fetchData
 from pokeapi.pokemon import PokemonInfoEndpoints
 from utils import isValidType, print_pretty_json
 
 def fetchDetailedPokemonType(type_str : str) -> DetailedPokemonType:
+  from entry import globalDb
+  
   result : DetailedPokemonType = {
     DetailedPokemonTypeKeys.TYPE_NAME : PokemonType.Unknown,
     DetailedPokemonTypeKeys.NO_DMG_TO : [],
@@ -19,6 +23,21 @@ def fetchDetailedPokemonType(type_str : str) -> DetailedPokemonType:
     print(f"Could not fetch detailed info for type {type_str}")
     return result
   
+  # check if query has already been saved in the DB
+  typeCollection : Collection = globalDb[DatabaseCollections.POKEMON_TYPE_INFO.value.name]
+  typeEntry = typeCollection.find_one({DetailedPokemonTypeKeys.TYPE_NAME : type_str})
+  
+  if typeEntry:
+    return {
+      DetailedPokemonTypeKeys.TYPE_NAME : typeEntry[DetailedPokemonTypeKeys.TYPE_NAME],
+      DetailedPokemonTypeKeys.NO_DMG_TO : typeEntry[DetailedPokemonTypeKeys.NO_DMG_TO],
+      DetailedPokemonTypeKeys.HALF_DMG_TO : typeEntry[DetailedPokemonTypeKeys.HALF_DMG_TO],
+      DetailedPokemonTypeKeys.DOUBLE_DMG_TO : typeEntry[DetailedPokemonTypeKeys.DOUBLE_DMG_TO],
+      DetailedPokemonTypeKeys.NO_DMG_FROM : typeEntry[DetailedPokemonTypeKeys.NO_DMG_FROM],
+      DetailedPokemonTypeKeys.HALF_DMG_FROM : typeEntry[DetailedPokemonTypeKeys.HALF_DMG_FROM],
+      DetailedPokemonTypeKeys.DOUBLE_DMG_FROM : typeEntry[DetailedPokemonTypeKeys.DOUBLE_DMG_FROM]
+    } 
+  
   result[DetailedPokemonTypeKeys.TYPE_NAME] = type_str
   url : str = f"{PokemonInfoEndpoints.GET_TYPE.value}/{type_str}"
   response : SuccessResponse | ErrorResponse = fetchData(url)
@@ -32,7 +51,7 @@ def fetchDetailedPokemonType(type_str : str) -> DetailedPokemonType:
   damage_relations_data = data.get("damage_relations")
   
   if (not damage_relations_data):
-    return result
+    return jsonify(result)
 
   no_damage_to_data = damage_relations_data.get("no_damage_to")
   half_damage_to_data = damage_relations_data.get("half_damage_to")
@@ -76,5 +95,16 @@ def fetchDetailedPokemonType(type_str : str) -> DetailedPokemonType:
       type : str | None = entry.get("name")
       if (type):
         result[DetailedPokemonTypeKeys.DOUBLE_DMG_FROM].append(type.capitalize())
+  
+  # store this query in DB so you dont have to re look it up
+  typeCollection.insert_one({
+    DetailedPokemonTypeKeys.TYPE_NAME : result[DetailedPokemonTypeKeys.TYPE_NAME],
+    DetailedPokemonTypeKeys.NO_DMG_TO : result[DetailedPokemonTypeKeys.NO_DMG_TO],
+    DetailedPokemonTypeKeys.HALF_DMG_TO : result[DetailedPokemonTypeKeys.HALF_DMG_TO],
+    DetailedPokemonTypeKeys.DOUBLE_DMG_TO : result[DetailedPokemonTypeKeys.DOUBLE_DMG_TO],
+    DetailedPokemonTypeKeys.NO_DMG_FROM : result[DetailedPokemonTypeKeys.NO_DMG_FROM],
+    DetailedPokemonTypeKeys.HALF_DMG_FROM : result[DetailedPokemonTypeKeys.HALF_DMG_FROM],
+    DetailedPokemonTypeKeys.DOUBLE_DMG_FROM : result[DetailedPokemonTypeKeys.DOUBLE_DMG_FROM]
+  })
   
   return result
