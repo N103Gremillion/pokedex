@@ -283,6 +283,148 @@
   height: 20%;
 }
 
+/*Moves#####################################################*/
+.move-grid {
+  display: grid;
+  grid-template-columns: 200px 200px 200px 200px 200px;
+  column-gap: 10px;
+  row-gap: 10px;
+  justify-content: center;
+}
+
+.move-card {
+  height: 100px;
+  border-style: solid;
+  border-radius: 10px;
+  font-weight: bold;
+  padding-top: 15px;
+}
+
+.move-card:hover {
+  border-color: var(--highlight_color);
+}
+
+.move-card-type-img {
+  padding-top: 10px;
+  width: 50px;
+}
+
+
+/* themes for types on the moves */
+.move-card-normal {
+  background-color: #A8A77A;  
+  border-color: #6D6D4E;  
+  color: #000000;        
+}
+
+
+.move-card-fire {
+  background-color: #F08030;  
+  border-color: #9C531F;  
+  color: #FFFFFF;        
+}
+
+.move-card-water {
+  background-color: #6890F0;  
+  border-color: #445E9C;  
+  color: #FFFFFF;        
+}
+
+.move-card-electric {
+  background-color: #F8D030;  
+  border-color: #A1871F;  
+  color: #000000;        
+}
+
+.move-card-grass {
+  background-color: #78C850;  
+  border-color: #4E8234;  
+  color: #FFFFFF;        
+}
+
+.move-card-ice {
+  background-color: #98D8D8;  
+  border-color: #638D8D;  
+  color: #000000;        
+}
+
+.move-card-fighting {
+  background-color: #F0653C; 
+  border-color: #7D1F1A;
+  color: #FFFFFF;
+}
+
+.move-card-poison {
+  background-color: #A040A0;  
+  border-color: #682A68;  
+  color: #FFFFFF;        
+}
+
+.move-card-ground {
+  background-color: #E0C068;  
+  border-color: #927D44;  
+  color: #000000;        
+}
+
+.move-card-flying {
+  background-color: #8FA8F0; 
+  border-color: #5D70A0;  
+  color: #FFFFFF;        
+}
+.move-card-psychic {
+  background-color: #F85888;  
+  border-color: #A13959;  
+  color: #FFFFFF;        
+}
+
+.move-card-bug {
+  background-color: #A8B820;  
+  border-color: #6D7815;  
+  color: #000000;        
+}
+
+.move-card-rock {
+  background-color: #B8A038;  
+  border-color: #786824;  
+  color: #000000;        
+}
+
+.move-card-ghost {
+  background-color: #705898;  
+  border-color: #493963;  
+  color: #FFFFFF;        
+}
+
+.move-card-dragon {
+  background-color: #7038F8;  
+  border-color: #4924A1;  
+  color: #FFFFFF;        
+}
+
+.move-card-dark {
+  background-color: #705848;  
+  border-color: #49392F;  
+  color: #FFFFFF;        
+}
+
+.move-card-steel {
+  background-color: #B8B8D0;  
+  border-color: #787887;  
+  color: #000000;        
+}
+
+.move-card-fairy {
+  background-color: #EE99AC;  
+  border-color: #9B6470;  
+  color: #000000;        
+}
+
+.move-card-unknown {
+  background-color: #A8A8A8;  
+  border-color: #666666;  
+  color: #000000;        
+}
+
 /*Navbar####################################################*/
 .navbar {
   height : 50px;

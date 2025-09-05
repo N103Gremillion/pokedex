@@ -135,8 +135,6 @@ export const  getMovesOfType = async (type : PokemonType) : Promise<MoveData[]> 
   const url : string = `${Routes.MOVES}/${type}`;
   const res : Response = await fetch(url);
   const json = await res.json();
-
-  console.log(json);
   
-  return [];
+  return json as MoveData[];
 }

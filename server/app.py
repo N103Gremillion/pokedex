@@ -91,7 +91,6 @@ def setupRoutes(app : Flask) -> None:
   # MOVE ENDPOINTS
   @app.route("/moves/<type_str>")
   def getMovesOfType(type_str : str) -> List[MoveData]:
-    print("GETTING MOVES")
     result : List[MoveData] = fetchPokemonMoves(type_str)
     return jsonify(result)
   

@@ -17,7 +17,14 @@ export enum PokemonType {
   Dark = "Dark",
   Steel = "Steel",
   Fairy = "Fairy",
-  Various = "Various"
+  Unkown = "Unknown"
+}
+
+export enum PokemonDmgClass {
+  Physical = "Physical",
+  Special = "Special",
+  Status = "Status",
+  Unkown = "Unkown"
 }
 
 export enum Generation {

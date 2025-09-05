@@ -1,4 +1,4 @@
-import type { PokemonType } from "./enums";
+import type { PokemonDmgClass, PokemonType } from "./enums";
 
 export type PokemonData = {
   id? : number;
@@ -15,8 +15,15 @@ export type ItemData = {
 }
 
 export type MoveData = {
-  type_name : PokemonType;
-  name : string;
+  accuracy? : number;
+  effect_chance? : number;
+  pp? : number;
+  priority? : number;
+  power? : number;
+  dmg_class? : PokemonDmgClass;
+  effects? : string[];
+  name? : string;
+  type_name? : PokemonType;
 }
 
 export type DetailedPokemonTypeData = {

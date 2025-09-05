@@ -1,5 +1,5 @@
 from typing import List
-from app_types import ErrorResponse, MoveData, MoveKeys, PokemonType, SuccessResponse, SuccessResponseKeys
+from app_types import ErrorResponse, MoveData, MoveKeys, PokemonDmgClass, PokemonType, SuccessResponse, SuccessResponseKeys
 from pokeapi.general import fetchData
 from pokeapi.pokemon import PokemonInfoEndpoints
 from utils import isValidType
@@ -11,7 +11,7 @@ def fetchPokemonMove(move_name : str) -> MoveData:
     MoveKeys.PP : -1,
     MoveKeys.PRIORITY : 0,
     MoveKeys.POWER : -1,
-    MoveKeys.DMG_CLASS : 'unknown',
+    MoveKeys.DMG_CLASS : PokemonDmgClass.Unkown,
     MoveKeys.EFFECTS : [],
     MoveKeys.NAME : "unknown",
     MoveKeys.TYPE_NAME : PokemonType.Unknown
@@ -56,7 +56,7 @@ def fetchPokemonMove(move_name : str) -> MoveData:
   if dmg_class_data:
     dmg_class = dmg_class_data.get("name")
     if dmg_class:
-      result[MoveKeys.DMG_CLASS] = dmg_class
+      result[MoveKeys.DMG_CLASS] = dmg_class.capitalize()
     
   name = data.get("name")
   

@@ -22,7 +22,13 @@ class PokemonType (str, Enum):
   Steel = "Steel",
   Fairy = "Fairy",
   Unknown = "Unknown"
- 
+
+class PokemonDmgClass(str, Enum):
+  Physical = "Physical"
+  Special = "Special"
+  Status = "Status"
+  Unkown = "Unkown"
+  
 # generic object to return in api fetches
 class SuccessResponseKeys(str, Enum):
   SUCCESS = "success"
@@ -77,7 +83,7 @@ class MoveData(TypedDict):
   pp : int
   priority : int
   power : int
-  dmg_class : str
+  dmg_class : PokemonDmgClass
   effects : List[str]
   name : str
   type_name : PokemonType
