@@ -1,6 +1,6 @@
-
 import type { PokedexData, PokemonData } from "../../types";
 import { PokedexEntry } from "./PokedexEntry";
+import "../../styles/pokedex.css";
 
 interface PokedexGridProps {
   pokedex : PokedexData;

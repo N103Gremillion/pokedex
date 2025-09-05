@@ -3,6 +3,7 @@ import { getTypeUrls } from "../../utils";
 import { useNavigate } from 'react-router-dom';
 import { PagePaths } from "../../pages/pagePaths";
 import type { PokemonData } from "../../types";
+import "../../styles/pokedex.css";
 
 interface PokedexEntryProps {
   pokemonData : PokemonData

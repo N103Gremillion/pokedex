@@ -1,6 +1,7 @@
 import type { JSX, SyntheticEvent } from "react";
 import type { GymLeaderData, IslandCaptainData, IslandKahunaData } from "../../types";
 import { getTypeUrl } from "../../utils";
+import "../../styles/trainer.css"
 
 interface PokemonTrainerCardProps {
   gymLeaderData : GymLeaderData | IslandCaptainData | IslandKahunaData;

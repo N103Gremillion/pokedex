@@ -2,6 +2,7 @@ import { Toolbar } from 'primereact/toolbar';
 import { NavBarDropdown } from './NavBarDropdown';
 import { HomeButton } from '../butttons/HomeButton';
 import { PagePaths } from '../../pages/pagePaths';
+import "../../styles/navbar.css"
 
 export const NavBar = () => {
   

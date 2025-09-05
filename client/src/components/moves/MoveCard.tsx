@@ -1,5 +1,6 @@
 import type { MoveData } from "../../types";
 import { getTypeUrl } from "../../utils";
+import "../../styles/moves.css"
 
 interface MoveCardProps {
   move : MoveData

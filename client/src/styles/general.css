@@ -1,24 +1,38 @@
-
-/** differetn color schemes to try **/
 :root {
   /* general */
-  --background_color: #121820;    /* very dark blue-gray */
-  --text_color: #cbd6e4;          /* soft light blue-gray */
-  --header_color: #0d99ff;        /* bright electric blue */
+  --background_color: #121820;    
+  --text_color: #cbd6e4;          
+  --header_color: #0d99ff;       
 
   /* toolbar */
-  --toolbar_color: #1e2a38;       /* dark navy */
-  --highlight_color: #3399ff;     /* medium blue */
-  --hover_color: #66b3ff;         /* lighter blue for hover */
+  --toolbar_color: #1e2a38;       
+  --highlight_color: #3399ff;     
+  --hover_color: #66b3ff;        
 
   /* search bar */
-  --searchbar_bg: #1e2a38;        /* match toolbar */
-  --searchbar_text: #cbd6e4;      /* light text */
-  --searchbar_border: #3399ff;    /* blue border */
+  --searchbar_bg: #1e2a38;        
+  --searchbar_text: #cbd6e4;      
+  --searchbar_border: #3399ff;    
 
   /* cards */
-  --card_bg: #1b2230;             /* deep navy/blue-black */
-  --card-border: #465572;         /* lighter grey  */
+  --card_bg: #1b2230;            
+  --card-border: #465572;         
+
+  /* Super effective */
+  --super-effective-bg: #4CAF50;
+  --super-effective-text: #ffffff;
+
+  /* Normal */
+  --normal-effective-bg: #B0B0B0;
+  --normal-effective-text: #000000;
+
+  /* Not very effective */
+  --not-very-effective-bg: #FFC107;
+  --not-very-effective-text: #000000;
+
+  /* Immune */
+  --immune-effevtive-bg: #E53935;   
+  --immune-effective-text: #ffffff; 
 }
 
 
@@ -37,62 +51,6 @@
   margin-top: 40px;
   color: var(--text_color);
   font-size: 18px;
-}
-
-/*Pokedex################################################*/
-.pokedex-grid-container {
-  padding-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(5, 200px);/* 5 squares per cols */
-  column-gap: 20px;
-  row-gap: 20px;
-  justify-content: center;
-}
-
-.pokedex-entry {
-  width : 200px;
-  height : 200px;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--card_bg);
-  padding: 5px;
-  border-radius: 2px;
-  border-color: var(--toolbar_color);
-  border-style: solid;
-}
-
-.pokedex-entry-img {
-  width: 100%;
-  height: 60%;
-  object-fit: contain;
-}
-
-.pokedex-entry-name {
-  width: 100%;
-  height: 20%;
-  text-align: center;
-  object-fit: contain;
-}
-
-.pokedex-entry-types-container {
-  width: 100%;
-  height: 20%;
-  object-fit: contain;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 10px;
-}
-
-.pokedex-entry-type-image {
-  width: 80%;
-  height: 100%;
-  object-fit: contain;
-  flex-shrink: 1;
-}
-
-.pokedex-entry:hover {
-  border-color: var(--highlight_color);
 }
 
 /*Search Bar#################################################*/
@@ -193,281 +151,5 @@
   white-space: nowrap;
 }
 
-/* Trainer Card ###################################*/
-/* Gym Leader */
-.gym-leader-card-component{
-  position: relative;
-  width: 350px;
-  height: 350px;
-  background-color: var(--toolbar_color);
-  border-style: solid;
-  border-color: var(--card-border);
-  border-width: 2px;
-}
 
-.trainer-card-trainer-img {
-  width: 100%;
-  height: 50%;
-  margin-top: 10%;
-  object-fit: contain;
-}
-
-.badge-img {
-  position: absolute; 
-  top: -2px;    /* move up slightly to overlap */
-  right: -2px; /* move right slightly to overlap */
-  width: 20%;
-  height: 20%;
-  float : right;
-  padding: 4px;
-}
-
-.gym-leader-card-component:hover{
-  border  : 2px solid var(--header_color);
-}
-
-.gym-leader-name {
-  margin-top: 10px;
-  color: var(--header_color);
-}
-
-/* Pokemon */
-.trainers-pokemon-container {
-  width: 500px;
-  height: 350px;
-  background-color: var(--toolbar_color);
-  border-style: solid;
-  border-color: var(--card-border);
-  border-width: 2px;
-  padding-top: 7px;
-
-  /* grid layout */
-  display: grid;
-  grid-template-columns: repeat(3, 150px);/* 5 squares per cols */
-  column-gap: 20px;
-  row-gap: 20px;
-  justify-content: center;
-}
-
-.trainers-pokemon {
-  width: 150px;
-  height: 150px;
-  background-color: var(--toolbar_color);
-  border-style: solid;
-  border-color: var(--card-border);
-  border-width: 2px;
-  
-}
-
-.trainers-pokemon:hover{
-  border  : 2px solid var(--header_color);
-}
-
-.trainers-pokemon-empty {
-  width: 150px;
-  height: 150px;
-  background-color: var(--toolbar_color);
-  border-style: dashed;
-  border-color: var(--card-border);
-  border-width: 2px;
-}
-
-.trainer-card-pokemon-img {
-  width: 100%;
-  height: 40%;
-  object-fit: contain;
-}
-
-.trainer-type-img {
-  width: 20%;
-  height: 20%;
-}
-
-/*Moves#####################################################*/
-.move-grid {
-  display: grid;
-  grid-template-columns: 200px 200px 200px 200px 200px;
-  column-gap: 10px;
-  row-gap: 10px;
-  justify-content: center;
-}
-
-.move-card {
-  height: 100px;
-  border-style: solid;
-  border-radius: 10px;
-  font-weight: bold;
-  padding-top: 15px;
-}
-
-.move-card:hover {
-  border-color: var(--highlight_color);
-}
-
-.move-card-type-img {
-  padding-top: 10px;
-  width: 50px;
-}
-
-
-/* themes for types on the moves */
-.move-card-normal {
-  background-color: #A8A77A;  
-  border-color: #6D6D4E;  
-  color: #000000;        
-}
-
-
-.move-card-fire {
-  background-color: #F08030;  
-  border-color: #9C531F;  
-  color: #FFFFFF;        
-}
-
-.move-card-water {
-  background-color: #6890F0;  
-  border-color: #445E9C;  
-  color: #FFFFFF;        
-}
-
-.move-card-electric {
-  background-color: #F8D030;  
-  border-color: #A1871F;  
-  color: #000000;        
-}
-
-.move-card-grass {
-  background-color: #78C850;  
-  border-color: #4E8234;  
-  color: #FFFFFF;        
-}
-
-.move-card-ice {
-  background-color: #98D8D8;  
-  border-color: #638D8D;  
-  color: #000000;        
-}
-
-.move-card-fighting {
-  background-color: #F0653C; 
-  border-color: #7D1F1A;
-  color: #FFFFFF;
-}
-
-.move-card-poison {
-  background-color: #A040A0;  
-  border-color: #682A68;  
-  color: #FFFFFF;        
-}
-
-.move-card-ground {
-  background-color: #E0C068;  
-  border-color: #927D44;  
-  color: #000000;        
-}
-
-.move-card-flying {
-  background-color: #8FA8F0; 
-  border-color: #5D70A0;  
-  color: #FFFFFF;        
-}
-.move-card-psychic {
-  background-color: #F85888;  
-  border-color: #A13959;  
-  color: #FFFFFF;        
-}
-
-.move-card-bug {
-  background-color: #A8B820;  
-  border-color: #6D7815;  
-  color: #000000;        
-}
-
-.move-card-rock {
-  background-color: #B8A038;  
-  border-color: #786824;  
-  color: #000000;        
-}
-
-.move-card-ghost {
-  background-color: #705898;  
-  border-color: #493963;  
-  color: #FFFFFF;        
-}
-
-.move-card-dragon {
-  background-color: #7038F8;  
-  border-color: #4924A1;  
-  color: #FFFFFF;        
-}
-
-.move-card-dark {
-  background-color: #705848;  
-  border-color: #49392F;  
-  color: #FFFFFF;        
-}
-
-.move-card-steel {
-  background-color: #B8B8D0;  
-  border-color: #787887;  
-  color: #000000;        
-}
-
-.move-card-fairy {
-  background-color: #EE99AC;  
-  border-color: #9B6470;  
-  color: #000000;        
-}
-
-.move-card-unknown {
-  background-color: #A8A8A8;  
-  border-color: #666666;  
-  color: #000000;        
-}
-
-/*Navbar####################################################*/
-.navbar {
-  height : 50px;
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 5px 20px;
-  background-color: var(--toolbar_color);
-  color: var(--text_color);
-  box-sizing: border-box;
-  gap: 20px; 
-  z-index: 1000 /* garuntee it is always on top */
-}
-
-
-.navbar-component {
-  background-color: var(--toolbar_color);  
-  color: var(--text_color);
-  
-  height : 100%;
-  padding: 8px 20px;
-  border: none;
-  border-radius: 4px;
-
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.navbar-component:hover {
-  background-color: var(--highlight_color);
-}
-
-/* prime react item in a Dropdown */
-.p-dropdown-item {
-  background-color: var(--toolbar_color);
-  color: var(--text_color);
-}
-
-.p-dropdown-item:hover {
-  background-color: var(--hover_color);
-  color: var(--text_color);
-}
 

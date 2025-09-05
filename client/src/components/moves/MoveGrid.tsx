@@ -1,5 +1,6 @@
 import type { MoveData } from "../../types";
 import { MoveCard } from "./MoveCard";
+import "../../styles/moves.css"
 
 interface MoveGridProps {
   moves : MoveData[]

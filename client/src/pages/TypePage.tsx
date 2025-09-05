@@ -6,6 +6,7 @@ import { PokemonType } from "../enums";
 import type { DetailedPokemonTypeData, MoveData, PokedexData, PokemonData } from "../types";
 import { PokedexGrid } from "../components/pokedex/PokedexGrid";
 import { MoveGrid } from "../components/moves/MoveGrid";
+import { TypeEffectivnessChart } from "../components/types/TypeEffectivnessChart";
 
 export const TypePage = () => {
   // pull of the type info from the url 
@@ -66,12 +67,16 @@ export const TypePage = () => {
 
   return (
     <div className='general-page'>
-      <h1 className='header'>{typeSymbolImage} {typeData.type_name} Type</h1>
-      <h2>{typeData.type_name} Moves</h2>
+      <h1 className='header' style={{paddingBottom:"20px"}}>{typeSymbolImage} {typeData.type_name} Type</h1>
+
+      <TypeEffectivnessChart typeData={typeData}/>
+
+      <h2 className="header2">{typeData.type_name} Moves</h2>
       <MoveGrid moves={movesOfType}/>
 
-      <h2>{typeData.type_name} Pokemon</h2>
+      <h2 className="header2">{typeData.type_name} Pokemon</h2>
       <PokedexGrid pokedex={{gen_num : -1, pokemon : pokemonOfType } as PokedexData}/>
+
     </div>
   );
 }

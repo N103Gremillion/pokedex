@@ -1,0 +1,55 @@
+.type-effectivness-grid {
+  display: grid;
+  grid-template-columns: 200px 800px;
+  justify-content: center;;
+}
+
+.type-effectivness-grid-types {
+  color: var(--header_color);
+  width: 800px;
+  height: 100px;
+  border: solid;
+  border-radius: 10px;
+  border-color: var(--toolbar_color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.type-effectivness-grid-type-img {
+  width: 50px;
+  height: 50px;
+}
+
+.type-effectivness-grid-label {
+    
+    width: 200px;
+    height: 100px;
+    border: solid;
+    border-radius: 10px;
+    border-color: var(--toolbar_color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* themes for effectivness */
+.type-effectivness-grid-label-super {
+  color: var(--super-effective-text);
+  background-color: var(--super-effective-bg);
+}
+
+.type-effectivness-grid-label-normal {
+  color: var(--normal-effective-text);
+  background-color: var(--normal-effective-bg);
+}
+
+.type-effectivness-grid-label-not-very {
+  color: var(--not-very-effective-text);
+  background-color: var(--not-very-effective-bg);
+}
+
+.type-effectivness-immune {
+  color: var(--immune-effective-text);
+  background-color: var(--immune-effevtive-bg);
+}
