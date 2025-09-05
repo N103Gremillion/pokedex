@@ -23,7 +23,7 @@ export function getTypeUrl(type : PokemonType | undefined) : string {
     return ""
   }
   
-  return `${basetypeImageUrl}/${type}.png`
+  return `/type_logos/${type}.png`
 } 
 
 export function getTypeUrls(types : PokemonType[] | undefined) : string[] {
@@ -35,8 +35,16 @@ export function getTypeUrls(types : PokemonType[] | undefined) : string[] {
   const n : number = types.length;
 
   for (let i = 0; i < n; i++) {
-    urls.push(`${basetypeImageUrl}/${types[i]}.png`);
+    urls.push(`/type_logos/${types[i]}.png`);
   }
 
   return urls;
+}
+
+export function getTypeSymbolUrl(type : PokemonType | undefined) : string {
+  if (type === undefined) {
+    return ""
+  }
+  
+  return `/type_symbols/${type.toLowerCase()}.png`
 }

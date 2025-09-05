@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { validPokemonType } from "../utils";
+import { getTypeSymbolUrl, validPokemonType } from "../utils";
 import { getAllPokemonOfType, getMovesOfType, getTypeInfo } from "../api/pokemon_api";
 import { PokemonType } from "../enums";
 import type { DetailedPokemonTypeData, MoveData, PokedexData, PokemonData } from "../types";
@@ -44,9 +44,9 @@ export const TypePage = () => {
         double_dmg_from: []
       });
       
-      setMovesOfType(await getMovesOfType(typeString as PokemonType));
+      // setMovesOfType(await getMovesOfType(typeString as PokemonType));
       // setPokemonOfType(await getAllPokemonOfType(typeString as PokemonType));
-      // setTypeData(await getTypeInfo(typeString as PokemonType));
+      setTypeData(await getTypeInfo(typeString as PokemonType));
 
       setLoading(false);
     };
@@ -54,14 +54,22 @@ export const TypePage = () => {
     run();
   }, [typeString]);
   
+  const typeSymbolImage = (
+    <img
+      src={getTypeSymbolUrl(typeString as PokemonType)}
+      alt={"Type"}
+      className="move-card-type-img"
+    />
+  );
+
   if (loading) { return <div className='loading-page'>Loading...</div>};
 
   return (
     <div className='general-page'>
-
-      <h1 className='header'>{typeData.type_name} Type</h1>
+      <h1 className='header'>{typeSymbolImage} {typeData.type_name} Type</h1>
       <h2>{typeData.type_name} Moves</h2>
       <MoveGrid moves={movesOfType}/>
+
       <h2>{typeData.type_name} Pokemon</h2>
       <PokedexGrid pokedex={{gen_num : -1, pokemon : pokemonOfType } as PokedexData}/>
     </div>
