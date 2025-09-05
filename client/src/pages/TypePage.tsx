@@ -45,9 +45,10 @@ export const TypePage = () => {
         double_dmg_from: []
       });
       
-      // setMovesOfType(await getMovesOfType(typeString as PokemonType));
-      // setPokemonOfType(await getAllPokemonOfType(typeString as PokemonType));
       setTypeData(await getTypeInfo(typeString as PokemonType));
+      setMovesOfType(await getMovesOfType(typeString as PokemonType));
+      setPokemonOfType(await getAllPokemonOfType(typeString as PokemonType));
+      
 
       setLoading(false);
     };

@@ -19,6 +19,8 @@ class DatabaseCollections (Enum):
   POKEDEX = CollectionInfo("pokedex", PokedexKeys.GEN_NUMBER)
   POKEMON_REGION_GYM_LEADERS = CollectionInfo("pokemon_region_gym_leaders", PokemonRegionGymLeadersKeys.GEN_NUMBER)
   POKEMON_TYPE_INFO = CollectionInfo("pokemon_type_info", DetailedPokemonTypeKeys.TYPE_NAME)
+  POKEMON_OF_TYPE = CollectionInfo("pokemon_of_type", DetailedPokemonTypeKeys.TYPE_NAME)
+  MOVES_OF_TYPE = CollectionInfo("moves_of_type", DetailedPokemonTypeKeys.TYPE_NAME)
 
 load_dotenv()
 

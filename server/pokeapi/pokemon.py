@@ -1,11 +1,12 @@
 from typing import List, Optional
-
 from flask import json
-from app_types import ErrorResponse, PokedexKeys, PokemonData, PokemonType, SuccessResponse, ErrorResponseKeys, PokemonKeys, SuccessResponseKeys
+from app_types import DetailedPokemonTypeKeys, ErrorResponse, PokedexKeys, PokemonData, PokemonType, SuccessResponse, ErrorResponseKeys, PokemonKeys, SuccessResponseKeys
+from mongo.db_utils import DatabaseCollections
 from utils import isValidType, print_pretty_json
 from pokeapi.general import baseApiUrl, fetchData
 from enum import Enum
 import requests
+from pymongo.collection import Collection
 
 class PokemonInfoEndpoints(Enum):
   GET_POKEMON = f"{baseApiUrl}/pokemon"
@@ -49,6 +50,15 @@ def fetchPokemonDataByIdentifier(pokemon_identifier : int | str) -> PokemonData:
   return pokemonData
   
 def fetchAllPokemonOfType(pokemon_type : PokemonType) -> List[PokemonData]:
+  from entry import globalDb 
+  
+
+  pokemOfTypeCollection : Collection = globalDb[DatabaseCollections.POKEMON_OF_TYPE.value.name]
+  pokemonOfTypeDoc = pokemOfTypeCollection.find_one({ DetailedPokemonTypeKeys.TYPE_NAME : pokemon_type })
+  
+  if pokemonOfTypeDoc:
+    return pokemonOfTypeDoc[PokedexKeys.POKEMON]
+  
   url : str = f"{PokemonInfoEndpoints.GET_TYPE.value}/{pokemon_type.lower()}"
   response : SuccessResponse | ErrorResponse = fetchData(url)
   
@@ -70,5 +80,10 @@ def fetchAllPokemonOfType(pokemon_type : PokemonType) -> List[PokemonData]:
     if not name:
       continue
     pokemon.append(fetchPokemonDataByIdentifier(name))
+  
+  pokemOfTypeCollection.insert_one({
+    DetailedPokemonTypeKeys.TYPE_NAME : pokemon_type,
+    PokedexKeys.POKEMON : pokemon
+  })
   
   return pokemon

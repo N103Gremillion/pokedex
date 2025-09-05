@@ -1,5 +1,6 @@
 from typing import List
-from app_types import ErrorResponse, MoveData, MoveKeys, PokemonDmgClass, PokemonType, SuccessResponse, SuccessResponseKeys
+from app_types import DetailedPokemonTypeKeys, ErrorResponse, MoveData, MoveKeys, PokemonDmgClass, PokemonType, SuccessResponse, SuccessResponseKeys
+from mongo.db_utils import DatabaseCollections
 from pokeapi.general import fetchData
 from pokeapi.pokemon import PokemonInfoEndpoints
 from utils import isValidType
@@ -81,12 +82,19 @@ def fetchPokemonMove(move_name : str) -> MoveData:
   return result
   
 def fetchPokemonMoves(type_str : str) -> List[MoveData]:
-  
   result : List[MoveData] = []
   
   if (not isValidType(type_str)):
     print(f"Could not fetch moves info for type {type_str}")
     return result
+  
+  from entry import globalDb
+  
+  movesOfTypeCollection  = globalDb[DatabaseCollections.MOVES_OF_TYPE.value.name]
+  movesOfTypeDoc = movesOfTypeCollection.find_one({ DetailedPokemonTypeKeys.TYPE_NAME : type_str })
+  
+  if movesOfTypeDoc:
+    return movesOfTypeDoc["moves"]
   
   url : str = f"{PokemonInfoEndpoints.GET_TYPE.value}/{type_str}"
   response : SuccessResponse | ErrorResponse = fetchData(url)
@@ -105,5 +113,10 @@ def fetchPokemonMoves(type_str : str) -> List[MoveData]:
     move_name : str = move_data.get("name")
     if (move_name):
       result.append(fetchPokemonMove(move_name))
+  
+  movesOfTypeCollection.insert_one({
+    DetailedPokemonTypeKeys.TYPE_NAME : type_str,
+    "moves" : result
+  })
   
   return result
