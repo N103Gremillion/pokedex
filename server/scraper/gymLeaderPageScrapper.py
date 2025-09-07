@@ -30,14 +30,13 @@ from utils import print_pretty_json, isValidType
 from scraper.scraper import BASE_BULBAPEDIA_WIKI_URL, BASE_POKEMON_DB_URL, scrape_page_builbapedia,scrape_page_pokedb
 
 GYM_LEADERS : List[str] = [
-  "Brock", "Misty", "Lt._Surge", "Erika", "Koga", "Janine", "Sabrina", "Blaine", "Giovanni", "Blue", # Indigo League
+  "Brock", "Misty", "Lt._Surge", "Erika", "Koga", "Sabrina", "Blaine", "Giovanni",  # Indigo League
   "Falkner", "Bugsy", "Whitney", "Morty", "Chuck", "Jasmine", "Pryce", "Clair", # Johto League 
-  "Roxanne", "Brawly", "Wattson", "Flannery", "Norman", "Winona", "Tate_and_Liza", "Wallace", "Juan", # Hoenn League
+  "Roxanne", "Brawly", "Wattson", "Flannery", "Norman", "Winona", "Tate_and_Liza", "Wallace",  # Hoenn League
   "Roark", "Gardenia", "Maylene", "Crasher_Wake", "Fantina", "Byron", "Candice", "Volkner", # Sinnoh League
   "Cilan", "Chili", "Cress", "Lenora", "Burgh", "Elesa", "Clay", "Skyla", "Brycen", "Drayden", "Iris", # Unova League (Black and White)
-  "Cheren", "Roxie", "Marlon", # Unova League (Black and White)
   "Viola", "Grant", "Korrina", "Ramos", "Clemont", "Valerie", "Olympia", "Wulfric", # Kalos League
-  "Milo", "Nessa", "Kabu", "Bea", "Allister", "Opal", "Bede", "Gordie", "Melong", "Piers", "Marnie", "Raihan", # Galar League
+  "Milo", "Nessa", "Kabu", "Bea", "Allister", "Opal", "Gordie", "Melong", "Piers", "Raihan", # Galar League
   "Katy", "Brassius", "Iono", "Kofu", "Larry", "Ryme", "Tulip", "Grusha" # Paldea League
 ]
 
@@ -48,7 +47,7 @@ GEN_TO_REGION : dict[int, str] = {
   4: "Sinnoh",
   5: "Unova",
   6: "Kalos",
-  7: "Alola", # HUGE REMINDER THIS REGION DOES NOT HAVE GYMS SO TREAT IT AS AN EDGE CASE
+  7: "Alola", 
   8: "Galar", 
   9: "Paldea"
 }

@@ -1,5 +1,5 @@
 const backendPort : number = 5000;
-export const baseBackendURL : string = `http://localhost:${backendPort}`;
+export const baseBackendURL : string = `https://localhost:${backendPort}`;
 
 enum ApiGetEndpoints {
   POKEMON = "/pokemon",

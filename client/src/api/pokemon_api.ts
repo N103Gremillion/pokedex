@@ -40,6 +40,19 @@ export const getAllPokemonOfType = async (type : PokemonType) : Promise<PokemonD
   return json.pokemon;
 }
 
+export const getDetailedPokemonData = async (pokemonName : string) : Promise<any> => {
+  const request_url : string = `${Routes.POKEMON}/detailed/${pokemonName}`;
+
+  console.log(request_url);
+
+  const res : Response = await fetch(request_url);
+  const json = await res.json();
+
+  console.log(`Fetching pokemon named ${pokemonName}`);
+
+  console.log(json);
+}
+
 // Items ************************************************************ //
 export const getRandomItem = async () : Promise<ItemData> => {
   console.log("fetching a random item.");

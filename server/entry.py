@@ -6,7 +6,7 @@ from mongo.db_utils import getDb, setupCollections
 
 # Configs
 portNumber : int = 5000
-frontEndUrl : str = "http://localhost:5173/"
+frontEndUrl : str = "https://localhost:5173/"
 
 # Flask app Initalization
 app : Flask = initApp()
@@ -18,4 +18,4 @@ globalDb : Database = getDb()
 setupCollections(globalDb)
 
 if __name__ == "__main__":
-    app.run(debug=True, port=portNumber)
+    app.run(host="localhost", port=portNumber, ssl_context=('cert/cert.pem', 'cert/key.pem'))

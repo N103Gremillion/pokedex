@@ -50,6 +50,11 @@ def setupRoutes(app : Flask) -> None:
     
     return jsonify({ PokedexKeys.POKEMON : pokemon })
   
+  @app.route("/pokemon/detailed/<pokemon_name>")
+  def getDetailedPokemon(pokemon_name : str) -> Response:
+    print(pokemon_name)
+    return jsonify({"res" : "Hello"})
+    
   # ITEM ENDPOINTS ###################################################################
   # TO DO add tying to name fetches and implement the rest of the typing
   @app.route("/item/<identifier>")
