@@ -1,7 +1,9 @@
 import type { JSX, SyntheticEvent } from "react";
-import type { GymLeaderData, IslandCaptainData, IslandKahunaData } from "../../types";
+import type { GymLeaderData, IslandCaptainData, IslandKahunaData, PokemonData } from "../../types";
 import { getTypeUrl } from "../../utils";
 import "../../styles/trainer.css"
+import { PagePaths } from "../../pages/pagePaths";
+import { useNavigate } from 'react-router-dom';
 
 interface PokemonTrainerCardProps {
   gymLeaderData : GymLeaderData | IslandCaptainData | IslandKahunaData;
@@ -27,7 +29,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
       onError= {(error) => handleImageNotFound(error)}
     />
   );
-
+  
   if ("gym_leader_name" in gymLeaderData) {
     
     const trainerImage = (
@@ -120,7 +122,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
       </div>
     );
   }
-
+  
   return (
     <div className="horizontal-container">
       {leaderContent}

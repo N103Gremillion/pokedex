@@ -52,7 +52,8 @@ def setupRoutes(app : Flask) -> None:
   
   @app.route("/pokemon/detailed/<pokemon_name>")
   def getDetailedPokemon(pokemon_name : str) -> Response:
-    print(pokemon_name)
+    # result = fetchDetailedPokemonInfo();
+    
     return jsonify({"res" : "Hello"})
     
   # ITEM ENDPOINTS ###################################################################
