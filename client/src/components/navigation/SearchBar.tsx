@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AutoComplete } from 'primereact/autocomplete';
-import { getMatchingPlayers } from '../../api/pokemon_api';
+import { getMatchingSearchs } from '../../api/pokemon_api';
 
 
 export const SearchBar = () => {
@@ -9,15 +9,14 @@ export const SearchBar = () => {
 
   const handleSearch = async (queryString : string ) => {
     setSearchBarText(queryString);
-
+    
     if (!queryString) {
       setSuggestions([]);
       return;
     }
 
     // Call your API to get matching players based on the query
-    const results = await getMatchingPlayers(queryString);
-    setSuggestions(results);
+    setSuggestions(await getMatchingSearchs (queryString));
   };
 
   return (
@@ -27,11 +26,11 @@ export const SearchBar = () => {
         id="player-search"
         value={searchBarText}
         suggestions={suggestions}
-        completeMethod={(event) => handleSearch(event.query)} 
-        field="name"                
+        completeMethod={(event) => handleSearch(event.query)}                 
         onChange={(event) => setSearchBarText(event.value)}
         placeholder="Search ..."
         inputClassName='search-bar'
+        panelStyle={{ width: '400px', backgroundColor : "royalblue"}}
       />
     </div>
   );

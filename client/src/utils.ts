@@ -30,7 +30,6 @@ export function getTypeUrls(types : PokemonType[] | undefined) : string[] {
   if (types === undefined) {
     return []
   }
-
   const urls : string[] = [];
   const n : number = types.length;
 

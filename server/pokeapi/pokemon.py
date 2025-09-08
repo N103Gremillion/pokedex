@@ -87,3 +87,23 @@ def fetchAllPokemonOfType(pokemon_type : PokemonType) -> List[PokemonData]:
   })
   
   return pokemon
+
+def fetchAllPokemonNames() -> List[str]:
+  
+  url : str = f"{PokemonInfoEndpoints.GET_POKEMON}?limit=100000&offset=0"
+  response : SuccessResponse | ErrorResponse = fetchData(url)
+  
+  if (not response[ErrorResponseKeys.SUCCESS]):
+    print(f"Error fetching all pokemon. Error: {response['error']}")
+    return []
+  
+  data = response[SuccessResponseKeys.DATA]
+  pokemon_names : List[str] = []
+  
+  for pokemon in data:
+    if pokemon:
+      name = pokemon["name"]
+      if name:
+        pokemon_names.append(name)
+  
+  return pokemon_names

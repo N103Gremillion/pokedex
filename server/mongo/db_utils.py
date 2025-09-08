@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any
+from typing import Any, List
 from dotenv import load_dotenv, dotenv_values
 import os
 from pymongo import MongoClient
@@ -7,7 +7,6 @@ from pymongo.database import Database
 from pymongo.collection import Collection
 from app_types import DetailedPokemonTypeKeys, PokedexKeys, PokemonRegionGymLeadersKeys
 from dataclasses import dataclass
-
 
 @dataclass(frozen=True)
 class CollectionInfo:
@@ -21,6 +20,7 @@ class DatabaseCollections (Enum):
   POKEMON_TYPE_INFO = CollectionInfo("pokemon_type_info", DetailedPokemonTypeKeys.TYPE_NAME)
   POKEMON_OF_TYPE = CollectionInfo("pokemon_of_type", DetailedPokemonTypeKeys.TYPE_NAME)
   MOVES_OF_TYPE = CollectionInfo("moves_of_type", DetailedPokemonTypeKeys.TYPE_NAME)
+  ALL_POKEMON = CollectionInfo("all_pokemon", "name") # just holds names used for seachbar matching
 
 load_dotenv()
 

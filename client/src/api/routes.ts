@@ -9,6 +9,7 @@ enum ApiGetEndpoints {
   POKEDEX = "/pokedex",
   TYPE = "/type",
   MOVES = "/moves",
+  SEARCH = "/search",
 }
 
 export const Routes = {
@@ -18,5 +19,6 @@ export const Routes = {
   GYM_LEADERS : `${baseBackendURL}${ApiGetEndpoints.GYM_LEADERS}`,
   POKEDEX : `${baseBackendURL}${ApiGetEndpoints.POKEDEX}`,
   TYPE : `${baseBackendURL}${ApiGetEndpoints.TYPE}`,
-  MOVES : `${baseBackendURL}${ApiGetEndpoints.MOVES}`
+  MOVES : `${baseBackendURL}${ApiGetEndpoints.MOVES}`,
+  SEARCH : `${baseBackendURL}${ApiGetEndpoints.SEARCH}`
 } as const;

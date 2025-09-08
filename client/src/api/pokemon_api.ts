@@ -3,13 +3,15 @@ import type { DetailedPokemonTypeData, GymLeaderData, ItemData, MoveData, Pokede
 import { getRandomItemId, getRandomPokemonId, NOT_FOUND_STATUS, SERVER_SIDE_ERROR_CUTOFF } from "./helpers";
 import { Routes } from "./routes";
 
-export const getMatchingPlayers = async (queryString : string) : Promise<string[]> => {
-  return [];
+export const getMatchingSearchs = async (queryString : string) : Promise<string[]> => {
+  const url : string = `${Routes.SEARCH}/match/${queryString}`;
+  const res : Response = await fetch(url);
+  const json = await res.json();;
+  return json;
 }
 
 // Pokemon **************************************************************** //
 export const getRandomPokemon = async () : Promise<PokemonData> => {
-  console.log("fetching a random pokemon.");
 
   // try and get the data of a pokemon with a random id
   const randomId : number = getRandomPokemonId();

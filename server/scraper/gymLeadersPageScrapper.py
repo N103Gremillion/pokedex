@@ -1,8 +1,9 @@
 import copy
+from typing import List
 from bs4 import BeautifulSoup, Tag
 from app_types import ErrorResponse, ErrorResponseKeys, GymLeaderData, GymLeaderKeys, IslandCaptainKeys, IslandKahunaKeys, PokemonData, PokemonRegionGymLeaders, PokemonRegionGymLeadersKeys, SuccessResponse, SuccessResponseKeys
 from mongo.db_utils import DatabaseCollections
-from scraper.gymLeaderPageScrapper import GEN_TO_REGION, fetchGymLeaderWithPokemon
+from scraper.gymLeaderPageScrapper import GEN_TO_REGION, GYM_LEADERS, fetchGymLeaderWithPokemon
 from utils import print_pretty_json, isValidType
 from scraper.scraper import BASE_BULBAPEDIA_WIKI_URL, scrape_page_builbapedia
 from scraper.gen7data import GEN_7_ISLAND_CAPTAINS, GEN_7_ISLAND_KAHUNAS
