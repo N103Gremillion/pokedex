@@ -2,7 +2,7 @@ import os
 from typing import List
 from flask import Flask, Response, jsonify
 from enum import Enum
-from pokeapi.move import fetchPokemonMoves
+from pokeapi.move import fetchPokemonMove, fetchPokemonMoves
 from pokeapi.type import fetchDetailedPokemonType
 from utils import filterBySubstringAcrossPools, isValidType
 from app_types import DetailedPokemonType, DetailedPokemonTypeKeys, GymLeaderData, ItemData, MoveData, PokemonData, PokedexKeys, PokemonRegionGymLeaders, PokemonType
@@ -55,7 +55,6 @@ def setupRoutes(app : Flask) -> None:
     return jsonify(result)
     
   # ITEM ENDPOINTS ###################################################################
-  # TO DO add tying to name fetches and implement the rest of the typing
   @app.route("/item/<identifier>")
   def getItemByIdentifier(identifier : str) -> Response:
     if identifier.isdigit():
@@ -98,7 +97,7 @@ def setupRoutes(app : Flask) -> None:
     result : DetailedPokemonType = fetchDetailedPokemonType(type_str)
     return  jsonify(result)
   
-  # MOVE ENDPOINTS
+  # MOVE ENDPOINTS ###########################################################
   @app.route("/moves/<type_str>")
   def getMovesOfType(type_str : str) -> List[MoveData]:
     result : List[MoveData] = fetchPokemonMoves(type_str)
@@ -106,11 +105,9 @@ def setupRoutes(app : Flask) -> None:
   
   @app.route("/moves/detailed/<move_name>")
   def getDetailedMove(move_name : str):
-    # result = fetchDetailedPokemonInfo();
-    print(f"Detailed move {move_name}")
-    return jsonify({"res" : "Hello"})
+    result : List[MoveData] = fetchPokemonMove(move_name)
+    return jsonify(result)
   
-  # scrapper endpoints (mostly gym stuff)
   # GYMLEADERS ENDPOINTS #####################################################
   @app.route("/gym-leader/random")
   def getRandomGymLeader() -> GymLeaderData:
