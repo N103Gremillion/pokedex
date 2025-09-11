@@ -8,14 +8,16 @@ from enum import Enum
 import requests
 from pymongo.collection import Collection
 
-class PokemonInfoEndpoints(Enum):
+class PokeApiEndpoints(Enum):
   GET_POKEMON = f"{baseApiUrl}/pokemon"
   GET_TYPE = f"{baseApiUrl}/type"
   GET_MOVE = f"{baseApiUrl}/move"
+  GET_ITEM = f"{baseApiUrl}/item"
+  GET_GENERATION = f"{baseApiUrl}/generation"
       
 # less data for this one since it is not used on the in depth pokemon pages
 def fetchPokemonDataByIdentifier(pokemon_identifier : int | str) -> PokemonData:
-  url : str = f"{PokemonInfoEndpoints.GET_POKEMON.value}/{pokemon_identifier}"
+  url : str = f"{PokeApiEndpoints.GET_POKEMON.value}/{pokemon_identifier}"
   response : SuccessResponse | ErrorResponse = fetchData(url)
   
   if (not response[ErrorResponseKeys.SUCCESS]):
@@ -53,7 +55,7 @@ def fetchPokemonDataByIdentifier(pokemon_identifier : int | str) -> PokemonData:
 def fetchDetailedPokemonDataByIdentifier(pokemon_identifier : int | str) -> PokemonData:
   from pokeapi.move import fetchPokemonMove
   
-  url : str = f"{PokemonInfoEndpoints.GET_POKEMON.value}/{pokemon_identifier}"
+  url : str = f"{PokeApiEndpoints.GET_POKEMON.value}/{pokemon_identifier}"
   response : SuccessResponse | ErrorResponse = fetchData(url)
   
   if (not response[ErrorResponseKeys.SUCCESS]):
@@ -176,7 +178,7 @@ def fetchAllPokemonOfType(pokemon_type : PokemonType) -> List[PokemonData]:
   if pokemonOfTypeDoc:
     return pokemonOfTypeDoc[PokedexKeys.POKEMON]
   
-  url : str = f"{PokemonInfoEndpoints.GET_TYPE.value}/{pokemon_type.lower()}"
+  url : str = f"{PokeApiEndpoints.GET_TYPE.value}/{pokemon_type.lower()}"
   response : SuccessResponse | ErrorResponse = fetchData(url)
   
   if (not response[ErrorResponseKeys.SUCCESS]):
@@ -206,7 +208,7 @@ def fetchAllPokemonOfType(pokemon_type : PokemonType) -> List[PokemonData]:
   return pokemon
 
 def fetchAllPokemonNames() -> List[str]:
-  url : str = f"{PokemonInfoEndpoints.GET_POKEMON}?limit=100000&offset=0"
+  url : str = f"{PokeApiEndpoints.GET_POKEMON}?limit=100000&offset=0"
   response : SuccessResponse | ErrorResponse = fetchData(url)
   
   if (not response[ErrorResponseKeys.SUCCESS]):

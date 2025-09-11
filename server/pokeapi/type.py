@@ -3,7 +3,7 @@ from app_types import DetailedPokemonType, DetailedPokemonTypeKeys, ErrorRespons
 from typing import Collection, List
 from mongo.db_utils import DatabaseCollections
 from pokeapi.general import baseApiUrl, fetchData
-from pokeapi.pokemon import PokemonInfoEndpoints
+from pokeapi.pokemon import PokeApiEndpoints
 from utils import isValidType, print_pretty_json
 
 def fetchDetailedPokemonType(type_str : str) -> DetailedPokemonType:
@@ -39,7 +39,7 @@ def fetchDetailedPokemonType(type_str : str) -> DetailedPokemonType:
     } 
   
   result[DetailedPokemonTypeKeys.TYPE_NAME] = type_str
-  url : str = f"{PokemonInfoEndpoints.GET_TYPE.value}/{type_str}"
+  url : str = f"{PokeApiEndpoints.GET_TYPE.value}/{type_str}"
   response : SuccessResponse | ErrorResponse = fetchData(url)
   
   if (not SuccessResponse[SuccessResponseKeys.SUCCESS]):

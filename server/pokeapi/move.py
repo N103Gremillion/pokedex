@@ -2,7 +2,7 @@ from typing import List
 from app_types import DetailedPokemonTypeKeys, ErrorResponse, MoveData, MoveKeys, PokemonDmgClass, PokemonType, SuccessResponse, SuccessResponseKeys
 from mongo.db_utils import DatabaseCollections
 from pokeapi.general import fetchData
-from pokeapi.pokemon import PokemonInfoEndpoints
+from pokeapi.pokemon import PokeApiEndpoints
 from utils import isValidType
 
 def fetchPokemonMove(move_name : str) -> MoveData:
@@ -18,7 +18,7 @@ def fetchPokemonMove(move_name : str) -> MoveData:
     MoveKeys.TYPE_NAME : PokemonType.Unknown
   }
   
-  url : str = f"{PokemonInfoEndpoints.GET_MOVE.value}/{move_name}"
+  url : str = f"{PokeApiEndpoints.GET_MOVE.value}/{move_name}"
   response : SuccessResponse | ErrorResponse = fetchData(url)
   
   if (not SuccessResponse[SuccessResponseKeys.SUCCESS]):
@@ -96,7 +96,7 @@ def fetchPokemonMoves(type_str : str) -> List[MoveData]:
   if movesOfTypeDoc:
     return movesOfTypeDoc["moves"]
   
-  url : str = f"{PokemonInfoEndpoints.GET_TYPE.value}/{type_str}"
+  url : str = f"{PokeApiEndpoints.GET_TYPE.value}/{type_str}"
   response : SuccessResponse | ErrorResponse = fetchData(url)
   
   if (not SuccessResponse[SuccessResponseKeys.SUCCESS]):

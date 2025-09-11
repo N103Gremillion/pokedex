@@ -3,13 +3,10 @@ from flask import json, jsonify
 from app_types import ErrorResponse, ErrorResponseKeys, PokedexData, PokedexKeys, SuccessResponse, SuccessResponseKeys, PokemonData
 from pokeapi.general import baseApiUrl, fetchData
 from utils import print_pretty_json
-from pokeapi.pokemon import fetchPokemonDataByIdentifier
+from pokeapi.pokemon import PokeApiEndpoints, fetchPokemonDataByIdentifier
 from mongo.db_utils import DatabaseCollections
 from pymongo.collection import Collection
-
-class PokedexInfoEndpoints(Enum):
-  GET_GENERATION = f"{baseApiUrl}/generation"
-
+  
 def fetchPokedexByGeneration(gen_num : int) -> PokedexData:
   from entry import globalDb
   
@@ -22,7 +19,7 @@ def fetchPokedexByGeneration(gen_num : int) -> PokedexData:
     return { PokedexKeys.GEN_NUMBER : cachedDoc[PokedexKeys.GEN_NUMBER], PokedexKeys.POKEMON : cachedDoc[PokedexKeys.POKEMON]}
   
   # if not chached fetch from api
-  url : str = f"{PokedexInfoEndpoints.GET_GENERATION.value}/{gen_num}"
+  url : str = f"{PokeApiEndpoints.GET_GENERATION.value}/{gen_num}"
   response : SuccessResponse | ErrorResponse = fetchData(url)
   res : PokedexData = {PokedexKeys.GEN_NUMBER :  gen_num, PokedexKeys.POKEMON : []}
   

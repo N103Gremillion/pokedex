@@ -137,11 +137,13 @@ class ItemKeys(str, Enum):
   ID = "id"
   NAME = "name"
   IMAGE_URL = "imageUrl"
+  EFFECT = "effect"
   
 class ItemData(TypedDict):
   id: int
   name: str
   imageUrl : str
+  effect : str
 
 # Pokedex
 class PokedexKeys(str, Enum):

@@ -6,7 +6,7 @@ from pokeapi.move import fetchPokemonMoves
 from pokeapi.type import fetchDetailedPokemonType
 from utils import filterBySubstringAcrossPools, isValidType
 from app_types import DetailedPokemonType, DetailedPokemonTypeKeys, GymLeaderData, ItemData, MoveData, PokemonData, PokedexKeys, PokemonRegionGymLeaders, PokemonType
-from pokeapi.item import fetchItemById, fetchItemByName
+from pokeapi.item import fetchDetailedItemByIdentifier, fetchItemByIdentifier
 from pokeapi.pokedex import fetchPokedexByGeneration
 from pokeapi.pokemon import fetchAllPokemonOfType, fetchDetailedPokemonDataByIdentifier, fetchPokemonDataByIdentifier
 from scraper.gymLeaderPageScrapper import fetchRandomGymLeader
@@ -26,8 +26,7 @@ def setupRoutes(app : Flask) -> None:
     print("Fetching home info")
     return "Hello, Flask!"
   
-  # POKEMON ENDPOINTS ################################################################
-  # TO DO add tying to name fetches and implement the rest of the typing
+  # POKEMON ENDPOINTS ###############################################################
   @app.route("/pokemon/<identifier>")
   def getPokemonByIdentifier(identifier : str) -> Response:   
     if identifier.isdigit():
@@ -62,18 +61,18 @@ def setupRoutes(app : Flask) -> None:
     if identifier.isdigit():
       # ID fetch
       item_id : int = int(identifier)
-      result : ItemData = fetchItemById(item_id)
+      result : ItemData = fetchItemByIdentifier(item_id)
     else:
       # Name fetch
-      result = fetchItemByName(identifier.lower())
+      result = fetchItemByIdentifier(identifier.lower())
     
     return jsonify(result)
   
   @app.route("/item/detailed/<item_name>")
   def getDetailedItem(item_name : str):
-    # result = fetchDetailedPokemonInfo();
+    result = fetchDetailedItemByIdentifier(item_name)
     print(f"Detailed item {item_name}")
-    return jsonify({"res" : "Hello"})
+    return jsonify(result)
   
   # POKEDEX ENDPOINTS ###########################################################
   @app.route("/pokedex/<generation>")
@@ -93,7 +92,7 @@ def setupRoutes(app : Flask) -> None:
     
     return jsonify(result)
   
-  # TYPE ENDPOINTS
+  # TYPE ENDPOINTS ###########################################################
   @app.route("/type/<type_str>")
   def getTypeInfo(type_str : str) -> DetailedPokemonType:
     result : DetailedPokemonType = fetchDetailedPokemonType(type_str)
@@ -112,7 +111,7 @@ def setupRoutes(app : Flask) -> None:
     return jsonify({"res" : "Hello"})
   
   # scrapper endpoints (mostly gym stuff)
-  # GYMLEADERS ENDPOINTS 
+  # GYMLEADERS ENDPOINTS #####################################################
   @app.route("/gym-leader/random")
   def getRandomGymLeader() -> GymLeaderData:
     result : GymLeaderData = fetchRandomGymLeader()
