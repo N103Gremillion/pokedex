@@ -1,6 +1,6 @@
 from typing import List, Optional
 from flask import json
-from app_types import DetailedPokemonTypeKeys, ErrorResponse, LearnMethod, MoveData, MoveKeys, PokedexKeys, PokemonData, PokemonEvolution, PokemonType, SuccessResponse, ErrorResponseKeys, PokemonKeys, SuccessResponseKeys
+from app_types import DetailedPokemonTypeKeys, ErrorResponse, LearnMethod, MoveData, MoveKeys, PokedexKeys, PokemonData, PokemonEvolution, PokemonEvolutionKeys, PokemonType, SuccessResponse, ErrorResponseKeys, PokemonKeys, SuccessResponseKeys
 from mongo.db_utils import DatabaseCollections
 from utils import hectogramsToPounds, isValidType, print_pretty_json
 from pokeapi.general import baseApiUrl, fetchData
@@ -79,11 +79,14 @@ def fetchDetailedPokemonDataByIdentifier(pokemon_identifier : int | str) -> Poke
   
   # evolution chain
   species_url = data.get("species").get("url")
-  response : SuccessResponse | ErrorResponse = fetchData(url)
-  species_data = response[SuccessResponseKeys.DATA]
+  species_response : SuccessResponse | ErrorResponse = fetchData(species_url)
+  species_data = species_response[SuccessResponseKeys.DATA]
+  evolution_chain : List[PokemonEvolution] = []
   
   if species_data:
-    evolution_chain : List[PokemonEvolution] = fetchEvolutionChainById(species_data.get("id"))
+    evolution_chain_url = species_data.get("evolution_chain", {}).get("url")
+    if evolution_chain_url:
+      evolution_chain = fetchEvolutionChainById(evolution_chain_url)
     
   # stats
   hp = attack = defense = sp_attack = sp_defense = speed = -1
@@ -109,37 +112,37 @@ def fetchDetailedPokemonDataByIdentifier(pokemon_identifier : int | str) -> Poke
   api_moves_data  = data.get("moves")
   moves : List[MoveData]  = []
   
-  # for entry in api_moves_data:
-  #   move_data = entry.get("move")
-  #   move_name = move_data.get("name")
+  for entry in api_moves_data:
+    move_data = entry.get("move")
+    move_name = move_data.get("name")
 
-  #   if not move_name: continue
+    if not move_name: continue
 
-  #   move : MoveData = fetchPokemonMove(move_name)
-  #   level_learned : int = -1
+    move : MoveData = fetchPokemonMove(move_name)
+    level_learned : int = -1
     
-  #   version_details = entry.get("version_group_details") # list of move info from different games
+    version_details = entry.get("version_group_details") # list of move info from different games
     
-  #   if (version_details and len(version_details) > 0):
-  #     last_entry = version_details[-1]
-  #     level_learned = last_entry.get("level_learned_at", -1)
-  #     learn_method = last_entry.get("move_learn_method", {}).get("name")
+    if (version_details and len(version_details) > 0):
+      last_entry = version_details[-1]
+      level_learned = last_entry.get("level_learned_at", -1)
+      learn_method = last_entry.get("move_learn_method", {}).get("name")
       
-  #     match learn_method:
-  #       case "level-up":
-  #         move[MoveKeys.LEARN_METHOD] = LearnMethod.LEVEL_UP
-  #       case "machine":
-  #         move[MoveKeys.LEARN_METHOD] = LearnMethod.MACHINE
-  #       case "egg":
-  #         move[MoveKeys.LEARN_METHOD] = LearnMethod.EGG
-  #       case "tutor":
-  #         move[MoveKeys.LEARN_METHOD] = LearnMethod.TUTOR
-  #       case _:
-  #         move[MoveKeys.LEARN_METHOD] = LearnMethod.OTHER
+      match learn_method:
+        case "level-up":
+          move[MoveKeys.LEARN_METHOD] = LearnMethod.LEVEL_UP
+        case "machine":
+          move[MoveKeys.LEARN_METHOD] = LearnMethod.MACHINE
+        case "egg":
+          move[MoveKeys.LEARN_METHOD] = LearnMethod.EGG
+        case "tutor":
+          move[MoveKeys.LEARN_METHOD] = LearnMethod.TUTOR
+        case _:
+          move[MoveKeys.LEARN_METHOD] = LearnMethod.OTHER
     
     
-  #   move[MoveKeys.LEVEL_LEARNED] = level_learned
-  #   moves.append(move)
+    move[MoveKeys.LEVEL_LEARNED] = level_learned
+    moves.append(move)
   
   # map the data onto the PokemonData to ensure you have these on the frontend
   pokemonData : PokemonData = {
@@ -156,7 +159,8 @@ def fetchDetailedPokemonDataByIdentifier(pokemon_identifier : int | str) -> Poke
     PokemonKeys.SP_ATTACK : sp_attack,
     PokemonKeys.SP_DEFENSE : sp_defense,
     PokemonKeys.SPEED : speed,
-    PokemonKeys.MOVES_LEARNED : moves
+    PokemonKeys.EVOLUTION_CHAIN : evolution_chain,
+    PokemonKeys.MOVES_LEARNED : moves,
   }
   
   return pokemonData
@@ -220,13 +224,91 @@ def fetchAllPokemonNames() -> List[str]:
   
   return pokemon_names
 
-def fetchEvolutionChainById(id : int | None) -> List[PokemonEvolution]:
-  if not id:
+# should fetch from the evolution-chain endpoint from the api
+def fetchEvolutionChainById(evolution_chain_url : str | None) -> List[PokemonEvolution]:
+  if not evolution_chain_url:
     return []
   
-  evolution_chain_url : str = f"{baseApiUrl}/evolution-chain/{id}"
+  res : SuccessResponse | ErrorResponse = fetchData(evolution_chain_url)
+  if not res[SuccessResponseKeys.SUCCESS]:
+    return []
   
-  return []
+  data = res[SuccessResponseKeys.DATA]
+  chain = data.get("chain")  
+  result : List[PokemonEvolution] = []
   
+  def traverse(node):
+    species : str = node.get("species", {})
+    
+    # general info about the pokemon
+    pokemon_name: str = species.get("name", "Unknown")
+    pokemon_data : PokemonData = fetchPokemonDataByIdentifier(pokemon_name)
+    
+    # evolution details
+    evolution_details  = node.get("evolution_details", [])
+
+    if evolution_details:
+      methods : List[str] = []
+      for detail in evolution_details:
+        methods.append(getEvolutionMethod(detail))
+      method_str = ", ".join(methods)
+    else:
+      method_str = "none"
+    
+    result.append({
+      PokemonEvolutionKeys.POKEMON : pokemon_data,
+      PokemonEvolutionKeys.METHOD : method_str
+    })
+      
+    # traverse all evolutions
+    for next_node in node.get("evolves_to", []):
+      traverse(next_node)
   
+  traverse(chain)
+  return result
+
+# constructs a string about the evolution method from the details dict defined in the pokeapi(Type EvolutionDetail)
+def getEvolutionMethod(details: dict) -> str:
+    res = []
+
+    if details.get("min_level"):
+        res.append(f"level-up {details['min_level']}")
+    if details.get("min_happiness"):
+        res.append(f"happiness ≥ {details['min_happiness']}")
+    if details.get("min_beauty"):
+        res.append(f"beauty ≥ {details['min_beauty']}")
+    if details.get("min_affection"):
+        res.append(f"affection ≥ {details['min_affection']}")
+    if details.get("item"):
+        res.append(f"using {details['item']['name']}")
+    if details.get("gender"):
+        res.append(f"gender: {details['gender']}")
+    if details.get("held_item"):
+        res.append(f"holding {details['held_item']['name']}")
+    if details.get("known_move"):
+        res.append(f"knows move {details['known_move']['name']}")
+    if details.get("known_move_type"):
+        res.append(f"knows move type {details['known_move_type']['name']}")
+    if details.get("location"):
+        res.append(f"at {details['location']['name']}")
+    if details.get("needs_overworld_rain"):
+        res.append("while raining")
+    if details.get("relative_physical_stats") is not None:
+        val = details['relative_physical_stats']
+        match val:
+            case 1:
+                res.append("Attack > Defense")
+            case 0:
+                res.append("Attack = Defense")
+            case -1:
+                res.append("Attack < Defense")
+    if details.get("time_of_day"):
+        res.append(details["time_of_day"])
+    if details.get("trade_species"):
+        res.append(f"Trade for {details['trade_species']['name']}")
+
+    if not res:
+        return "Other"
+
+    return ", ".join(res)
   

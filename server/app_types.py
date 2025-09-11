@@ -104,6 +104,7 @@ class PokemonKeys(str, Enum):
   WEIGHT = "weight"
   SHINY_IMAGE_URL = "shiny_image_url"
   MOVES_LEARNED = "moves_learned"
+  EVOLUTION_CHAIN = "evolution_chain"
   # stats
   HP = "hp"
   ATTACK = "attack"
@@ -122,6 +123,7 @@ class PokemonData(TypedDict):
   weight : NotRequired[float]  # I use lbs for this
   shiny_image_url : NotRequired[str]
   moves_learned : NotRequired[List[MoveData]]
+  evolution_chain : NotRequired[List[PokemonEvolution]]
   # stats
   hp : NotRequired[int]
   attack : NotRequired[int]
