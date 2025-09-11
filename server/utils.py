@@ -11,6 +11,11 @@ def isValidType(value : str | None) -> bool:
       return True
   return False
 
+def hectogramsToPounds(value : int | None) -> float:
+  if value is None:
+    return -1.0
+  return round((value / 10) * 2.20462, 4)
+
 def filterBySubstringAcrossPools(sub_string : str) -> List[str]:
   res : List[str] = []
   

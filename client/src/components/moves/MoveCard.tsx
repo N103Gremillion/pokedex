@@ -16,6 +16,10 @@ export const MoveCard = ({ move } : MoveCardProps) => {
     />
   );
 
+  const handleClick = () => {
+    
+  }
+
   return (
     <div className={`move-card move-card-${move.type_name?.toLowerCase()}`}>
       <div>

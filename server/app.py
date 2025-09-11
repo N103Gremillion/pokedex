@@ -8,7 +8,7 @@ from utils import filterBySubstringAcrossPools, isValidType
 from app_types import DetailedPokemonType, DetailedPokemonTypeKeys, GymLeaderData, ItemData, MoveData, PokemonData, PokedexKeys, PokemonRegionGymLeaders, PokemonType
 from pokeapi.item import fetchItemById, fetchItemByName
 from pokeapi.pokedex import fetchPokedexByGeneration
-from pokeapi.pokemon import fetchAllPokemonOfType, fetchPokemonDataByIdentifier
+from pokeapi.pokemon import fetchAllPokemonOfType, fetchDetailedPokemonDataByIdentifier, fetchPokemonDataByIdentifier
 from scraper.gymLeaderPageScrapper import fetchRandomGymLeader
 from scraper.gymLeadersPageScrapper import fetchGymLeadersByGeneration
 
@@ -51,10 +51,9 @@ def setupRoutes(app : Flask) -> None:
     return jsonify({ PokedexKeys.POKEMON : pokemon })
   
   @app.route("/pokemon/detailed/<pokemon_name>")
-  def getDetailedPokemon(pokemon_name : str) -> Response:
-    # result = fetchDetailedPokemonInfo();
-    
-    return jsonify({"res" : "Hello"})
+  def getDetailedPokemon(pokemon_name : str):
+    result = fetchDetailedPokemonDataByIdentifier(pokemon_name)
+    return jsonify(result)
     
   # ITEM ENDPOINTS ###################################################################
   # TO DO add tying to name fetches and implement the rest of the typing
@@ -69,6 +68,12 @@ def setupRoutes(app : Flask) -> None:
       result = fetchItemByName(identifier.lower())
     
     return jsonify(result)
+  
+  @app.route("/item/detailed/<item_name>")
+  def getDetailedItem(item_name : str):
+    # result = fetchDetailedPokemonInfo();
+    print(f"Detailed item {item_name}")
+    return jsonify({"res" : "Hello"})
   
   # POKEDEX ENDPOINTS ###########################################################
   @app.route("/pokedex/<generation>")
@@ -100,19 +105,31 @@ def setupRoutes(app : Flask) -> None:
     result : List[MoveData] = fetchPokemonMoves(type_str)
     return jsonify(result)
   
+  @app.route("/moves/detailed/<move_name>")
+  def getDetailedMove(move_name : str):
+    # result = fetchDetailedPokemonInfo();
+    print(f"Detailed move {move_name}")
+    return jsonify({"res" : "Hello"})
+  
   # scrapper endpoints (mostly gym stuff)
   # GYMLEADERS ENDPOINTS 
   @app.route("/gym-leader/random")
   def getRandomGymLeader() -> GymLeaderData:
     result : GymLeaderData = fetchRandomGymLeader()
     return jsonify(result)
+  
+  @app.route("/gym-leader/detailed/<leader_name>")
+  def getDetailedGymLeader(leader_name : str) -> Response:
+    # result = fetchDetailedPokemonInfo();
+    print(f"Detailed gym-leader {leader_name}")
+    return jsonify({"res" : "Hello"})
 
   @app.route("/gym-leaders/<generation>")
   def getGymLeadersFromGeneration(generation : str) -> PokemonRegionGymLeaders:
     res : list[GymLeaderData] = fetchGymLeadersByGeneration(generation)
     return jsonify(res)
   
-  # for search bar
+  # for SEARCH BAR
   @app.route("/search/match/<sub_string>")
   def getMatchingSearchResults(sub_string) -> List[str]:
     print(f"Searching for strings that match {sub_string}")

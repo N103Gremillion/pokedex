@@ -1,3 +1,4 @@
+from __future__ import annotations 
 from enum import Enum
 from typing import List, NotRequired, TypedDict, Any, Optional
 
@@ -29,6 +30,13 @@ class PokemonDmgClass(str, Enum):
   Status = "Status"
   Unkown = "Unkown"
   
+class LearnMethod(str, Enum):
+    LEVEL_UP = "level-up"
+    MACHINE = "machine"
+    EGG = "egg"
+    TUTOR = "tutor"
+    OTHER = "other"
+    
 # generic object to return in api fetches
 class SuccessResponseKeys(str, Enum):
   SUCCESS = "success"
@@ -49,21 +57,6 @@ class ErrorResponse(TypedDict):
   error: str
   status_code: Optional[int]
   details: Optional[str]
-  
-# Pokemon
-class PokemonKeys(str, Enum):
-  ID = "id"
-  NAME = "name"
-  IMAGE_URL = "imageUrl"
-  TYPES = "types"
-  LEVEL = "level"
-  
-class PokemonData(TypedDict):
-  id: int
-  name: str
-  imageUrl : str
-  types: NotRequired[list[PokemonType]]
-  level : NotRequired[str]
 
 # Moves
 class MoveKeys(str, Enum):
@@ -76,6 +69,8 @@ class MoveKeys(str, Enum):
   EFFECTS = "effects"
   NAME = "name"
   TYPE_NAME = "type_name"
+  LEVEL_LEARNED = "level_learned"
+  LEARN_METHOD = "learn_method"
   
 class MoveData(TypedDict):
   accuracy : int
@@ -87,6 +82,53 @@ class MoveData(TypedDict):
   effects : List[str]
   name : str
   type_name : PokemonType
+  level_learned : NotRequired[int]
+  learn_method : NotRequired[LearnMethod]
+
+class PokemonEvolutionKeys(str, Enum):
+  POKEMON = "pokemon"
+  METHOD = "method"
+  
+class PokemonEvolution(TypedDict):
+  pokemon : PokemonData
+  method : str
+  
+# Pokemon
+class PokemonKeys(str, Enum):
+  ID = "id"
+  NAME = "name"
+  IMAGE_URL = "image_url"
+  TYPES = "types"
+  LEVEL = "level"
+  HEIGHT = "height"
+  WEIGHT = "weight"
+  SHINY_IMAGE_URL = "shiny_image_url"
+  MOVES_LEARNED = "moves_learned"
+  # stats
+  HP = "hp"
+  ATTACK = "attack"
+  DEFENSE = "defense"
+  SP_ATTACK = "sp_attack"
+  SP_DEFENSE = "sp_defense"
+  SPEED = "speed"
+  
+class PokemonData(TypedDict):
+  id: int
+  name: str
+  image_url : str
+  types: NotRequired[list[PokemonType]]
+  level : NotRequired[str]
+  height : NotRequired[int]
+  weight : NotRequired[float]  # I use lbs for this
+  shiny_image_url : NotRequired[str]
+  moves_learned : NotRequired[List[MoveData]]
+  # stats
+  hp : NotRequired[int]
+  attack : NotRequired[int]
+  defense : NotRequired[int]
+  sp_attack : NotRequired[int]
+  sp_defense : NotRequired[int]
+  speed : NotRequired[int]
   
 # Items
 class ItemKeys(str, Enum):

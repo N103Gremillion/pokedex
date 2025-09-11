@@ -18,4 +18,9 @@ globalDb : Database = getDb()
 setupCollections(globalDb)
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=portNumber, ssl_context=('cert/cert.pem', 'cert/key.pem'))
+    app.run(
+        host="localhost", 
+        port=portNumber,
+        debug=True, 
+        ssl_context=('cert/cert.pem', 'cert/key.pem')
+    )
