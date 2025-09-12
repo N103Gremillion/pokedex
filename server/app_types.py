@@ -166,6 +166,7 @@ class GymLeaderKeys(str, Enum):
   BADGE_NAME = "badge_name"
   BADGE_IMAGE_URL = "badge_image_url"
   POKEMON = "pokemon"
+  DESCRIPTION = "description"
   
 class GymLeaderData(TypedDict):
   id : int
@@ -178,6 +179,7 @@ class GymLeaderData(TypedDict):
   badge_name : str
   badge_image_url : str
   pokemon : NotRequired[list[PokemonData]]
+  description : NotRequired[str]
 
 # Island Kahunas
 class IslandKahunaKeys(str, Enum):

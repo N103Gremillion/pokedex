@@ -111,16 +111,15 @@ def fetchDetailedGymLeader(leader_name : str) -> GymLeaderData:
   response : GymLeaderData = {
     GymLeaderKeys.ID : -1
   }
-  
   if not isValidGymLeaderName(leader_name):
     return response
   
   response[GymLeaderKeys.GYM_LEADER_NAME] = leader_name.capitalize()
   response[GymLeaderKeys.GENERATION] = getGenNumFromGymLeaderName(leader_name)
-  response = attachGymInfoToGymLeader(response, response[GymLeaderKeys.GENERATION])
-  
-  # get the gymleader's pokemon
   response = attachPokemonToGymLeader(response, response[GymLeaderKeys.GENERATION])
+  response = attachGymInfoToGymLeader(response, response[GymLeaderKeys.GENERATION])
+  response = attachGymLeaderImgAndDescriptionToGymLeader(response, getFullTrainerName(response))
+  
   return response
 
 # THESE FUNCTIONS ARE USED TO SCRAP FROM https://pokemondb.net/red-blue/gymleaders-elitefour (this one fetches trainer img_url and pokemon info for the trainer input)
@@ -266,9 +265,67 @@ def attachGymInfoToGymLeader(leader : GymLeaderData | IslandKahunaData | IslandC
 
   gym_info : str = gym_leader_info_header.get_text(strip=True)
   
+  # split into the gym name and the gym number
+  gym_list : List[str] = gym_info.split(", ") # should looks something like [GYM #8, Viridian City]
+  
+  try:
+    leader[GymLeaderKeys.GYM_NUMBER] = int(gym_list[0][-1])
+    leader[GymLeaderKeys.GYM_NAME] = gym_list[1]
+  except:
+    leader[GymLeaderKeys.GYM_NUMBER] = -1 
+    leader[GymLeaderKeys.GYM_NAME] = "Unknown"
   
   return leader
 
+# attaches the main gym leader imgurl to the object from a page like this https://bulbapedia.bulbagarden.net/wiki/Giovanni
+def attachGymLeaderImgAndDescriptionToGymLeader(leader : GymLeaderData | IslandKahunaData | IslandCaptainData, formatted_leader_name : str | None) -> GymLeaderData:
+  if not formatted_leader_name:
+    print("Gym leader name is null")
+    return leader
+
+  url : str = f"{BASE_BULBAPEDIA_WIKI_URL}/{formatted_leader_name}"
+  gym_leader_page : SuccessResponse | ErrorResponse = scrape_page_builbapedia(url) 
+  
+  if (not gym_leader_page[SuccessResponseKeys.SUCCESS]):
+    print(f"Issue fetching gym leader page for url : {url}")
+    return leader
+
+  html = gym_leader_page[SuccessResponseKeys.DATA]
+  soup = BeautifulSoup(html, "html.parser")
+  
+  if not soup:
+    return leader
+  
+  # pull off the description
+  p_tag = soup.find("p")
+  
+  if p_tag:
+    leader[GymLeaderKeys.DESCRIPTION] = p_tag.get_text(strip=True)
+  
+  # Find the infobox table
+  infobox = soup.find("table", {"class": "roundy"})
+  if not infobox:
+    print("No infobox found")
+    return leader
+
+  img_tag = infobox.find("img")
+  if not img_tag:
+    print("No image found in infobox")
+    return leader
+  
+  img_url = img_tag["src"]
+  
+  if GymLeaderKeys.GYM_LEADER_NAME in leader:
+    leader[GymLeaderKeys.GYM_LEADER_IMAGE_URL] = img_url
+    
+  elif IslandKahunaKeys.ISLAND_KAHUNA_NAME in leader:
+    leader[IslandKahunaKeys.ISLAND_KAHUNA_IMAGE_URL] = img_url
+    
+  elif IslandCaptainKeys.ISLAND_CAPTAIN_NAME in leader:
+    leader[IslandCaptainKeys.ISLAND_CAPTAIN_IMAGE_URL] = img_url
+    
+  return leader
+  
 # pull of trainer name given the 3 trainer types we have
 def getFullTrainerName(leader : GymLeaderData | IslandKahunaData | IslandCaptainData) -> str | None:
   full_leader_name : str | None = None
@@ -294,3 +351,4 @@ def getPokemonDatabaseUrlForTrainer(gen : int) -> str:
     sub_path = "gymleaders"
   
   return f"{BASE_POKEMON_DB_URL}/{game}/{sub_path}"
+

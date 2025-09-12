@@ -53,7 +53,6 @@ def fetchGymLeadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
   
   # this is an edge case since it does not have gym leaders but a similar thing called island challenges
   if (gen == 7):
-    # print("Gen 7 edge case")
     response[PokemonRegionGymLeadersKeys.ISLAND_KAHUNAS] = GEN_7_ISLAND_KAHUNAS
     response[PokemonRegionGymLeadersKeys.ISLAND_CAPTAINS] = GEN_7_ISLAND_CAPTAINS
     
