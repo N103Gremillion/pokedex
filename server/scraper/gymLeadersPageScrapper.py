@@ -3,7 +3,7 @@ from typing import List
 from bs4 import BeautifulSoup, Tag
 from app_types import ErrorResponse, ErrorResponseKeys, GymLeaderData, GymLeaderKeys, IslandCaptainKeys, IslandKahunaKeys, PokemonData, PokemonRegionGymLeaders, PokemonRegionGymLeadersKeys, SuccessResponse, SuccessResponseKeys
 from mongo.db_utils import DatabaseCollections
-from scraper.gymLeaderPageScrapper import GEN_TO_REGION, GYM_LEADERS, fetchGymLeaderWithPokemon
+from scraper.gymLeaderPageScrapper import GEN_TO_REGION, GYM_LEADERS, attachPokemonToGymLeader
 from utils import print_pretty_json, isValidType
 from scraper.scraper import BASE_BULBAPEDIA_WIKI_URL, scrape_page_builbapedia
 from scraper.gen7data import GEN_7_ISLAND_CAPTAINS, GEN_7_ISLAND_KAHUNAS
@@ -59,11 +59,11 @@ def fetchGymLeadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
     
     for kahuna in response[PokemonRegionGymLeadersKeys.ISLAND_KAHUNAS]:
       # print(f"SCRAPING FOR THE KAHUNA {kahuna[IslandKahunaKeys.ISLAND_KAHUNA_NAME]}.")
-      leader_pokemon = fetchGymLeaderWithPokemon(kahuna, gen)
+      leader_pokemon = attachPokemonToGymLeader(kahuna, gen)
       
     for captain in response[PokemonRegionGymLeadersKeys.ISLAND_CAPTAINS]:
       # print(f"SCRAPING FOR THE CAPTAIN {captain[IslandCaptainKeys.ISLAND_CAPTAIN_NAME]}.")
-      leader_pokemon = fetchGymLeaderWithPokemon(captain, gen)
+      leader_pokemon = attachPokemonToGymLeader(captain, gen)
     
     # add to cache pages to prevent unecessary fetches in the future
     pokemonRegionCollection.insert_one({
@@ -174,7 +174,7 @@ def fetchGymLeadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
   # iterate over each trainer and scrap the info about there pokemon 
   for leader in gym_leaders:
     print(f"SCRAPING FOR {leader[GymLeaderKeys.GYM_LEADER_NAME]}")
-    leader_pokemon = fetchGymLeaderWithPokemon(leader, gen)
+    leader_pokemon = attachPokemonToGymLeader(leader, gen)
     
   response[PokemonRegionGymLeadersKeys.GYM_LEADERS] = gym_leaders
   

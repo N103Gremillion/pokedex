@@ -157,6 +157,8 @@ class PokedexData(TypedDict):
 # Gym Leaders
 class GymLeaderKeys(str, Enum):
   ID = "id"
+  GENERATION = "generation"
+  GYM_NUMBER = "gym_number"
   GYM_NAME = "gym_name"
   GYM_LEADER_NAME = "gym_leader_name"
   GYM_LEADER_IMAGE_URL = "gym_leader_image_url"
@@ -167,6 +169,8 @@ class GymLeaderKeys(str, Enum):
   
 class GymLeaderData(TypedDict):
   id : int
+  generation : int
+  gym_number : int
   gym_name : str
   gym_leader_name : str
   gym_leader_image_url : str

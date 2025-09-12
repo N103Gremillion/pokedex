@@ -20,13 +20,12 @@ Note:
   I am using this because some information is not openly availble on the pokeapi.
   
 """
-
 import random
 from typing import List
 from bs4 import BeautifulSoup, Tag
-from app_types import ErrorResponse, ErrorResponseKeys, GymLeaderData, GymLeaderKeys, IslandCaptainData, IslandCaptainKeys, IslandKahunaData, IslandKahunaKeys, PokemonData, PokemonKeys, PokemonType, SuccessResponse, SuccessResponseKeys
+from app_types import ErrorResponse, ErrorResponseKeys, GymLeaderData, GymLeaderKeys, IslandCaptainData, IslandCaptainKeys, IslandKahunaData, IslandKahunaKeys, PokemonData, PokemonKeys, PokemonRegionGymLeaders, PokemonRegionGymLeadersKeys, PokemonType, SuccessResponse, SuccessResponseKeys
 from pokeapi.pokemon import fetchPokemonDataByIdentifier
-from utils import print_pretty_json, isValidType
+from utils import getGenNumFromGymLeaderName, isValidGymLeaderName, print_pretty_json, isValidType
 from scraper.scraper import BASE_BULBAPEDIA_WIKI_URL, BASE_POKEMON_DB_URL, scrape_page_builbapedia,scrape_page_pokedb
 
 GYM_LEADERS : List[str] = [
@@ -108,37 +107,34 @@ def fetchRandomGymLeader() -> GymLeaderData:
   
   return response
 
+def fetchDetailedGymLeader(leader_name : str) -> GymLeaderData:
+  response : GymLeaderData = {
+    GymLeaderKeys.ID : -1
+  }
+  
+  if not isValidGymLeaderName(leader_name):
+    return response
+  
+  response[GymLeaderKeys.GYM_LEADER_NAME] = leader_name.capitalize()
+  response[GymLeaderKeys.GENERATION] = getGenNumFromGymLeaderName(leader_name)
+  response = attachGymInfoToGymLeader(response, response[GymLeaderKeys.GENERATION])
+  
+  # get the gymleader's pokemon
+  response = attachPokemonToGymLeader(response, response[GymLeaderKeys.GENERATION])
+  return response
+
 # THESE FUNCTIONS ARE USED TO SCRAP FROM https://pokemondb.net/red-blue/gymleaders-elitefour (this one fetches trainer img_url and pokemon info for the trainer input)
-def fetchGymLeaderWithPokemon(leader : GymLeaderData | IslandKahunaData | IslandCaptainData, gen : int) -> GymLeaderData:
+def attachPokemonToGymLeader(leader : GymLeaderData | IslandKahunaData | IslandCaptainData, gen : int) -> GymLeaderData:
   
   # set it up with default values
   pokemon : list[PokemonData] = []
   leader[GymLeaderKeys.POKEMON] = pokemon # this has same value for all 3 types
-  full_leader_name : str | None = None
-  
-  if GymLeaderKeys.GYM_LEADER_NAME in leader:
-    full_leader_name = leader[GymLeaderKeys.GYM_LEADER_NAME]
-    
-  elif IslandKahunaKeys.ISLAND_KAHUNA_NAME in leader:
-    full_leader_name = leader[IslandKahunaKeys.ISLAND_KAHUNA_NAME]
-    
-  elif IslandCaptainKeys.ISLAND_CAPTAIN_NAME in leader:
-    full_leader_name = leader[IslandCaptainKeys.ISLAND_CAPTAIN_NAME]
+  full_leader_name : str | None = getFullTrainerName(leader)
   
   if (not full_leader_name or full_leader_name == ""):
     return leader
   
-  game : str = GEN_TO_GAME[gen]
-  sub_path : str = "gymleaders-elitefour" 
-  
-  if gen == 7:
-    sub_path = "kahunas-elitefour"
-  elif gen == 8:
-    sub_path = "gymleaders"
-     
-  url : str = f"{BASE_POKEMON_DB_URL}/{game}/{sub_path}"
-  
-  # send the fetch
+  url : str = getPokemonDatabaseUrlForTrainer(gen)
   gym_leader_page : SuccessResponse | ErrorResponse = scrape_page_pokedb(url) 
   
   if (not gym_leader_page[SuccessResponseKeys.SUCCESS]):
@@ -239,3 +235,62 @@ def fetchGymLeaderWithPokemon(leader : GymLeaderData | IslandKahunaData | Island
     pokemon.append(pokemon_data)
   
   return leader
+
+# attaches the gym number and location to the leader object page reference : https://pokemondb.net/red-blue/gymleaders-elitefour
+def attachGymInfoToGymLeader(leader : GymLeaderData | IslandKahunaData | IslandCaptainData, gen : int) -> GymLeaderData:
+  full_leader_name : str | None = getFullTrainerName(leader)
+  
+  if (not full_leader_name or full_leader_name == ""):
+    return leader
+  
+  url : str = getPokemonDatabaseUrlForTrainer(gen)
+  gym_leader_page : SuccessResponse | ErrorResponse = scrape_page_pokedb(url) 
+  
+  if (not gym_leader_page[SuccessResponseKeys.SUCCESS]):
+    print(f"Issue fetching gym leader page for url : {url}")
+    return leader
+
+  html = gym_leader_page[SuccessResponseKeys.DATA]
+  soup = BeautifulSoup(html, "html.parser")
+  
+  # use gym leader name as a reference to find the img 
+  img_tag = soup.find("img", {"alt": full_leader_name})
+  
+  if not img_tag:
+    return leader
+
+  gym_leader_info_header = img_tag.find_previous("h2")
+  
+  if not gym_leader_info_header:
+    return leader
+
+  gym_info : str = gym_leader_info_header.get_text(strip=True)
+  
+  
+  return leader
+
+# pull of trainer name given the 3 trainer types we have
+def getFullTrainerName(leader : GymLeaderData | IslandKahunaData | IslandCaptainData) -> str | None:
+  full_leader_name : str | None = None
+  
+  if GymLeaderKeys.GYM_LEADER_NAME in leader:
+    full_leader_name = leader[GymLeaderKeys.GYM_LEADER_NAME]
+    
+  elif IslandKahunaKeys.ISLAND_KAHUNA_NAME in leader:
+    full_leader_name = leader[IslandKahunaKeys.ISLAND_KAHUNA_NAME]
+    
+  elif IslandCaptainKeys.ISLAND_CAPTAIN_NAME in leader:
+    full_leader_name = leader[IslandCaptainKeys.ISLAND_CAPTAIN_NAME]
+  
+  return full_leader_name
+
+def getPokemonDatabaseUrlForTrainer(gen : int) -> str:
+  game : str = GEN_TO_GAME[gen]
+  sub_path : str = "gymleaders-elitefour" 
+  
+  if gen == 7:
+    sub_path = "kahunas-elitefour"
+  elif gen == 8:
+    sub_path = "gymleaders"
+  
+  return f"{BASE_POKEMON_DB_URL}/{game}/{sub_path}"

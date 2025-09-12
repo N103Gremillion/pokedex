@@ -9,7 +9,7 @@ from app_types import DetailedPokemonType, DetailedPokemonTypeKeys, GymLeaderDat
 from pokeapi.item import fetchDetailedItemByIdentifier, fetchItemByIdentifier
 from pokeapi.pokedex import fetchPokedexByGeneration
 from pokeapi.pokemon import fetchAllPokemonOfType, fetchDetailedPokemonDataByIdentifier, fetchPokemonDataByIdentifier
-from scraper.gymLeaderPageScrapper import fetchRandomGymLeader
+from scraper.gymLeaderPageScrapper import fetchDetailedGymLeader, fetchRandomGymLeader
 from scraper.gymLeadersPageScrapper import fetchGymLeadersByGeneration
 
 def initApp() -> Flask:
@@ -116,9 +116,9 @@ def setupRoutes(app : Flask) -> None:
   
   @app.route("/gym-leader/detailed/<leader_name>")
   def getDetailedGymLeader(leader_name : str) -> Response:
-    # result = fetchDetailedPokemonInfo();
+    result = fetchDetailedGymLeader(leader_name)
     print(f"Detailed gym-leader {leader_name}")
-    return jsonify({"res" : "Hello"})
+    return result
 
   @app.route("/gym-leaders/<generation>")
   def getGymLeadersFromGeneration(generation : str) -> PokemonRegionGymLeaders:
