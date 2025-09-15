@@ -4,4 +4,5 @@ export enum PagePaths {
   GymLeaders = '/gym-leaders',
   Type = '/type',
   Pokemon = '/pokemon',
+  Move = '/move'
 }

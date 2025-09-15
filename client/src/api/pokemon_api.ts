@@ -153,3 +153,13 @@ export const  getMovesOfType = async (type : PokemonType) : Promise<MoveData[]> 
   
   return json as MoveData[];
 }
+
+export const getDetailedMoveInfo = async (moveName : string) : Promise<MoveData> => {
+  const url : string = `${Routes.MOVES}/detailed/${moveName}`;
+  const res : Response = await fetch(url);
+  const json = await res.json();
+
+  console.log(json);
+
+  return json as MoveData;
+}

@@ -1,4 +1,9 @@
-import type { PokemonDmgClass, PokemonType } from "./enums";
+import type { LearnMethod, PokemonDmgClass, PokemonType } from "./enums";
+
+export type PokemonEvolution = {
+  pokemon? : PokemonData;
+  method? : string; 
+}
 
 export type PokemonData = {
   id? : number;
@@ -6,6 +11,17 @@ export type PokemonData = {
   imageUrl? : string;
   types? : PokemonType[];
   level? : number;
+  height? : number;
+  weight? : number;
+  shiny_image_url? : string;
+  moves_learned? : MoveData[];
+  evolution_chain? : PokemonEvolution[];
+  hp? : number;
+  attack? : number;
+  defense? : number;
+  sp_attack? : number;
+  sp_defense? : number;
+  speed? : number;
 }
 
 export type ItemData = {
@@ -24,6 +40,8 @@ export type MoveData = {
   effects? : string[];
   name? : string;
   type_name? : PokemonType;
+  level_learned? : number;
+  learn_method? : LearnMethod
 }
 
 export type DetailedPokemonTypeData = {

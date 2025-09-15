@@ -10,6 +10,7 @@ import './App.css';
 import './styles/general.css';
 import { Footer } from './components/general/Footer';
 import { PokemonPage } from './pages/PokemonPage';
+import { MovePage } from './pages/MovePage';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path={`${PagePaths.GymLeaders}/:generationString`} element={<GymLeadersPage /> }/>
         <Route path={`${PagePaths.Type}/:typeString`} element={<TypePage />} />
         <Route path={`${PagePaths.Pokemon}/:pokemonNameString`} element={<PokemonPage/>}/>
+        <Route path={`${PagePaths.Move}/:moveNameString`} element={<MovePage/>}/>
       </Routes> 
       <Footer/>     
     </>

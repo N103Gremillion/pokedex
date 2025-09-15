@@ -40,6 +40,14 @@ export enum Generation {
   INVALID = "-1"
 }
 
+export enum LearnMethod {
+  LevelUp = "level-up",
+  Machine = "machine",
+  Egg = "egg",
+  Tutor = "tutor",
+  Other = "other",
+}
+
 export function getGenerationFromString(generationsString : string) : Generation{
   switch (generationsString) {
     case "GenerationI":
@@ -64,3 +72,4 @@ export function getGenerationFromString(generationsString : string) : Generation
       return Generation.INVALID;
   }
 }
+
