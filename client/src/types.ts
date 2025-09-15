@@ -28,6 +28,7 @@ export type ItemData = {
   id? : number;
   name? : string;
   imageUrl? : string;
+  effect? : string;
 }
 
 export type MoveData = {

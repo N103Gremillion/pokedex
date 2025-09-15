@@ -1,0 +1,24 @@
+.item-info-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-style: solid;
+  border-color: #004080;
+  width: 1000px;
+  height: fit-content;
+  padding: 10px;
+}
+
+.item-info-img {
+  width: 150px;
+}
+
+.general-item-info-container {
+  width: 300px;
+}
+
+.item-info-effects {
+  text-align: left;
+  font-size: 25px;
+  width: 700px;
+}
