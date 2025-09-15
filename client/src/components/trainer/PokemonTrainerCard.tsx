@@ -14,11 +14,20 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
   let leaderContent: JSX.Element | null = null;
   const defaultImageUrl : string = "/default_img.png";
   const totalPokemon : number = gymLeaderData.pokemon?.length ?? 0;
+  const navigate = useNavigate();
 
   // construct the handler for when the image doesnt load
   const handleImageNotFound = (event : SyntheticEvent<HTMLImageElement, Event>) => {
     const img = event.currentTarget;
     img.src = defaultImageUrl;
+  }
+
+  const handleGymLeaderClick = (gymLeaderString : string) => {
+    navigate(`${PagePaths.GymLeader}/${gymLeaderString}`);
+  }
+
+  const handlePokemonClick = (pokemonString : string) => {
+    navigate(`${PagePaths.Pokemon}/${pokemonString}`);
   }
 
   const typeImage = (
@@ -51,7 +60,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
     );
 
     leaderContent = (
-      <div className="gym-leader-card-component">
+      <div className="gym-leader-card-component" onClick={() => handleGymLeaderClick(gymLeaderData.gym_leader_name ?? "undefined")}>
         {badgeImage}
         {trainerImage}
         <div>
@@ -80,7 +89,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
     );
 
     leaderContent = (
-      <div className="gym-leader-card-component">
+      <div className="gym-leader-card-component" onClick={() => handleGymLeaderClick(gymLeaderData.island_kahuna_name ?? "undefined")}>
         {trainerImage}
         <div>
           <div>
@@ -109,7 +118,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
 
     // setup the imgs for this componenent
     leaderContent = (
-      <div className="gym-leader-card-component">
+      <div className="gym-leader-card-component" onClick={() => handleGymLeaderClick(gymLeaderData.island_captain_name ?? "undefined")}>
         {trainerImage}
         <div>
           <div>
@@ -129,7 +138,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
       <div className="trainers-pokemon-container">
         {/* layout there pokemon */}
         {gymLeaderData.pokemon?.map((pokemon) => (
-          <div key={pokemon.name ?? Math.random()} className="trainers-pokemon">
+          <div key={pokemon.name ?? Math.random()} className="trainers-pokemon" onClick={() => handlePokemonClick(pokemon.name ?? "undefined")}>
             <img
               src={pokemon.imageUrl}
               alt={pokemon.name ?? "Pokemon image"}

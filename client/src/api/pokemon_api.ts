@@ -15,8 +15,8 @@ export const getRandomPokemon = async () : Promise<PokemonData> => {
 
   // try and get the data of a pokemon with a random id
   const randomId : number = getRandomPokemonId();
-  const request_url : string = `${Routes.POKEMON}/${randomId}`;
-  const res : Response = await fetch(request_url);
+  const url : string = `${Routes.POKEMON}/${randomId}`;
+  const res : Response = await fetch(url);
 
   if (res.status === NOT_FOUND_STATUS) throw new Error("Pokemon not found");
   if (res.status >= SERVER_SIDE_ERROR_CUTOFF) throw new Error("Sever error");
@@ -26,14 +26,14 @@ export const getRandomPokemon = async () : Promise<PokemonData> => {
   return {
     id: json.id,
     name: json.name,
-    imageUrl: json.imageUrl,
+    imageUrl: json.image_url,
     types : json.types
   };
 }
 
 export const getAllPokemonOfType = async (type : PokemonType) : Promise<PokemonData[]> => {
-  const request_url : string = `${Routes.POKEMON}/type/${type}`;
-  const res : Response = await fetch(request_url);
+  const url : string = `${Routes.POKEMON}/type/${type}`;
+  const res : Response = await fetch(url);
   const json = await res.json();
   console.log(`Fetching all pokemon of Type ${type}`);
 
@@ -42,31 +42,22 @@ export const getAllPokemonOfType = async (type : PokemonType) : Promise<PokemonD
   return json.pokemon;
 }
 
-export const getDetailedPokemonData = async (pokemonName : string) : Promise<any> => {
-  const request_url : string = `${Routes.POKEMON}/detailed/${pokemonName}`;
+export const getDetailedPokemonData = async (pokemonName : string) : Promise<PokemonData> => {
+  const url : string = `${Routes.POKEMON}/detailed/${pokemonName}`;
 
-  console.log(request_url);
-
-  const res : Response = await fetch(request_url);
+  const res : Response = await fetch(url);
   const json = await res.json();
 
-  console.log(`Fetching pokemon named ${pokemonName}`);
-
-  console.log(json);
+  return json as PokemonData;
 }
 
 // Items ************************************************************ //
 export const getRandomItem = async () : Promise<ItemData> => {
-  console.log("fetching a random item.");
 
   // try and get the data of a pokemon with a random id
   const randomId : number = getRandomItemId();
-  const request_url : string = `${Routes.ITEM}/${randomId}`;
-  const res : Response = await fetch(request_url);
-
-  if (res.status === NOT_FOUND_STATUS) throw new Error("Pokemon not found");
-  if (res.status >= SERVER_SIDE_ERROR_CUTOFF) throw new Error("Sever error");
-
+  const url : string = `${Routes.ITEM}/${randomId}`;
+  const res : Response = await fetch(url);
   const json = await res.json();
 
   return {
@@ -76,12 +67,20 @@ export const getRandomItem = async () : Promise<ItemData> => {
   };
 }
 
+export const getDetailedItemInfo = async(itemName : string) : Promise<ItemData> => {
+  const url : string = `${Routes.ITEM}/detailed/${itemName}`;
+  const res : Response = await fetch(url);
+  const json = await res.json();
+
+  return json as ItemData;
+} 
+
 // Pokedex ********************************************************* //
 export const getPokedexInfo = async (generation : Generation) : Promise<PokedexData> => {
   console.log(`Fetching pokedex info for gen ${generation}`);
 
-  const request_url : string = `${Routes.POKEDEX}/${generation}`;
-  const res : Response = await fetch(request_url);
+  const url : string = `${Routes.POKEDEX}/${generation}`;
+  const res : Response = await fetch(url);
   const json = await res.json();
 
   console.log(json);
@@ -97,8 +96,8 @@ export const getRandomGymLeader = async () : Promise<GymLeaderData> => {
   console.log("fetching a random gym leader.");
 
   // we have to generate the randomness of the gym leader on the backend since it is not part of the api we have to webscrape it
-  const request_url : string = `${Routes.GYM_LEADER}/random`;
-  const res : Response = await fetch(request_url);
+  const url : string = `${Routes.GYM_LEADER}/random`;
+  const res : Response = await fetch(url);
   const json = await res.json();
 
   return {
@@ -107,12 +106,20 @@ export const getRandomGymLeader = async () : Promise<GymLeaderData> => {
   };
 }
 
+export const getDetailedGymLeaderInfo = async (gymLeaderName : string) : Promise<GymLeaderData> => {
+  const url : string = `${Routes.GYM_LEADER}/detailed/${gymLeaderName}`;
+  const res : Response = await fetch(url);
+  const json = await res.json();
+
+  return json as GymLeaderData;
+}
+
 // PokemonRegionGymLeaders************************************//
 export const getPokemonRegionGymLeaders = async (generation : Generation) : Promise<PokemonRegionGymLeaders> => {
   console.log(`fetching the gym leaders info for generatoin ${generation}.`);
 
-  const request_url : string = `${Routes.GYM_LEADERS}/${generation}`;
-  const res : Response = await fetch(request_url);
+  const url : string = `${Routes.GYM_LEADERS}/${generation}`;
+  const res : Response = await fetch(url);
   const json = await res.json();
 
   console.log(json);

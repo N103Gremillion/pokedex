@@ -1,4 +1,4 @@
-import { PokemonType } from "./enums";
+import { PokemonDmgClass, PokemonType } from "./enums";
 
 const basetypeImageUrl : string = "/type_logos";
 
@@ -15,6 +15,13 @@ export function validPokemonType(typeString : string) : boolean {
   }
 
   return false;
+}
+
+export function getDmgClassUrl(type : PokemonDmgClass | undefined) : string {
+  if (type === undefined) {
+    return ""
+  }
+  return `/type_logos/${type}.png`
 }
 
 export function getTypeUrl(type : PokemonType | undefined) : string {

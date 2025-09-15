@@ -30,13 +30,13 @@ export const PokedexEntry = ({pokemonData} : PokedexEntryProps) => {
     />
   );
 
-  const handleClick = (event : React.MouseEvent) : void => {
+  const handleClick = () : void => {
     const pokemonNameString : string = pokemonData.name ?? "undefined";
     navigate(`${PagePaths.Pokemon}/${pokemonNameString}`);
   }
 
   return (
-    <div className="pokedex-entry" onClick={(event) => handleClick(event)}>
+    <div className="pokedex-entry" onClick={() => handleClick()}>
       {pokemonImage}
       <div className="pokedex-entry-types-container">
         {typeImageUrls.map((url, index) => (

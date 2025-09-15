@@ -61,13 +61,16 @@ export type PokedexData = {
 
 export type GymLeaderData = {
   id? : number;
+  generation? : number;
+  gym_number? : number;
   gym_name? : string;
   gym_leader_name? : string;
   gym_leader_image_url? : string;
   element_type? : PokemonType;
-  badge_name? : string,
-  badge_image_url? : string,
-  pokemon? : PokemonData[]
+  badge_name? : string;
+  badge_image_url? : string;
+  pokemon? : PokemonData[];
+  description? : string; 
 }
 
 export type IslandKahunaData = {

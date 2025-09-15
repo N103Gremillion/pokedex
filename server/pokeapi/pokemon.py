@@ -41,13 +41,23 @@ def fetchPokemonDataByIdentifier(pokemon_identifier : int | str) -> PokemonData:
       if isValidType(type_name.capitalize()):
         types.append(PokemonType(type_name.capitalize()))
   
+  sprites = data.get("sprites") or {}
+  front_default = sprites.get("front_default")
+
+  if not front_default:
+    other = sprites.get("other") or {}
+    official = other.get("official-artwork") or {}
+    front_default = official.get("front_default") or ""
+  
   # map the data onto the PokemonData to ensure you have these on the frontend
   pokemonData : PokemonData = {
     PokemonKeys.ID : data.get("id"),
     PokemonKeys.NAME : data.get("name"),
-    PokemonKeys.IMAGE_URL : data.get("sprites").get("front_default"),
+    PokemonKeys.IMAGE_URL : front_default,
     PokemonKeys.TYPES : types
   }
+  
+  print(pokemonData)
   
   return pokemonData
 
