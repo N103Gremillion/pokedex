@@ -37,6 +37,8 @@ def setupRoutes(app : Flask) -> None:
       # Name fetch
       result = fetchPokemonDataByIdentifier(identifier.lower()) # api expects a lower case name
     
+    print(result)
+    
     return jsonify(result)
   
   @app.route("/pokemon/type/<type_name>")
@@ -116,8 +118,9 @@ def setupRoutes(app : Flask) -> None:
   
   @app.route("/gym-leader/detailed/<leader_name>")
   def getDetailedGymLeader(leader_name : str) -> Response:
+    print(leader_name)
     result = fetchDetailedGymLeader(leader_name)
-    print(f"Detailed gym-leader {leader_name}")
+    print(result)
     return result
 
   @app.route("/gym-leaders/<generation>")

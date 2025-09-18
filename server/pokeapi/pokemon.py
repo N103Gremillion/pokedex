@@ -57,8 +57,6 @@ def fetchPokemonDataByIdentifier(pokemon_identifier : int | str) -> PokemonData:
     PokemonKeys.TYPES : types
   }
   
-  print(pokemonData)
-  
   return pokemonData
 
 # this is used to extract all data necessary for the in depth pokemon page

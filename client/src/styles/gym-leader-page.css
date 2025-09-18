@@ -1,0 +1,52 @@
+:root {
+  --dark-blue: #3B44AA;
+  --highlight_color: #3399ff;
+}
+
+.general-gym-leader-info-container {
+  width: 600px;
+  height: fit-content;
+  display: flex;
+  padding: 40px;
+  border-bottom: 2px solid var(--dark-blue);
+}
+
+.general-gym-leader-info-container:hover {
+  border : 2px solid;
+  border-color: var(--highlight_color);
+}
+
+.gym-leader-img {
+  width : 175px;
+  height: auto;
+}
+
+.gym-leader-header {
+  color: var(--dark-blue);
+}
+
+.gym-leader-description {
+  padding: 20px;
+  font-size: 25px;
+  text-align: left;
+  width: 600px;
+  height: auto;
+  border-bottom: 2px solid var(--dark-blue);
+}
+
+.pokemon-container {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 2;
+  gap : 20px;
+}
+
+.pokemon-instance-container {
+  width : 150px;
+  height: 150px;
+}
+
+.pokemon-instance-container:hover {
+  border: 2px solid var(--highlight_color);
+}

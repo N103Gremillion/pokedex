@@ -19,10 +19,11 @@ def isValidGymLeaderName(leader_name : str) -> bool:
   leader_name = leader_name.lower()
   
   # typicall gym leaders
-  for leader in GYM_LEADERS:
-    if leader_name == leader.lower():
-      return True
-  
+  for generation_leaders in GYM_LEADERS:
+    for leader in generation_leaders:
+      if leader_name == leader.lower():
+        return True
+        
   # island kahunas
   for kahunas in GEN_7_ISLAND_KAHUNAS:
     if leader_name == kahunas.get(IslandKahunaKeys.ISLAND_KAHUNA_NAME).lower():
@@ -38,7 +39,7 @@ def isValidGymLeaderName(leader_name : str) -> bool:
 def getGenNumFromGymLeaderName(leader_name : str) -> int:
   from scraper.gymLeaderPageScrapper import GYM_LEADERS
   
-  leader_name = leader_name.capitalize()
+  leader_name = leader_name.strip().lower()
   
   # island kahunas
   for kahunas in GEN_7_ISLAND_KAHUNAS:
@@ -51,10 +52,14 @@ def getGenNumFromGymLeaderName(leader_name : str) -> int:
       return 7
     
   # typicall gym leaders
-  total_gyms : int = len(GYM_LEADERS)
-  for i in range(total_gyms):
-    if leader_name == GYM_LEADERS[i]:
-      return (i // 8) + 1
+  gen_index = 1
+  for leaders in GYM_LEADERS:
+    # If this generation is Gen 7, skip it
+    if gen_index == 7:
+      gen_index += 1
+    if any(leader_name == name.lower() for name in leaders):
+      return gen_index
+    gen_index += 1
     
   return -1
   

@@ -23,12 +23,7 @@ export const getRandomPokemon = async () : Promise<PokemonData> => {
 
   const json = await res.json();
 
-  return {
-    id: json.id,
-    name: json.name,
-    imageUrl: json.image_url,
-    types : json.types
-  };
+  return json as PokemonData;
 }
 
 export const getAllPokemonOfType = async (type : PokemonType) : Promise<PokemonData[]> => {

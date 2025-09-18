@@ -1,6 +1,6 @@
 /* Trainer Card ###################################*/
 /* Gym Leader */
-.gym-leader-card-component{
+.trainer-card-component{
   position: relative;
   width: 350px;
   height: 350px;
@@ -27,11 +27,11 @@
   padding: 4px;
 }
 
-.gym-leader-card-component:hover{
+.trainer-card-component:hover{
   border  : 2px solid var(--header_color);
 }
 
-.gym-leader-name {
+.trainer-name {
   margin-top: 10px;
   color: var(--header_color);
 }

@@ -60,7 +60,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
     );
 
     leaderContent = (
-      <div className="gym-leader-card-component" onClick={() => handleGymLeaderClick(gymLeaderData.gym_leader_name ?? "undefined")}>
+      <div className="trainer-card-component" onClick={() => handleGymLeaderClick(gymLeaderData.gym_leader_name ?? "undefined")}>
         {badgeImage}
         {trainerImage}
         <div>
@@ -89,7 +89,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
     );
 
     leaderContent = (
-      <div className="gym-leader-card-component" onClick={() => handleGymLeaderClick(gymLeaderData.island_kahuna_name ?? "undefined")}>
+      <div className="trainer-card-component" onClick={() => handleGymLeaderClick(gymLeaderData.island_kahuna_name ?? "undefined")}>
         {trainerImage}
         <div>
           <div>
@@ -118,7 +118,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
 
     // setup the imgs for this componenent
     leaderContent = (
-      <div className="gym-leader-card-component" onClick={() => handleGymLeaderClick(gymLeaderData.island_captain_name ?? "undefined")}>
+      <div className="trainer-card-component" onClick={() => handleGymLeaderClick(gymLeaderData.island_captain_name ?? "undefined")}>
         {trainerImage}
         <div>
           <div>

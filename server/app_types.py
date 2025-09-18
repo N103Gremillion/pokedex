@@ -97,7 +97,7 @@ class PokemonEvolution(TypedDict):
 class PokemonKeys(str, Enum):
   ID = "id"
   NAME = "name"
-  IMAGE_URL = "image_url"
+  IMAGE_URL = "imageUrl"
   TYPES = "types"
   LEVEL = "level"
   HEIGHT = "height"
@@ -116,7 +116,7 @@ class PokemonKeys(str, Enum):
 class PokemonData(TypedDict):
   id: int
   name: str
-  image_url : str
+  imageUrl : str
   types: NotRequired[list[PokemonType]]
   level : NotRequired[str]
   height : NotRequired[int]

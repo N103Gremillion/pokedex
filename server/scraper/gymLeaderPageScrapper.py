@@ -28,16 +28,25 @@ from pokeapi.pokemon import fetchPokemonDataByIdentifier
 from utils import getGenNumFromGymLeaderName, isValidGymLeaderName, print_pretty_json, isValidType
 from scraper.scraper import BASE_BULBAPEDIA_WIKI_URL, BASE_POKEMON_DB_URL, scrape_page_builbapedia,scrape_page_pokedb
 
-GYM_LEADERS : List[str] = [
-  "Brock", "Misty", "Lt._Surge", "Erika", "Koga", "Sabrina", "Blaine", "Giovanni",  # Indigo League
-  "Falkner", "Bugsy", "Whitney", "Morty", "Chuck", "Jasmine", "Pryce", "Clair", # Johto League 
-  "Roxanne", "Brawly", "Wattson", "Flannery", "Norman", "Winona", "Tate_and_Liza", "Wallace",  # Hoenn League
-  "Roark", "Gardenia", "Maylene", "Crasher_Wake", "Fantina", "Byron", "Candice", "Volkner", # Sinnoh League
-  "Cilan", "Chili", "Cress", "Lenora", "Burgh", "Elesa", "Clay", "Skyla", "Brycen", "Drayden", "Iris", # Unova League (Black and White)
-  "Viola", "Grant", "Korrina", "Ramos", "Clemont", "Valerie", "Olympia", "Wulfric", # Kalos League
-  "Milo", "Nessa", "Kabu", "Bea", "Allister", "Opal", "Gordie", "Melong", "Piers", "Raihan", # Galar League
-  "Katy", "Brassius", "Iono", "Kofu", "Larry", "Ryme", "Tulip", "Grusha" # Paldea League
+GYM_LEADERS: list[list[str]] = [
+    # Gen 1
+    ["Brock", "Misty", "Lt._Surge", "Erika", "Koga", "Sabrina", "Blaine", "Giovanni"],
+    # Gen 2
+    ["Falkner", "Bugsy", "Whitney", "Morty", "Chuck", "Jasmine", "Pryce", "Clair"],
+    # Gen 3
+    ["Roxanne", "Brawly", "Wattson", "Flannery", "Norman", "Winona", "Tate_&_Liza", "Wallace"],
+    # Gen 4
+    ["Roark", "Gardenia", "Maylene", "Crasher_Wake", "Fantina", "Byron", "Candice", "Volkner"],
+    # Gen 5
+    ["Cilan", "Chili", "Cress", "Lenora", "Burgh", "Elesa", "Clay", "Skyla", "Brycen", "Drayden", "Iris"],
+    # Gen 6
+    ["Viola", "Grant", "Korrina", "Ramos", "Clemont", "Valerie", "Olympia", "Wulfric"],
+    # Gen 8
+    ["Milo", "Nessa", "Kabu", "Bea", "Allister", "Opal", "Gordie", "Melony", "Piers", "Raihan"],
+    # Gen 9
+    ["Katy", "Brassius", "Iono", "Kofu", "Larry", "Ryme", "Tulip", "Grusha"]
 ]
+
 
 GEN_TO_REGION : dict[int, str] = {
   1: "Kanto",
@@ -66,7 +75,8 @@ GEN_TO_GAME : dict[int, str] = {
 # THIS FUCTION SCRAPES THE GYM LEADERS IMG FROM THIS PAGE https://pokemondb.net/red-blue/gymleaders-elitefour
 def fetchRandomGymLeader() -> GymLeaderData:
   # first get a random gym leader name and create the url string
-  gym_leader_name : str = random.choice(GYM_LEADERS)
+  gen_leaders : List[str] = random.choice(GYM_LEADERS)
+  gym_leader_name : str = random.choice(gen_leaders)
   url_string : str = f"{BASE_BULBAPEDIA_WIKI_URL}/{gym_leader_name}"
   
   # request this gymLeaders page
@@ -111,20 +121,23 @@ def fetchDetailedGymLeader(leader_name : str) -> GymLeaderData:
   response : GymLeaderData = {
     GymLeaderKeys.ID : -1
   }
+  
+  leader_name = leader_name.replace(" ", "_").strip()
+  
   if not isValidGymLeaderName(leader_name):
     return response
   
-  response[GymLeaderKeys.GYM_LEADER_NAME] = leader_name.capitalize()
+  response[GymLeaderKeys.GYM_LEADER_NAME] = leader_name
+  
   response[GymLeaderKeys.GENERATION] = getGenNumFromGymLeaderName(leader_name)
+  response = attachGymLeaderImgAndDescriptionToGymLeader(response, getFullTrainerName(response))
   response = attachPokemonToGymLeader(response, response[GymLeaderKeys.GENERATION])
   response = attachGymInfoToGymLeader(response, response[GymLeaderKeys.GENERATION])
-  response = attachGymLeaderImgAndDescriptionToGymLeader(response, getFullTrainerName(response))
   
   return response
 
 # THESE FUNCTIONS ARE USED TO SCRAP FROM https://pokemondb.net/red-blue/gymleaders-elitefour (this one fetches trainer img_url and pokemon info for the trainer input)
 def attachPokemonToGymLeader(leader : GymLeaderData | IslandKahunaData | IslandCaptainData, gen : int) -> GymLeaderData:
-  
   # set it up with default values
   pokemon : list[PokemonData] = []
   leader[GymLeaderKeys.POKEMON] = pokemon # this has same value for all 3 types
@@ -147,7 +160,7 @@ def attachPokemonToGymLeader(leader : GymLeaderData | IslandKahunaData | IslandC
   print(f"{url}")
   
   # use gym leader name as a reference to find the img 
-  img_tag = soup.find("img", {"alt": full_leader_name})
+  img_tag = soup.find("img", {"alt": full_leader_name.replace("_", " ")})
   
   if not img_tag:
     print(f"Could not find img tag with alt {full_leader_name}")
@@ -253,7 +266,7 @@ def attachGymInfoToGymLeader(leader : GymLeaderData | IslandKahunaData | IslandC
   soup = BeautifulSoup(html, "html.parser")
   
   # use gym leader name as a reference to find the img 
-  img_tag = soup.find("img", {"alt": full_leader_name})
+  img_tag = soup.find("img", {"alt": full_leader_name.replace("_", " ")})
   
   if not img_tag:
     return leader

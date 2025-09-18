@@ -7,8 +7,6 @@ interface PokedexGridProps {
 }
 
 export const PokedexGrid = ({pokedex} : PokedexGridProps) => {
-
-  console.log(pokedex);
   
   return (
     <div className="pokedex-grid-container">
