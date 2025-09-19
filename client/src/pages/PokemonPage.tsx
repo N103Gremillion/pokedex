@@ -27,6 +27,7 @@ export const  PokemonPage = () => {
     const runQuery = async () => {
       setDetailedPokemonData(await getDetailedPokemonData(pokemonNameString));
       setLoading(false);
+      window.scrollTo(0, 0);
     }
     runQuery();
   }, [pokemonNameString]);

@@ -9,6 +9,8 @@ from utils import isValidType, print_pretty_json
 def fetchDetailedPokemonType(type_str : str) -> DetailedPokemonType:
   from entry import globalDb
   
+  type_str = type_str.capitalize()
+  
   result : DetailedPokemonType = {
     DetailedPokemonTypeKeys.TYPE_NAME : PokemonType.Unknown,
     DetailedPokemonTypeKeys.NO_DMG_TO : [],

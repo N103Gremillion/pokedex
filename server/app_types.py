@@ -36,7 +36,15 @@ class LearnMethod(str, Enum):
     EGG = "egg"
     TUTOR = "tutor"
     OTHER = "other"
-    
+
+class SearchPool(str, Enum):
+  NONE = "none"
+  POKEMON = "pokemon"
+  GYM_LEADER = "gym_leader"
+  MOVE = "move"
+  TYPE = "type"
+  ITEM = "item"
+  
 # generic object to return in api fetches
 class SuccessResponseKeys(str, Enum):
   SUCCESS = "success"

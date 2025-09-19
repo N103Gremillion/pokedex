@@ -1,12 +1,22 @@
-import type { Generation, PokemonType } from "../enums";
+import type { Generation, PokemonType, SearchPool } from "../enums";
 import type { DetailedPokemonTypeData, GymLeaderData, ItemData, MoveData, PokedexData, PokemonData, PokemonRegionGymLeaders } from "../types";
 import { getRandomItemId, getRandomPokemonId, NOT_FOUND_STATUS, SERVER_SIDE_ERROR_CUTOFF } from "./helpers";
 import { Routes } from "./routes";
 
+//  Search Bar 
+export const getMatchingSearchPool = async (queryString : string) : Promise<SearchPool> => {
+  queryString = queryString.replace(/ /g, "_")
+
+  const url : string = `${Routes.SEARCH}/${queryString}`;
+  const res : Response = await fetch(url);
+  const json = await res.json();
+  return json as SearchPool;
+}
+
 export const getMatchingSearchs = async (queryString : string) : Promise<string[]> => {
   const url : string = `${Routes.SEARCH}/match/${queryString}`;
   const res : Response = await fetch(url);
-  const json = await res.json();;
+  const json = await res.json();
   return json;
 }
 

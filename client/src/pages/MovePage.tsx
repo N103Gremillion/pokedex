@@ -14,6 +14,7 @@ export const MovePage = () => {
   useEffect(() => {
     const queryMoveInfo = async () => {
       setMoveInfo(await getDetailedMoveInfo(moveNameString));
+      window.scrollTo(0, 0);
     }
     queryMoveInfo();
   }, []);

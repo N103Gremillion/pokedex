@@ -14,6 +14,7 @@ export const ItemPage = () => {
   useEffect(() => {
     const runQuery = async () => {
       setDetailedItemData(await getDetailedItemInfo(itemNameString));
+      window.scrollTo(0, 0);
     }
     runQuery();
   }, []);

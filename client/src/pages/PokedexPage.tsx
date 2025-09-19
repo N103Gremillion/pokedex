@@ -31,6 +31,7 @@ export const PokedexPage = () => {
         console.log(`Issue getting pokedex info for gen : ${generation} | Error : ${error}`);
       } finally {
         setLoading(false);
+        window.scrollTo(0, 0);
       }
     };
     

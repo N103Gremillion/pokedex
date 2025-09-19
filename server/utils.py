@@ -8,8 +8,13 @@ def print_pretty_json(data) -> None:
   print(json.dumps(data, indent=4))
   
 def isValidType(value : str | None) -> bool:
+  if not value:
+    return False
+  
+  value = value.lower()
+  
   for type in PokemonType:
-    if (value == type.value):
+    if (value == type.value.lower()):
       return True
   return False
 
@@ -71,7 +76,7 @@ def hectogramsToPounds(value : int | None) -> float:
 def filterBySubstringAcrossPools(sub_string : str) -> List[str]:
   res : List[str] = []
   
-  res.extend(filterPokemonBySubstring(sub_string))
+  # res.extend(filterPokemonBySubstring(sub_string))
   res.extend(filterGymLeadersBySubstring(sub_string))
   res.extend(filterTypesBySubstring(sub_string))
   
@@ -89,9 +94,10 @@ def filterGymLeadersBySubstring(sub_string : str) -> List[str]:
   
   res : List[str] = []
   
-  for gym_leader_name in GYM_LEADERS:
-    if (gym_leader_name.lower().startswith(sub_string.lower())):
-      res.append(gym_leader_name)
+  for generation_gym_leaders in GYM_LEADERS:
+    for gym_leader_name in generation_gym_leaders:
+      if (gym_leader_name.lower().startswith(sub_string.lower())):
+        res.append(gym_leader_name)
   
   return res
 

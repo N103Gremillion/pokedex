@@ -32,6 +32,7 @@ export const GymLeadersPage = () => {
         console.log(`Issue getting pokemonRegionInfo for gen : ${generation} | Error : ${error}`);
       } finally {
         setLoading(false);
+        window.scrollTo(0, 0);
       }
     };
     

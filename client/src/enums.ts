@@ -48,6 +48,15 @@ export enum LearnMethod {
   Other = "other",
 }
 
+export enum SearchPool {
+  None = "none",
+  GymLeader = "gym_leader",
+  Pokemon = "pokemon",
+  Move = "move",
+  Type = "type",
+  Item = "item"
+}
+
 export function getGenerationFromString(generationsString : string) : Generation{
   switch (generationsString) {
     case "GenerationI":

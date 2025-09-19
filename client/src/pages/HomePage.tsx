@@ -20,6 +20,7 @@ export const HomePage = () => {
       setPokemon(await getRandomPokemon()); 
       setItem(await getRandomItem());
       setGymLeader(await getRandomGymLeader());
+      window.scrollTo(0, 0);
     };
 
     fetchData();

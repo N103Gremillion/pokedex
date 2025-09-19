@@ -122,6 +122,7 @@ def fetchDetailedGymLeader(leader_name : str) -> GymLeaderData:
     GymLeaderKeys.ID : -1
   }
   
+  leader_name = leader_name.title()
   leader_name = leader_name.replace(" ", "_").strip()
   
   if not isValidGymLeaderName(leader_name):

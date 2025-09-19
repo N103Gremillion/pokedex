@@ -4,8 +4,8 @@ from flask import Flask, Response, jsonify
 from enum import Enum
 from pokeapi.move import fetchPokemonMove, fetchPokemonMoves
 from pokeapi.type import fetchDetailedPokemonType
-from utils import filterBySubstringAcrossPools, isValidType
-from app_types import DetailedPokemonType, DetailedPokemonTypeKeys, GymLeaderData, ItemData, MoveData, PokemonData, PokedexKeys, PokemonRegionGymLeaders, PokemonType
+from utils import filterBySubstringAcrossPools, isValidGymLeaderName, isValidType
+from app_types import DetailedPokemonType, DetailedPokemonTypeKeys, GymLeaderData, ItemData, MoveData, PokemonData, PokedexKeys, PokemonRegionGymLeaders, PokemonType, SearchPool
 from pokeapi.item import fetchDetailedItemByIdentifier, fetchItemByIdentifier
 from pokeapi.pokedex import fetchPokedexByGeneration
 from pokeapi.pokemon import fetchAllPokemonOfType, fetchDetailedPokemonDataByIdentifier, fetchPokemonDataByIdentifier
@@ -36,8 +36,6 @@ def setupRoutes(app : Flask) -> None:
     else:
       # Name fetch
       result = fetchPokemonDataByIdentifier(identifier.lower()) # api expects a lower case name
-    
-    print(result)
     
     return jsonify(result)
   
@@ -118,7 +116,6 @@ def setupRoutes(app : Flask) -> None:
   
   @app.route("/gym-leader/detailed/<leader_name>")
   def getDetailedGymLeader(leader_name : str) -> Response:
-    print(leader_name)
     result = fetchDetailedGymLeader(leader_name)
     print(result)
     return result
@@ -129,9 +126,23 @@ def setupRoutes(app : Flask) -> None:
     return jsonify(res)
   
   # for SEARCH BAR
+  @app.route("/search/<search_string>")
+  def getSearchResult(search_string : str):
+    # default dictionary that will return an empty object if no result is found
+    pool : SearchPool = SearchPool.NONE
+
+    if (isValidGymLeaderName(search_string)):
+      pool = SearchPool.GYM_LEADER
+    elif (isValidType(search_string)):
+      pool = SearchPool.TYPE
+    
+    return jsonify(pool)
+  
   @app.route("/search/match/<sub_string>")
-  def getMatchingSearchResults(sub_string) -> List[str]:
+  def getMatchingSearchResults(sub_string : str):
     print(f"Searching for strings that match {sub_string}")
     matches : List[str] = filterBySubstringAcrossPools(sub_string)
     return jsonify(matches)
+  
+  
   

@@ -21,6 +21,7 @@ export const GymLeaderPage = () => {
     const runQuery = async () => {
       setDetailedGymLeaderData(await getDetailedGymLeaderInfo(gymLeaderNameString));
       setLoading(false);
+      window.scrollTo(0, 0);
     }
 
     runQuery();

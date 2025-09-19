@@ -8,8 +8,10 @@ export const sleep = async(seconds : number) : Promise<void> => {
 
 export function validPokemonType(typeString : string) : boolean {
 
+  typeString = typeString.toLowerCase();
+
   for (const type of Object.values(PokemonType)) {
-    if (typeString === type) {
+    if (typeString === type.toLowerCase()) {
       return true;
     }
   }
