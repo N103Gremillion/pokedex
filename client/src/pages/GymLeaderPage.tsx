@@ -35,6 +35,10 @@ export const GymLeaderPage = () => {
     navigate(`${PagePaths.GymLeader}/${detailedGymLeaderData.gym_leader_name}`);
   }
 
+  const handlePokemonClick = (pokemonName : string) => {
+    navigate(`${PagePaths.Pokemon}/${pokemonName}`);
+  }
+
   const GymLeaderImg = () : ReactNode => {
     return (
       <img 
@@ -77,7 +81,7 @@ export const GymLeaderPage = () => {
       <div className="pokemon-container">
         {!detailedGymLeaderData.pokemon || detailedGymLeaderData.pokemon.length === 0 ? "Unknown" :
         detailedGymLeaderData.pokemon?.map((pokemon : PokemonData, index : number) => (
-          <div key={index} className="pokemon-instance-container">
+          <div key={index} className="pokemon-instance-container" onClick={() => handlePokemonClick(pokemon.name ?? "Undefined")}>
             <img src={pokemon.imageUrl} alt={pokemon.name ?? "Uknown"} onError={handleImageNotFound} className="trainer-card-pokemon-img"/>
             <p>{pokemon.name ?? "Unknown"}</p>
             <p>{pokemon.level ?? "-"}</p>

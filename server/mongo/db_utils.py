@@ -5,7 +5,7 @@ import os
 from pymongo import MongoClient
 from pymongo.database import Database
 from pymongo.collection import Collection
-from app_types import DetailedPokemonTypeKeys, PokedexKeys, PokemonRegionGymLeadersKeys
+from app_types import DetailedPokemonTypeKeys, PokedexKeys, PokemonKeys, PokemonRegionGymLeadersKeys
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
@@ -20,7 +20,7 @@ class DatabaseCollections (Enum):
   POKEMON_TYPE_INFO = CollectionInfo("pokemon_type_info", DetailedPokemonTypeKeys.TYPE_NAME)
   POKEMON_OF_TYPE = CollectionInfo("pokemon_of_type", DetailedPokemonTypeKeys.TYPE_NAME)
   MOVES_OF_TYPE = CollectionInfo("moves_of_type", DetailedPokemonTypeKeys.TYPE_NAME)
-  ALL_POKEMON = CollectionInfo("all_pokemon", "name") # just holds names used for seachbar matching
+  DETAILED_POKEMON = CollectionInfo("detailed_pokemon", PokemonKeys.NAME)
 
 load_dotenv()
 
@@ -62,3 +62,12 @@ def existsInCollection(collection : Collection, key : str, value : Any) -> bool:
     # check if a document already exists with this key
     result = collection.find_one({key : value})
     return result is not None
+
+def clean_for_mongo(obj):
+    if isinstance(obj, Enum):
+        return obj.value 
+    if isinstance(obj, dict):
+        return {clean_for_mongo(k): clean_for_mongo(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple, set)):
+        return [clean_for_mongo(v) for v in obj]
+    return obj

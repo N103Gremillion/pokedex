@@ -1,12 +1,13 @@
 from typing import List, Optional
 from flask import json
 from app_types import DetailedPokemonTypeKeys, ErrorResponse, LearnMethod, MoveData, MoveKeys, PokedexKeys, PokemonData, PokemonEvolution, PokemonEvolutionKeys, PokemonType, SuccessResponse, ErrorResponseKeys, PokemonKeys, SuccessResponseKeys
-from mongo.db_utils import DatabaseCollections
+from mongo.db_utils import DatabaseCollections, clean_for_mongo
 from utils import hectogramsToPounds, isValidType, print_pretty_json
 from pokeapi.general import baseApiUrl, fetchData
 from enum import Enum
 import requests
 from pymongo.collection import Collection
+from bson import json_util
 
 class PokeApiEndpoints(Enum):
   GET_POKEMON = f"{baseApiUrl}/pokemon"
@@ -60,8 +61,19 @@ def fetchPokemonDataByIdentifier(pokemon_identifier : int | str) -> PokemonData:
   return pokemonData
 
 # this is used to extract all data necessary for the in depth pokemon page
-def fetchDetailedPokemonDataByIdentifier(pokemon_identifier : int | str) -> PokemonData:
+def fetchDetailedPokemonDataByIdentifier(pokemon_identifier : str) -> PokemonData:
   from pokeapi.move import fetchPokemonMove
+  from entry import globalDb
+  
+  # check if it is already cached in the database
+  detailedPokemonCollection : Collection = globalDb[DatabaseCollections.DETAILED_POKEMON.value.name]
+  
+  cached_doc = detailedPokemonCollection.find_one({DatabaseCollections.DETAILED_POKEMON.value.key: pokemon_identifier})
+  
+  if (cached_doc):
+    json_str = json_util.dumps(cached_doc)
+    clean_dict = json.loads(json_str)
+    return clean_dict
   
   url : str = f"{PokeApiEndpoints.GET_POKEMON.value}/{pokemon_identifier}"
   response : SuccessResponse | ErrorResponse = fetchData(url)
@@ -172,6 +184,30 @@ def fetchDetailedPokemonDataByIdentifier(pokemon_identifier : int | str) -> Poke
     PokemonKeys.EVOLUTION_CHAIN : evolution_chain,
     PokemonKeys.MOVES_LEARNED : moves,
   }
+  
+  document = {
+    DatabaseCollections.DETAILED_POKEMON.value.key: pokemon_identifier,
+    PokemonKeys.ID: data.get("id"),
+    PokemonKeys.NAME: data.get("name"),
+    PokemonKeys.IMAGE_URL: data.get("sprites", {}).get("front_default"),
+    PokemonKeys.TYPES: types,
+    PokemonKeys.HEIGHT: data.get("height"),
+    PokemonKeys.WEIGHT: hectogramsToPounds(data.get("weight")),
+    PokemonKeys.SHINY_IMAGE_URL: data.get("sprites", {}).get("front_shiny"),
+    PokemonKeys.HP: hp,
+    PokemonKeys.ATTACK: attack,
+    PokemonKeys.DEFENSE: defense,
+    PokemonKeys.SP_ATTACK: sp_attack,
+    PokemonKeys.SP_DEFENSE: sp_defense,
+    PokemonKeys.SPEED: speed,
+    PokemonKeys.EVOLUTION_CHAIN: evolution_chain,
+    PokemonKeys.MOVES_LEARNED: moves,
+  }
+  
+  clean_document = clean_for_mongo(document)
+  
+  # add to cache pages to prevent unecessary fetches in the future
+  detailedPokemonCollection.insert_one(clean_document)
   
   return pokemonData
 
