@@ -1,5 +1,6 @@
-const backendPort : number = 5000;
-export const baseBackendURL : string = `https://localhost:${backendPort}`;
+export const baseBackendURL : string = "http://localhost:5000";
+
+// process.env.REACT_APP_BACKEND_URL ||
 
 enum ApiGetEndpoints {
   POKEMON = "/pokemon",
