@@ -28,7 +28,7 @@ def getDb() -> Database:
     username : str = os.getenv('MONGO_DB_ATLAS_USER')
     password : str = os.getenv('MONGO_DB_ATLAS_PASSWORD')
     clusterId : str = os.getenv('MONGO_DB_ATLAS_CLUSTER')
-    appName : str = os.getenv('MONGO_DB_ATLAS_App_NAME')
+    appName : str = os.getenv('MONGO_DB_ATLAS_App_NAME', 'MyApp')
     dbName : str = os.getenv('MONGO_DB_ATLAS_DB_NAME')
 
     if not all([username, password, clusterId, dbName]):
@@ -36,7 +36,7 @@ def getDb() -> Database:
 
     dBconnectionString : str = f"mongodb+srv://{username}:{password}@{clusterId}/?retryWrites=true&w=majority&appName={appName}"
 
-    client : MongoClient = MongoClient(dBconnectionString)
+    client : MongoClient = MongoClient(dBconnectionString, tls=True, tlsAllowInvalidCertificates=False)
 
     db : Database = client[dbName]
     return db
