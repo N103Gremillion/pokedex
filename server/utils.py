@@ -41,6 +41,24 @@ def isValidGymLeaderName(leader_name : str) -> bool:
     
   return False
 
+def isValidPokemon(pokemon_name : str) -> bool:
+  from pokeapi.pokemon import POKEMON_SET
+  
+  pokemon_name = pokemon_name.lower().replace(" ", "-")
+  return pokemon_name in POKEMON_SET
+
+def isValidPokemonMove(move_name : str) -> bool:
+  from pokeapi.move import POKEMON_MOVES_SET
+  move_name = move_name.lower().replace(" ", "-")
+  move_name = move_name.lower().replace("_", "-")
+  return move_name in POKEMON_MOVES_SET
+
+def isValidItem(item_name : str) -> bool:
+  from pokeapi.item import ITEMS_SET
+  item_name = item_name.lower().replace(" ", "-")
+  item_name = item_name.lower().replace("_", "-")
+  return item_name in ITEMS_SET
+  
 def getGenNumFromGymLeaderName(leader_name : str) -> int:
   from scraper.gymLeaderPageScrapper import GYM_LEADERS
   
@@ -76,27 +94,67 @@ def hectogramsToPounds(value : int | None) -> float:
 def filterBySubstringAcrossPools(sub_string : str) -> List[str]:
   res : List[str] = []
   
-  # res.extend(filterPokemonBySubstring(sub_string))
-  res.extend(filterGymLeadersBySubstring(sub_string))
   res.extend(filterTypesBySubstring(sub_string))
+  res.extend(filterGymLeadersBySubstring(sub_string))
+  res.extend(filterPokemonBySubstring(sub_string))
+  res.extend(filterMoveBySubstring(sub_string))
+  res.extend(filterItemBySubstring(sub_string))
   
   return res
 
-def filterPokemonBySubstring(sub_string : str) -> List[str]:
+def filterItemBySubstring(sub_string : str) -> List[str]:
+  from pokeapi.item import ITEM_NAMES
+  
+  sub_string = sub_string.lower().replace(" ", "-")
+  sub_string = sub_string.lower().replace("_", "-")
+  
   res : List[str] = []
   
-  pokemon : List[str] = []
+  for item_name in ITEM_NAMES:
+    if item_name.startswith(sub_string):
+      res.append(item_name)
+  
+  return res
+  
+def filterMoveBySubstring(sub_string : str) -> List[str]:
+  from pokeapi.move import POKEMON_MOVES
+  
+  sub_string = sub_string.lower().replace(" ", "-")
+  sub_string = sub_string.lower().replace("_", "-")
+  
+  res : List[str] = []
+  
+  for move_name in POKEMON_MOVES:
+    if move_name.startswith(sub_string):
+      res.append(move_name)
+  
+  return res
+  
+def filterPokemonBySubstring(sub_string : str) -> List[str]:
+  from pokeapi.pokemon import POKEMON_NAMES
+  
+  sub_string = sub_string.lower().replace(" ", "-")
+  sub_string = sub_string.lower().replace("_", "-")
+  
+  res : List[str] = []
+  
+  for name in POKEMON_NAMES:
+    if name.startswith(sub_string):
+      res.append(name)
   
   return res
 
 def filterGymLeadersBySubstring(sub_string : str) -> List[str]:
   from scraper.gymLeaderPageScrapper import GYM_LEADERS
   
+  sub_string = sub_string.lower()
+  sub_string = sub_string.replace(" ", "_")
+  
   res : List[str] = []
   
   for generation_gym_leaders in GYM_LEADERS:
     for gym_leader_name in generation_gym_leaders:
-      if (gym_leader_name.lower().startswith(sub_string.lower())):
+      if (gym_leader_name.lower().startswith(sub_string)):
         res.append(gym_leader_name)
   
   return res

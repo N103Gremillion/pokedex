@@ -4,7 +4,7 @@ from flask import Flask, Response, jsonify
 from enum import Enum
 from pokeapi.move import fetchPokemonMove, fetchPokemonMoves
 from pokeapi.type import fetchDetailedPokemonType
-from utils import filterBySubstringAcrossPools, isValidGymLeaderName, isValidType
+from utils import filterBySubstringAcrossPools, isValidGymLeaderName, isValidItem, isValidPokemon, isValidPokemonMove, isValidType
 from app_types import DetailedPokemonType, DetailedPokemonTypeKeys, GymLeaderData, ItemData, MoveData, PokemonData, PokedexKeys, PokemonRegionGymLeaders, PokemonType, SearchPool
 from pokeapi.item import fetchDetailedItemByIdentifier, fetchItemByIdentifier
 from pokeapi.pokedex import fetchPokedexByGeneration
@@ -135,7 +135,13 @@ def setupRoutes(app : Flask) -> None:
       pool = SearchPool.GYM_LEADER
     elif (isValidType(search_string)):
       pool = SearchPool.TYPE
-    
+    elif (isValidPokemon(search_string)):
+      pool = SearchPool.POKEMON
+    elif (isValidPokemonMove(search_string)):
+      pool = SearchPool.MOVE
+    elif (isValidItem(search_string)):
+      pool = SearchPool.ITEM
+      
     return jsonify(pool)
   
   @app.route("/search/match/<sub_string>")

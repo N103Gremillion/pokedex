@@ -7,6 +7,7 @@ import { Routes } from "./routes";
 export const getMatchingSearchPool = async (queryString : string) : Promise<SearchPool> => {
   queryString = queryString.replace(/ /g, "_")
 
+  //  gym leaders use a delimiter of _ and 
   const url : string = `${Routes.SEARCH}/${queryString}`;
   const res : Response = await fetch(url);
   const json = await res.json();

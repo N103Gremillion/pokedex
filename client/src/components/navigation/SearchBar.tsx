@@ -8,9 +8,11 @@ import { PagePaths } from '../../pages/pagePaths';
 export const SearchBar = () => {
   const [searchBarText, setSearchBarText] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [noResult, setNoResult] = useState(false);
   const navigate = useNavigate();
 
   const handleAutoCompleteSuggestions = async (queryString : string ) => {
+    setNoResult(false);
     setSearchBarText(queryString);
     
     if (!queryString) {
@@ -23,6 +25,7 @@ export const SearchBar = () => {
   };
 
   const handleSearch = async (queryString : string) => {
+    setNoResult(false);
     const pool : SearchPool = await getMatchingSearchPool(queryString);
 
     if (pool === SearchPool.GymLeader) {
@@ -31,7 +34,19 @@ export const SearchBar = () => {
     else if (pool === SearchPool.Type) {
       navigate(`${PagePaths.Type}/${queryString}`);
     }
+    else if (pool === SearchPool.Pokemon) {
+      navigate(`${PagePaths.Pokemon}/${queryString}`);
+    }
+    else if (pool === SearchPool.Move) {
+      navigate(`${PagePaths.Move}/${queryString}`);
+    }
+    else if (pool === SearchPool.Item) {
+      navigate(`${PagePaths.Item}/${queryString}`);
+    }
     else {
+      setSuggestions([]);
+      setSearchBarText("");
+      setNoResult(true);
       console.log(`CANT FIND A POOL FOR QUERY : ${queryString}`)
     }
   }
@@ -53,7 +68,11 @@ export const SearchBar = () => {
             handleSearch(searchBarText);
           }
         }}
+        emptyMessage="No results"
       />
+      {noResult && (
+        <div style={{ color: "red", marginTop: "4px" }}>No results</div>
+      )}
     </div>
   );
 };
