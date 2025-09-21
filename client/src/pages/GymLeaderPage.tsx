@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode, type SyntheticEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getDetailedGymLeaderInfo } from "../api/pokemon_api";
+import { getDetailedGymLeaderInfo, getProxyUrl } from "../api/pokemon_api";
 import type { GymLeaderData, PokemonData } from "../types";
 import { PagePaths } from "./pagePaths";
 import { getTypeUrl } from "../utils";
@@ -44,7 +44,10 @@ export const GymLeaderPage = () => {
     return (
       <img 
         className="gym-leader-img"
-        src={detailedGymLeaderData.gym_leader_image_url} 
+        src={
+          detailedGymLeaderData.gym_leader_image_url ?
+          getProxyUrl(detailedGymLeaderData.gym_leader_image_url) : defaultImageUrl
+        } 
         alt={detailedGymLeaderData.gym_name ?? "Unknown"}
         onError={handleImageNotFound}
       />

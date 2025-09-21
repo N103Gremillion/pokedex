@@ -1,7 +1,10 @@
+from io import BytesIO
 import os
 from typing import List
-from flask import Flask, Response, jsonify
+from flask import Flask, Response, jsonify, request, send_file
 from enum import Enum
+
+import requests
 from pokeapi.move import fetchPokemonMove, fetchPokemonMoves
 from pokeapi.type import fetchDetailedPokemonType
 from utils import filterBySubstringAcrossPools, isValidGymLeaderName, isValidItem, isValidPokemon, isValidPokemonMove, isValidType
@@ -51,6 +54,7 @@ def setupRoutes(app : Flask) -> None:
   
   @app.route("/pokemon/detailed/<pokemon_name>")
   def getDetailedPokemon(pokemon_name : str):
+    print(f"HIT DETAILED POKEMON FOR {pokemon_name}")
     result = fetchDetailedPokemonDataByIdentifier(pokemon_name)
     return jsonify(result)
     
@@ -150,5 +154,20 @@ def setupRoutes(app : Flask) -> None:
     matches : List[str] = filterBySubstringAcrossPools(sub_string)
     return jsonify(matches)
   
-  
-  
+  # Try and handle img bingind issue using this
+  @app.route("/proxy/image")
+  def proxy_image():
+    url = request.args.get("url")
+    if not url:
+      return "Missing URL", 400
+    try:
+      resp = requests.get(url, timeout=10)
+      resp.raise_for_status()
+    except requests.RequestException:
+      # Optional: return a placeholder image if fetching fails
+      return "Failed to fetch image", 500
+
+    return send_file(
+      BytesIO(resp.content),
+      mimetype=resp.headers.get("Content-Type", "image/png")
+    )

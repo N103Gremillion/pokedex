@@ -1,5 +1,6 @@
 import { Card } from 'primereact/card';
 import type { SyntheticEvent } from 'react';
+import { getProxyUrl } from '../../api/pokemon_api';
         
 // TODO : change to use primereact
 export enum CardSize {
@@ -28,7 +29,10 @@ export const InfoCard = ({size, title, subtitle, text, imageUrl} : InfoCardProps
 
   const cardImage = (
     <img 
-      src={imageUrl || defaultImageUrl} 
+      src={
+        imageUrl ?
+        getProxyUrl(imageUrl) : defaultImageUrl
+      } 
       alt="Player card"
       className='small-card-image'
       onError= {(error) => handleImageNotFound(error)}

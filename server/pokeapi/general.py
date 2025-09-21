@@ -4,11 +4,12 @@ import requests
 from app_types import ErrorResponse, ErrorResponseKeys, SuccessResponse, SuccessResponseKeys
 
 baseApiUrl : str = "https://pokeapi.co/api/v2/"
+session = requests.Session()
+session.headers.update({"User-Agent": "PokePluse/1.0"})
 
 def fetchData(url: str, fromScrapper : bool = False) -> SuccessResponse | ErrorResponse:
   try:
-      
-    response = requests.get(url, timeout=5)
+    response = session.get(url, timeout=5)
     response.raise_for_status() # raise 4xx/ 5xx responses to be caught in execption below
     
     # you can just use json for the api
@@ -17,6 +18,7 @@ def fetchData(url: str, fromScrapper : bool = False) -> SuccessResponse | ErrorR
         SuccessResponseKeys.SUCCESS: True,
         SuccessResponseKeys.DATA: response.json()
       }
+      
     # need to use response.text for the scrapper
     else :
       return {

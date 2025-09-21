@@ -1,3 +1,4 @@
+import time
 from typing import List, Optional
 from flask import json
 from app_types import DetailedPokemonTypeKeys, ErrorResponse, LearnMethod, MoveData, MoveKeys, PokedexKeys, PokemonData, PokemonEvolution, PokemonEvolutionKeys, PokemonType, SuccessResponse, ErrorResponseKeys, PokemonKeys, SuccessResponseKeys
@@ -235,6 +236,8 @@ def fetchDetailedPokemonDataByIdentifier(pokemon_identifier : str) -> PokemonDat
   from pokeapi.move import fetchPokemonMove
   from entry import globalDb
   
+  print(f"STARTED SEARCHING FOR {pokemon_identifier}")
+  
   # check if it is already cached in the database
   detailedPokemonCollection : Collection = globalDb[DatabaseCollections.DETAILED_POKEMON.value.name]
   
@@ -279,7 +282,7 @@ def fetchDetailedPokemonDataByIdentifier(pokemon_identifier : str) -> PokemonDat
     evolution_chain_url = species_data.get("evolution_chain", {}).get("url")
     if evolution_chain_url:
       evolution_chain = fetchEvolutionChainById(evolution_chain_url)
-    
+  
   # stats
   hp = attack = defense = sp_attack = sp_defense = speed = -1
   
@@ -299,7 +302,7 @@ def fetchDetailedPokemonDataByIdentifier(pokemon_identifier : str) -> PokemonDat
         sp_defense = base
       case "speed":
         speed = base
-        
+  
   # moves
   api_moves_data  = data.get("moves")
   moves : List[MoveData]  = []
@@ -331,7 +334,6 @@ def fetchDetailedPokemonDataByIdentifier(pokemon_identifier : str) -> PokemonDat
           move[MoveKeys.LEARN_METHOD] = LearnMethod.TUTOR
         case _:
           move[MoveKeys.LEARN_METHOD] = LearnMethod.OTHER
-    
     
     move[MoveKeys.LEVEL_LEARNED] = level_learned
     moves.append(move)

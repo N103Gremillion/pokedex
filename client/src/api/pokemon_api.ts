@@ -1,7 +1,7 @@
 import type { Generation, PokemonType, SearchPool } from "../enums";
 import type { DetailedPokemonTypeData, GymLeaderData, ItemData, MoveData, PokedexData, PokemonData, PokemonRegionGymLeaders } from "../types";
 import { getRandomItemId, getRandomPokemonId, NOT_FOUND_STATUS, SERVER_SIDE_ERROR_CUTOFF } from "./helpers";
-import { Routes } from "./routes";
+import { baseBackendURL, Routes } from "./routes";
 
 //  Search Bar 
 export const getMatchingSearchPool = async (queryString : string) : Promise<SearchPool> => {
@@ -175,4 +175,9 @@ export const getDetailedMoveInfo = async (moveName : string) : Promise<MoveData>
   console.log(json);
 
   return json as MoveData;
+}
+
+// Proxy 
+export const getProxyUrl = (img_ulr : string) : string => {
+  return `${baseBackendURL}/proxy/image?url=${encodeURIComponent(img_ulr)}`
 }

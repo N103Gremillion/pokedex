@@ -4,6 +4,8 @@ import { getTypeUrl } from "../../utils";
 import "../../styles/trainer.css"
 import { PagePaths } from "../../pages/pagePaths";
 import { useNavigate } from 'react-router-dom';
+import { baseBackendURL } from "../../api/routes";
+import { getProxyUrl } from "../../api/pokemon_api";
 
 interface PokemonTrainerCardProps {
   gymLeaderData : GymLeaderData | IslandCaptainData | IslandKahunaData;
@@ -43,7 +45,10 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
     
     const trainerImage = (
       <img 
-        src={gymLeaderData.gym_leader_image_url || defaultImageUrl} 
+        src={
+          gymLeaderData.gym_leader_image_url ? 
+          getProxyUrl(gymLeaderData.gym_leader_image_url) : defaultImageUrl
+        } 
         alt="Player card"
         className='trainer-card-trainer-img'
         onError= {(error) => handleImageNotFound(error)}
@@ -52,7 +57,10 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
 
     const badgeImage = (
       <img
-      src={gymLeaderData.badge_image_url || defaultImageUrl} 
+      src={
+        gymLeaderData.badge_image_url ?
+        getProxyUrl(gymLeaderData.badge_image_url) : defaultImageUrl
+      } 
       alt="Player card"
       className='badge-img'
       onError= {(error) => handleImageNotFound(error)}
@@ -81,7 +89,10 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
 
     const trainerImage = (
       <img 
-        src={gymLeaderData.island_kahuna_image_url || defaultImageUrl} 
+        src={
+          gymLeaderData.island_kahuna_image_url ? 
+          getProxyUrl(gymLeaderData.island_kahuna_image_url) : defaultImageUrl
+        } 
         alt="Player card"
         className='trainer-card-trainer-img'
         onError= {(error) => handleImageNotFound(error)}
@@ -93,7 +104,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
         {trainerImage}
         <div>
           <div>
-            <h3 className="gym-leader-name">{gymLeaderData.island_kahuna_name}</h3>
+            <h2 className="gym-leader-name">{gymLeaderData.island_kahuna_name}</h2>
           </div>
           <div>
             {`(${gymLeaderData.fight_location})`}
@@ -109,7 +120,10 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
 
     const trainerImage = (
       <img 
-        src={gymLeaderData.island_captain_image_url || defaultImageUrl} 
+        src={
+          gymLeaderData.island_captain_image_url ? 
+          getProxyUrl(gymLeaderData.island_captain_image_url) : defaultImageUrl
+        } 
         alt="Player card"
         className='trainer-card-trainer-img'
         onError= {(error) => handleImageNotFound(error)}
@@ -122,7 +136,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
         {trainerImage}
         <div>
           <div>
-            <h3 className="gym-leader-name">{gymLeaderData.island_captain_name}</h3>
+            <h2 className="gym-leader-name">{gymLeaderData.island_captain_name} </h2>
           </div>
           <div>
             {typeImage}

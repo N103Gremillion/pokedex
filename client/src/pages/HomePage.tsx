@@ -41,8 +41,6 @@ export const HomePage = () => {
     navigate(`${PagePaths.Item}/${itemName}`);
   }
 
-  console.log(pokemon);
-
   return (
     <div className='general-page'>
       <h1 className='header'>PokePluse</h1>

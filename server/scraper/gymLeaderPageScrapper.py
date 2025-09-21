@@ -157,9 +157,6 @@ def attachPokemonToGymLeader(leader : GymLeaderData | IslandKahunaData | IslandC
   html = gym_leader_page[SuccessResponseKeys.DATA]
   soup = BeautifulSoup(html, "html.parser")
   
-  print(f"PAGE FOUND FOR {full_leader_name} --------------------")
-  print(f"{url}")
-  
   # use gym leader name as a reference to find the img 
   img_tag = soup.find("img", {"alt": full_leader_name.replace("_", " ")})
   
