@@ -2,7 +2,7 @@ import type { DetailedPokemonTypeData } from "../../types";
 import "../../styles/types.css"
 import { PokemonType } from "../../enums";
 import { getTypeSymbolUrl } from "../../utils";
-import type { JSX, ReactElement } from "react";
+import type { ReactElement } from "react";
 
 interface TypeEffectivnessChartProps {
   typeData : DetailedPokemonTypeData

@@ -1,10 +1,9 @@
 import type { JSX, SyntheticEvent } from "react";
-import type { GymLeaderData, IslandCaptainData, IslandKahunaData, PokemonData } from "../../types";
+import type { GymLeaderData, IslandCaptainData, IslandKahunaData } from "../../types";
 import { getTypeUrl } from "../../utils";
 import "../../styles/trainer.css"
 import { PagePaths } from "../../pages/pagePaths";
 import { useNavigate } from 'react-router-dom';
-import { baseBackendURL } from "../../api/routes";
 import { getProxyUrl } from "../../api/pokemon_api";
 
 interface PokemonTrainerCardProps {

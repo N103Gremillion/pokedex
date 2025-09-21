@@ -1,7 +1,7 @@
-import { useParams, useSearchParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import "../styles/general.css"
 import "../styles/moves.css"
-import { useEffect, useState, type JSX, type ReactElement, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import type { MoveData } from "../types";
 import { getDetailedMoveInfo } from "../api/pokemon_api";
 import { getDmgClassUrl, getTypeUrl } from "../utils";

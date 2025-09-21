@@ -2,16 +2,13 @@ import { useEffect, useState, type ReactNode, type SyntheticEvent } from "react"
 import { Button } from 'primereact/button';
 import { useNavigate, useParams } from "react-router-dom";
 import { getDetailedPokemonData } from "../api/pokemon_api";
-import type { MoveData, PokemonData, PokemonEvolution } from "../types";
+import type { MoveData, PokemonData } from "../types";
 import "../styles/pokemon-page.css"
 import type { PokemonType } from "../enums";
 import { getTypeUrl } from "../utils";
 import { PokemonStatChart } from "../components/stats/PokemonStatChart";
 import { PokedexEntry } from "../components/pokedex/PokedexEntry";
 import { PagePaths } from "./pagePaths";
-
-
-
 
 export const  PokemonPage = () => {
 
@@ -75,9 +72,9 @@ export const  PokemonPage = () => {
           <div>
             Types :
             {
-              detailedPokemonData.types?.map((type : PokemonType, index : number) => (
-                  <img className="pokemon-type-img" src={getTypeUrl(type)} alt="---"/>
-              ))
+            detailedPokemonData.types?.map((type : PokemonType, index : number) => (
+              <img key={index} className="pokemon-type-img" src={getTypeUrl(type)} alt="---"/>
+            ))
             }
           </div>
         </div>

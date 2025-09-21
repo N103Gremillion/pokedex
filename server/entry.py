@@ -13,7 +13,7 @@ flask_env: str = os.environ.get("FLASK_ENV", "development")  # 'development' or 
 # Production: use deployed frontend URL
 # Development: allow localhost & 127.0.0.1
 if flask_env == "production":
-	frontend_url = os.environ.get("FRONTEND_URL")  # e.g., "https://your-frontend.vercel.app"
+	frontend_url = os.environ.get("FRONTEND_URL") 
 	if not frontend_url:
 		raise ValueError("FRONTEND_URL must be set in production environment")
 	CORS_ORIGINS = [frontend_url.rstrip('/')]
