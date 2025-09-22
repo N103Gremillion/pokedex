@@ -1,7 +1,13 @@
+#!/bin/bash
 PORT=${PORT:-5000}
 
-./kill.sh # kill previous running process
+# Kill previous running process
+./kill.sh
 
 echo "Starting backend..."
+
+# Activate virtualenv
 source ./.venv/bin/activate
-exec gunicorn -w 4 -b 0.0.0.0:$PORT entry:app --timeout 60 
+
+# Start gunicorn without exec
+gunicorn -w 4 -b 0.0.0.0:$PORT entry:app --timeout 60

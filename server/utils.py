@@ -1,8 +1,42 @@
+import os
+import requests
 from typing import List
+from flask import request
 from app_types import IslandCaptainKeys, IslandKahunaKeys, PokemonType
 from scraper.gen7data import GEN_7_ISLAND_KAHUNAS
 from scraper.gen7data import GEN_7_ISLAND_CAPTAINS
 
+
+# Downloads the image if it doesn't exist locally and returns a full URL for the frontend.
+def download_and_get_local_url(img_url: str, folder: str) -> str:
+  from scraper.gymLeadersPageScrapper import BASE_BACKEND_URL
+  
+  if not img_url:
+    return ""
+
+  # Make sure folder exists
+  os.makedirs(folder, exist_ok=True)
+
+  # Determine local filename and path
+  filename = img_url.split("/")[-1]
+  local_path = os.path.join(folder, filename)
+
+  # Download the image if it doesn't exist
+  if not os.path.exists(local_path):
+    try:
+      resp = requests.get(img_url, timeout=10)
+      resp.raise_for_status()
+      with open(local_path, "wb") as f:
+        f.write(resp.content)
+      print(f"Downloaded image to {local_path}")
+    except requests.RequestException as error:
+      print(f"Failed to download image: {error}")
+      return ""
+  
+  full_url : str = f"{BASE_BACKEND_URL}{local_path}"
+  print(full_url)
+  return full_url
+  
 def print_pretty_json(data) -> None:
   import json
   print(json.dumps(data, indent=4))

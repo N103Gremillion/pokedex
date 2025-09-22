@@ -45,8 +45,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
     const trainerImage = (
       <img 
         src={
-          gymLeaderData.gym_leader_image_url ? 
-          getProxyUrl(gymLeaderData.gym_leader_image_url) : defaultImageUrl
+          gymLeaderData.gym_leader_image_url 
         } 
         alt="Player card"
         className='trainer-card-trainer-img'
@@ -57,8 +56,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
     const badgeImage = (
       <img
       src={
-        gymLeaderData.badge_image_url ?
-        getProxyUrl(gymLeaderData.badge_image_url) : defaultImageUrl
+        gymLeaderData.badge_image_url 
       } 
       alt="Player card"
       className='badge-img'
@@ -89,8 +87,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
     const trainerImage = (
       <img 
         src={
-          gymLeaderData.island_kahuna_image_url ? 
-          getProxyUrl(gymLeaderData.island_kahuna_image_url) : defaultImageUrl
+          gymLeaderData.island_kahuna_image_url 
         } 
         alt="Player card"
         className='trainer-card-trainer-img'
@@ -120,8 +117,7 @@ export const PokemonTrainerCard = ({ gymLeaderData } : PokemonTrainerCardProps) 
     const trainerImage = (
       <img 
         src={
-          gymLeaderData.island_captain_image_url ? 
-          getProxyUrl(gymLeaderData.island_captain_image_url) : defaultImageUrl
+          gymLeaderData.island_captain_image_url 
         } 
         alt="Player card"
         className='trainer-card-trainer-img'

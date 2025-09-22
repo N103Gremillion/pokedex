@@ -1,13 +1,22 @@
 import copy
+import os
 from typing import List
 from bs4 import BeautifulSoup, Tag
 from app_types import ErrorResponse, ErrorResponseKeys, GymLeaderData, GymLeaderKeys, IslandCaptainKeys, IslandKahunaKeys, PokemonData, PokemonRegionGymLeaders, PokemonRegionGymLeadersKeys, SuccessResponse, SuccessResponseKeys
 from mongo.db_utils import DatabaseCollections
 from scraper.gymLeaderPageScrapper import GEN_TO_REGION, GYM_LEADERS, attachPokemonToGymLeader
-from utils import print_pretty_json, isValidType
+from utils import download_and_get_local_url, print_pretty_json, isValidType
 from scraper.scraper import BASE_BULBAPEDIA_WIKI_URL, scrape_page_builbapedia
 from scraper.gen7data import GEN_7_ISLAND_CAPTAINS, GEN_7_ISLAND_KAHUNAS
 from pymongo.collection import Collection
+
+BASE_BACKEND_URL = "http://18.223.11.80:5000/"
+BADGE_IMAGE_FOLDER = os.path.join("static", "images", "badges")
+GYM_LEADER_IMAGE_FOLDER = os.path.join("static", "images", "gym_leaders")
+
+# create folders if they dont already exit
+os.makedirs(BADGE_IMAGE_FOLDER, exist_ok=True)
+os.makedirs(GYM_LEADER_IMAGE_FOLDER, exist_ok=True)
 
 ####################### THESE ARE SPECIFIC TO THIS PAGE https://bulbapedia.bulbagarden.net/wiki/Gym ##########################################
 def fetchGymLeadersByGeneration(gen_string : str) -> PokemonRegionGymLeaders:
@@ -267,41 +276,40 @@ def parseGymRowCopy(gym_data : GymLeaderData, cells : list[Tag]) -> GymLeaderDat
     
   return gym_data_copy
   
-def parseGymRow(cells : list[Tag], offset : int) -> tuple[GymLeaderData, int]:
-  
-  response : GymLeaderData = {}
-  
-  # badge info can only have 1 instance so we use this to determine if another cell has 2 entries 
+def parseGymRow(cells: list[Tag], offset: int) -> tuple[GymLeaderData, int]:
+  response: GymLeaderData = {}
+
+  # Badge info
   gym_name = cells[1 + offset].get_text(strip=True)
   badge_cell = cells[2 + offset]
   badge_name = badge_cell.get_text(strip=True)
-  badge_img = badge_cell.find("img")
+  badge_img_tag = badge_cell.find("img")
   gym_type = cells[3 + offset].get_text(strip=True) 
   gym_leader_cell = cells[4 + offset]
   gym_leader_name = gym_leader_cell.get_text(strip=True)
-  gym_leader_img = gym_leader_cell.find("img")
-  
-  if badge_img:
-    badge_img_url = badge_img.get("src") 
-  else :
-    badge_img_url = "" 
-  
-  if gym_leader_img:
-    gym_leader_img_url = gym_leader_img.get("src")
-  else:
-    gym_leader_img_url = ""
-    
+  gym_leader_img_tag = gym_leader_cell.find("img")
+
+  # Download and get URLs
+  badge_img_url = download_and_get_local_url(
+    badge_img_tag.get("src") if badge_img_tag else "", BADGE_IMAGE_FOLDER
+  )
+
+  gym_leader_img_url = download_and_get_local_url(
+    gym_leader_img_tag.get("src") if gym_leader_img_tag else "", GYM_LEADER_IMAGE_FOLDER
+  )
+
+  # Fill response object
   response[GymLeaderKeys.GYM_NAME] = gym_name
   response[GymLeaderKeys.BADGE_NAME] = badge_name
   response[GymLeaderKeys.BADGE_IMAGE_URL] = badge_img_url
   response[GymLeaderKeys.GYM_LEADER_NAME] = gym_leader_name
   response[GymLeaderKeys.GYM_LEADER_IMAGE_URL] = gym_leader_img_url
-  
-  if (isValidType(gym_type)):
+
+  if isValidType(gym_type):
     response[GymLeaderKeys.TYPE] = gym_type
-  
-  
-  # check if there are more possible gym leader names, gym leader images, or gym types 
+
+  # Check rowspan for multi-entry cells
   rowspan = int(badge_cell.get("rowspan", 1))
-  
-  return (response, rowspan)
+
+  return response, rowspan
+

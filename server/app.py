@@ -16,7 +16,7 @@ from scraper.gymLeaderPageScrapper import fetchDetailedGymLeader, fetchRandomGym
 from scraper.gymLeadersPageScrapper import fetchGymLeadersByGeneration
 
 def initApp() -> Flask:
-  app : Flask = Flask(__name__)
+  app : Flask = Flask(__name__, static_url_path="/static", static_folder="static")
   return app
 
 class ApiGetEndpoints(Enum):

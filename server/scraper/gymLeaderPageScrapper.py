@@ -20,11 +20,15 @@ Note:
   I am using this because some information is not openly availble on the pokeapi.
   
 """
+import os
 import random
+import requests
+from flask import request
 from typing import List
 from bs4 import BeautifulSoup, Tag
 from app_types import ErrorResponse, ErrorResponseKeys, GymLeaderData, GymLeaderKeys, IslandCaptainData, IslandCaptainKeys, IslandKahunaData, IslandKahunaKeys, PokemonData, PokemonKeys, PokemonRegionGymLeaders, PokemonRegionGymLeadersKeys, PokemonType, SuccessResponse, SuccessResponseKeys
 from pokeapi.pokemon import fetchPokemonDataByIdentifier
+from mongo.db_utils import DatabaseCollections
 from utils import getGenNumFromGymLeaderName, isValidGymLeaderName, print_pretty_json, isValidType
 from scraper.scraper import BASE_BULBAPEDIA_WIKI_URL, BASE_POKEMON_DB_URL, scrape_page_builbapedia,scrape_page_pokedb
 
@@ -77,47 +81,11 @@ def fetchRandomGymLeader() -> GymLeaderData:
   # first get a random gym leader name and create the url string
   gen_leaders : List[str] = random.choice(GYM_LEADERS)
   gym_leader_name : str = random.choice(gen_leaders)
-  url_string : str = f"{BASE_BULBAPEDIA_WIKI_URL}/{gym_leader_name}"
-  
-  # request this gymLeaders page
-  gym_leader_page : SuccessResponse | ErrorResponse = scrape_page_builbapedia(url_string)
-  
-  response : GymLeaderData = {
-    GymLeaderKeys.GYM_LEADER_NAME : gym_leader_name,
-    GymLeaderKeys.GYM_LEADER_IMAGE_URL : ""
-  }
-  
-  if not gym_leader_page[ErrorResponseKeys.SUCCESS]:
-    print("Failed to get gym leader page")
-    return response
-  
-  html = gym_leader_page[SuccessResponseKeys.DATA]
-  
-  soup = BeautifulSoup(html, "html.parser")
-  
-  content_div : Tag | None = soup.find("div", id="mw-content-text")
-  
-  if (not content_div):
-    print("Failed to get contient div when fetching gym leader info")
-    return response
-  
-  gym_leader_info_table : Tag | None = content_div.find("table", class_="roundy infobox")
-  
-  if (not content_div):
-    print("Failed to get table div when fetching gym leader info")
-    return response
-  
-  image_info : Tag | None = gym_leader_info_table.find("img")
-  
-  if (not image_info):
-    print("Failed to get image from table when fetching gym leader info")
-    return response
-  
-  response[GymLeaderKeys.GYM_LEADER_IMAGE_URL] = image_info["src"]
-  
-  return response
+  return fetchDetailedGymLeader(gym_leader_name)
 
 def fetchDetailedGymLeader(leader_name : str) -> GymLeaderData:
+  from entry import globalDb
+  
   response : GymLeaderData = {
     GymLeaderKeys.ID : -1
   }
@@ -128,12 +96,40 @@ def fetchDetailedGymLeader(leader_name : str) -> GymLeaderData:
   if not isValidGymLeaderName(leader_name):
     return response
   
+  # check if it is already cached gym leader in the database
+  detailedGymLeaderCollection = globalDb[DatabaseCollections.DETAILED_GYM_LEADERS.value.name]
+  
+  cachedDoc = detailedGymLeaderCollection.find_one({DatabaseCollections.POKEMON_REGION_GYM_LEADERS.value.key: leader_name})
+  
+  if (cachedDoc):
+    return { 
+      GymLeaderKeys.DESCRIPTION : cachedDoc[GymLeaderKeys.DESCRIPTION], 
+      GymLeaderKeys.GENERATION : cachedDoc[GymLeaderKeys.GENERATION],
+      GymLeaderKeys.GYM_LEADER_IMAGE_URL : cachedDoc[GymLeaderKeys.GYM_LEADER_IMAGE_URL],
+      GymLeaderKeys.GYM_LEADER_NAME : cachedDoc[GymLeaderKeys.GYM_LEADER_NAME],
+      GymLeaderKeys.GYM_NUMBER : cachedDoc[GymLeaderKeys.GYM_NUMBER],
+      GymLeaderKeys.POKEMON : cachedDoc[GymLeaderKeys.POKEMON]
+    }
+    
   response[GymLeaderKeys.GYM_LEADER_NAME] = leader_name
   
   response[GymLeaderKeys.GENERATION] = getGenNumFromGymLeaderName(leader_name)
   response = attachGymLeaderImgAndDescriptionToGymLeader(response, getFullTrainerName(response))
   response = attachPokemonToGymLeader(response, response[GymLeaderKeys.GENERATION])
   response = attachGymInfoToGymLeader(response, response[GymLeaderKeys.GENERATION])
+  
+  # add to cache pages to prevent unecessary fetches in the future
+  # after you build response completely:
+  detailedGymLeaderCollection.insert_one({
+    DatabaseCollections.POKEMON_REGION_GYM_LEADERS.value.key: leader_name,
+    GymLeaderKeys.DESCRIPTION: response.get(GymLeaderKeys.DESCRIPTION),
+    GymLeaderKeys.GENERATION: response.get(GymLeaderKeys.GENERATION),
+    GymLeaderKeys.GYM_LEADER_IMAGE_URL: response.get(GymLeaderKeys.GYM_LEADER_IMAGE_URL),
+    GymLeaderKeys.GYM_LEADER_NAME: response.get(GymLeaderKeys.GYM_LEADER_NAME),
+    GymLeaderKeys.GYM_NUMBER: response.get(GymLeaderKeys.GYM_NUMBER),
+    GymLeaderKeys.POKEMON: response.get(GymLeaderKeys.POKEMON)
+  })
+
   
   return response
 
@@ -290,6 +286,8 @@ def attachGymInfoToGymLeader(leader : GymLeaderData | IslandKahunaData | IslandC
 
 # attaches the main gym leader imgurl to the object from a page like this https://bulbapedia.bulbagarden.net/wiki/Giovanni
 def attachGymLeaderImgAndDescriptionToGymLeader(leader : GymLeaderData | IslandKahunaData | IslandCaptainData, formatted_leader_name : str | None) -> GymLeaderData:
+  from scraper.gymLeadersPageScrapper import GYM_LEADER_IMAGE_FOLDER, BASE_BACKEND_URL
+  
   if not formatted_leader_name:
     print("Gym leader name is null")
     return leader
@@ -326,14 +324,32 @@ def attachGymLeaderImgAndDescriptionToGymLeader(leader : GymLeaderData | IslandK
   
   img_url = img_tag["src"]
   
+  # determine local filename
+  filename : str = img_url.split("/")[-1]
+  local_path = os.path.join(GYM_LEADER_IMAGE_FOLDER, filename)
+  
+  # Download the image if it doesn't exist
+  if not os.path.exists(local_path):
+    try:
+      resp = requests.get(img_url, timeout=10)
+      resp.raise_for_status()
+      with open(local_path, "wb") as f:
+        f.write(resp.content)
+      print(f"Downloaded image to {local_path}")
+    except requests.RequestException as e:
+      print(f"Failed to download image: {e}")
+      return leader
+  
+  full_url = f"{BASE_BACKEND_URL}static/images/gym_leaders/{filename}"
+  
   if GymLeaderKeys.GYM_LEADER_NAME in leader:
-    leader[GymLeaderKeys.GYM_LEADER_IMAGE_URL] = img_url
+    leader[GymLeaderKeys.GYM_LEADER_IMAGE_URL] = full_url
     
   elif IslandKahunaKeys.ISLAND_KAHUNA_NAME in leader:
-    leader[IslandKahunaKeys.ISLAND_KAHUNA_IMAGE_URL] = img_url
+    leader[IslandKahunaKeys.ISLAND_KAHUNA_IMAGE_URL] = full_url
     
   elif IslandCaptainKeys.ISLAND_CAPTAIN_NAME in leader:
-    leader[IslandCaptainKeys.ISLAND_CAPTAIN_IMAGE_URL] = img_url
+    leader[IslandCaptainKeys.ISLAND_CAPTAIN_IMAGE_URL] = full_url
     
   return leader
   

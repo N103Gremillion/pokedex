@@ -6,7 +6,7 @@ import os
 from pymongo import MongoClient
 from pymongo.database import Database
 from pymongo.collection import Collection
-from app_types import DetailedPokemonTypeKeys, PokedexKeys, PokemonKeys, PokemonRegionGymLeadersKeys
+from app_types import DetailedPokemonTypeKeys, GymLeaderKeys, IslandCaptainKeys, IslandKahunaKeys, PokedexKeys, PokemonKeys, PokemonRegionGymLeadersKeys
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
@@ -22,6 +22,7 @@ class DatabaseCollections (Enum):
   POKEMON_OF_TYPE = CollectionInfo("pokemon_of_type", DetailedPokemonTypeKeys.TYPE_NAME)
   MOVES_OF_TYPE = CollectionInfo("moves_of_type", DetailedPokemonTypeKeys.TYPE_NAME)
   DETAILED_POKEMON = CollectionInfo("detailed_pokemon", PokemonKeys.NAME)
+  DETAILED_GYM_LEADERS = CollectionInfo("detailed_gym_leaders", GymLeaderKeys.GYM_LEADER_NAME)
 
 load_dotenv()
 
